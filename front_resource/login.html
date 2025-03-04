@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="form-box">
+            <h2>登录</h2>
+            <form action="/login" method="POST">
+                <div class="input-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button class="button" type="submit">登录</button>
+                <div class="ls-link">
+                    没有账号？<a href="register.html">立即注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -6,6 +6,8 @@
 *.lo
 *.o
 *.obj
+*.ko
+*.elf
 
 # Precompiled Headers
 *.gch
@@ -15,6 +17,7 @@
 *.so
 *.dylib
 *.dll
+*.so.*
 
 # Fortran module files
 *.mod
@@ -25,8 +28,42 @@
 *.la
 *.a
 *.lib
+*.lo
 
 # Executables
 *.exe
 *.out
 *.app
+*.i*86
+*.x86_64
+*.hex
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Build files
+build/
+test/
+
+# Vscode configuration
+.vscode/
+
+# Web resource
+# front_resource/

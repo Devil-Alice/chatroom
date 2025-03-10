@@ -28,7 +28,7 @@ body {
     width: 95%;
     height: 95%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-    /* 苹果风格的柔和阴影 */
+    /* 柔和阴影 */
     background-color: white;
     /* 使得阴影效果更明显 */
 }
@@ -74,7 +74,7 @@ h2 {
 .button {
     width: 100%;
     padding: 15px;
-    background-color: #007aff;
+    background-color: #34c759;
     color: #fff;
     font-size: 16px;
     border: none;
@@ -84,7 +84,7 @@ h2 {
 }
 
 .button:hover {
-    background-color: #005bb5;
+    background-color: #28a745;
 }
 
 

@@ -1,2 +1,2 @@
 # 忽略前端的代码
-front_resource linguist-vendored
+front_resource/** linguist-vendored

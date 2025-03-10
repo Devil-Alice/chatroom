@@ -1,4 +1,2 @@
 # 忽略前端的代码
-*.html text
-*.js text
-*.css text
+front_resource linguist-vendored

@@ -1,5 +1,6 @@
 #include "http_service.h"
 #include "http_connection.h"
+#include "verify_grpc_client.h"
 
 HttpService::HttpService()
 {
@@ -13,7 +14,7 @@ HttpService::HttpService()
     } });
 
 
-    regist_post("/varifycode", [](std::shared_ptr<HttpConnection> http_conn){
+    regist_post("/varify_code", [](std::shared_ptr<HttpConnection> http_conn){
         string body_str = boost::beast::buffers_to_string(http_conn->request_.body().data());;
         cout << "received body: " << body_str << endl;
         http_conn->response_.set(http::field::content_type, "text/json");
@@ -22,12 +23,15 @@ HttpService::HttpService()
         Json::Value src_root;
         bool success = reader.parse(body_str, src_root, false);
         
+        // 定义检测的key字符串
+        std::string deteced_key = "phone";
+
         // 解析失败，或者不包含key值
-        if (!success || !src_root.isMember("key"))
+        if (!success || !src_root.isMember(deteced_key))
         {
             cout << "failed to parse json data" << endl;
             //这里返回的是true，因为json格式不对只是小问题，false是比较严重的情况
-            root["error"] = (int)MY_ERROR::JSON;
+            root["error"] = (int)MY_ERROR_CODE::JSON;
             //格式化
             string styled_str = root.toStyledString();
             //写入response
@@ -36,13 +40,19 @@ HttpService::HttpService()
         }
 
         // 解析成功
-        string value = src_root["key"].asString();
-        cout << "key: " << value << endl;
+        string value = src_root[deteced_key].asString();
+        //调用rpc方法获取验证码
+        GetVerifyResponse rsp = VerifyGrpcClient::instance().get_rerify_code(value);
+        if (rsp.error() != 0)
+        {
+            
+        }
+        cout << deteced_key << value << endl;
 
 
         //构建成功的返回数据
         root["error"] = 0;
-        root["key"] = value;
+        root[deteced_key] = value;
         string styled_str = root.toStyledString();
         //写入response
         beast::ostream(http_conn->response_.body()) << styled_str << endl;

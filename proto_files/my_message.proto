@@ -1,0 +1,30 @@
+// proto 协议版本
+syntax = "proto3";
+
+// 包名，类似c++的namespace
+package my_message;
+
+
+// service 用于定义 RPC（远程过程调用）服务。RPC 是一种协议，用于允许客户端和服务器之间进行通信
+// VerifyService 是服务的名称，表示这是一个名为 VerifyService 的服务
+service VerifyService
+{
+    // rpc 表示你要定义一个服务端的接口方法，客户端可以调用这个方法来请求服务。通过 rpc 定义的函数是异步的、网络通信的函数，客户端通过这些 RPC 方法与服务器进行交互
+    // 这句表示定义了一个方法 get_verify_code，它接受一个 GetVerifyRequest 类型的请求，并返回一个 GetVerifyResponse 类型的响应
+    rpc get_verify_code (GetVerifyRequest) returns (GetVerifyResponse) {}
+    // returns 是 Proto3 中的一个关键字，用来指定 RPC 方法的返回类型
+    // 在 rpc 定义中，returns 后面跟着的是该 RPC 方法的返回类型，告诉 Protocol Buffers 生成的代码，服务端应该返回什么类型的消息
+}
+
+
+message GetVerifyRequest
+{
+    string phone = 1;
+}
+
+message GetVerifyResponse
+{
+    int32 error = 1;
+    string phone = 2;
+    string code = 3;
+}

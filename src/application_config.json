@@ -1,0 +1,8 @@
+{
+    "gate_server": {
+        "port": 8080
+    },
+    "rpc_server": {
+        "port": 50053
+    }
+}

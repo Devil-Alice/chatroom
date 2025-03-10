@@ -1,4 +1,5 @@
 #include <iostream>
+#include "global.h"
 #include "server.h"
 
 int main()
@@ -6,7 +7,10 @@ int main()
     try
     {
         std::cout << "server init..." << std::endl;
-        unsigned short port = 8080;
+
+        std::string port_ = app_config["gate_server"]["port"];
+
+        unsigned short port = std::atoi(port_.data());
         asio::io_context ioc{1};
         asio::signal_set signals(ioc, SIGINT, SIGTERM);
         signals.async_wait([&ioc](beast::error_code ec, int signal)

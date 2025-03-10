@@ -62,6 +62,9 @@ dkms.conf
 build/
 test/
 
+# Tmp files
+tmp/
+
 # Vscode configuration
 .vscode/
 

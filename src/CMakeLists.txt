@@ -41,10 +41,10 @@ endif()
 
 
 # Include source files
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/../proto_files")
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
-file(GLOB PBSOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cc)
+file(GLOB PBSOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../proto_files/*.cc)
 add_executable(chatroom ${SOURCES} ${PBSOURCES})
 
 target_link_libraries(chatroom

@@ -1,6 +1,6 @@
 #pragma once
-#include <grpcpp/grpcpp.h>
 #include "global.h"
+#include <grpcpp/grpcpp.h>
 #include "my_message.pb.h"
 #include "my_message.grpc.pb.h"
 

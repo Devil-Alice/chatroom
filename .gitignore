@@ -59,7 +59,7 @@ Mkfile.old
 dkms.conf
 
 # Build files
-build/
+**/build/
 test/
 
 # Tmp files

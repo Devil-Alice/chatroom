@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(chatroom C CXX)
+set(PROJECT_NAME "chatroom")
+project(${PROJECT_NAME} C CXX)
+add_definitions("-Wall -g")
 
 # basic config:-----------------------------------------------------------------------
 # This branch assumes that gRPC and all its dependencies are already installed
@@ -41,13 +43,13 @@ endif()
 
 
 # Include source files
-include_directories("${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/../proto_files")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../proto_files)
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB PBSOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../proto_files/*.cc)
-add_executable(chatroom ${SOURCES} ${PBSOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${PBSOURCES})
 
-target_link_libraries(chatroom
+target_link_libraries(${PROJECT_NAME}
 absl::check
 absl::flags
 absl::flags_parse

@@ -47,12 +47,13 @@ HttpService::HttpService()
         {
             
         }
-        cout << deteced_key << value << endl;
+        cout << deteced_key << ": " << value << endl;
 
 
         //构建成功的返回数据
         root["error"] = 0;
         root[deteced_key] = value;
+        root["code"] = rsp.code();
         string styled_str = root.toStyledString();
         //写入response
         beast::ostream(http_conn->response_.body()) << styled_str << endl;

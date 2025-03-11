@@ -25,7 +25,8 @@ private:
     VerifyGrpcClient()
     {
         // 初始化channel，初始化stub
-        std::shared_ptr<Channel> channel = grpc::CreateChannel("127.0.0.1:50053", grpc::InsecureChannelCredentials());
+        std::string server_address = "127.0.0.1:" + app_config["rpc_server"]["port"];
+        std::shared_ptr<Channel> channel = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
         stub_ = VerifyService::NewStub(channel);
     }
 

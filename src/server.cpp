@@ -23,7 +23,7 @@ void Server::start_listen_client()
                 std::make_shared<HttpConnection>(std::move(self->socket_))->start_listen_events();
                 self->start_listen_client();
 
-            } catch(std::exception ex)
+            } catch(std::exception &ex)
             {
                 
             } });

@@ -26,7 +26,7 @@ int main()
         std::make_shared<Server>(ioc, port)->start_listen_client();
         ioc.run();
     }
-    catch (std::exception ex)
+    catch (std::exception &ex)
     {
         std::cout << "excetpion: " << ex.what() << std::endl;
         return EXIT_FAILURE;

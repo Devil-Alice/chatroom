@@ -5,8 +5,8 @@
 class Server : public std::enable_shared_from_this<Server>
 {
 private:
-    tcp::acceptor acceptor_;
     asio::io_context &ioc_;
+    tcp::acceptor acceptor_;
     tcp::socket socket_;
 
 public:

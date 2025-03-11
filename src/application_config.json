@@ -3,6 +3,6 @@
         "port": 8080
     },
     "rpc_server": {
-        "port": 50053
+        "port": 50051
     }
 }

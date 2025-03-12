@@ -5,6 +5,7 @@
 #include <chrono>
 #include <functional>
 #include <map>
+#include <vector>
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>

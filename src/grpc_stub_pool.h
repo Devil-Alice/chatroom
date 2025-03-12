@@ -4,10 +4,8 @@
 #include "my_message.pb.h"
 #include "my_message.grpc.pb.h"
 
-class GrpcStubPool : public Singleton<GrpcStubPool>
+class GrpcStubPool
 {
-    friend class Singleton<GrpcStubPool>;
-
 private:
     size_t pool_size_;
     std::string host_;
@@ -27,5 +25,3 @@ public:
     std::unique_ptr<VerifyService::Stub> &get_grpc_stub();
     void return_grpc_stub(std::unique_ptr<VerifyService::Stub> &stub);
 };
-
-extern GrpcStubPool &grpc_stub_pool;

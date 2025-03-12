@@ -1,6 +1,5 @@
 #include "grpc_stub_pool.h"
 
-GrpcStubPool &grpc_stub_pool = GrpcStubPool::instance();
 
 GrpcStubPool::GrpcStubPool(size_t size, std::string host, std::string port) : pool_size_(size), host_(host), port_(port), stop_flag_(false)
 {

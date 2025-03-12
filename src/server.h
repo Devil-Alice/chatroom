@@ -7,7 +7,6 @@ class Server : public std::enable_shared_from_this<Server>
 private:
     asio::io_context &ioc_;
     tcp::acceptor acceptor_;
-    tcp::socket socket_;
 
 public:
     Server(asio::io_context &ioc, unsigned int port);

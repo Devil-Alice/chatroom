@@ -17,8 +17,9 @@ private:
     std::map<std::string, std::string> get_params_;
 
 public:
-    HttpConnection(tcp::socket socket);
+    HttpConnection(asio::io_context &ioc);
     ~HttpConnection();
+    tcp::socket &get_socket();
     void start_listen_events();
 
 private:
@@ -28,6 +29,5 @@ private:
     void parse_url(const std::string &url);
 };
 
-
-std::string url_encode(const std::string& str);
-std::string url_decode(const std::string& encoded);
+std::string url_encode(const std::string &str);
+std::string url_decode(const std::string &encoded);

@@ -1,12 +1,17 @@
 #include "http_connection.h"
 #include "http_service.h"
 
-HttpConnection::HttpConnection(tcp::socket socket) : socket_(std::move(socket))
+HttpConnection::HttpConnection(asio::io_context &ioc) : socket_(ioc)
 {
 }
 
 HttpConnection::~HttpConnection()
 {
+}
+
+tcp::socket &HttpConnection::get_socket()
+{
+    return this->socket_;
 }
 
 void HttpConnection::start_listen_events()
@@ -64,7 +69,7 @@ void HttpConnection::handle_request()
         response_.set(http::field::server, "GateServer");
         send_response();
     }
-    
+
     // 处理post请求
     if (request_.method() == http::verb::post)
     {

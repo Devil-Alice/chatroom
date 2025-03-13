@@ -17,11 +17,11 @@ private:
     std::mutex mutex_;
     std::condition_variable cond_;
 
-    GrpcStubPool(size_t size, std::string host, std::string port);
     void close();
 
 public:
+    GrpcStubPool(size_t size, std::string host, std::string port);
     ~GrpcStubPool();
-    std::unique_ptr<VerifyService::Stub> &get_grpc_stub();
-    void return_grpc_stub(std::unique_ptr<VerifyService::Stub> &stub);
+    std::unique_ptr<VerifyService::Stub> get_grpc_stub();
+    void return_grpc_stub(std::unique_ptr<VerifyService::Stub> stub);
 };

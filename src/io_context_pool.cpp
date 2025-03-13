@@ -1,8 +1,8 @@
 #include "io_context_pool.h"
 
-IoContextPool::IoContextPool(std::size_t size) : io_contexts_(size), works_(size), next_context_idx_(size)
+IoContextPool::IoContextPool(std::size_t size) : io_contexts_(size), works_(size), next_context_idx_(0)
 {
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         // 用work跟iocontext绑定，这样context就不会在没有任务的时候直接退出了
         works_[i] = std::unique_ptr<asio::io_context::work>(new asio::io_context::work(io_contexts_[i]));

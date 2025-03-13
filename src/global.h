@@ -21,7 +21,6 @@
 #include "config_manager.h"
 #include "my_message.pb.h"
 #include "my_message.grpc.pb.h"
-#include "grpc_stub_pool.h"
 
 // 简化命名空间
 namespace beast = boost::beast;

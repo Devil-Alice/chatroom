@@ -8,7 +8,8 @@ RedisConnectionPool::RedisConnectionPool(size_t size, string host, int port, str
     for (size_t i = 0; i < pool_size_; i++)
     {
         redisContext *context = connect(host, port);
-        auth(context, password);
+        if (!password.empty())
+            auth(context, password);
         connections_.push(context);
     }
 }
@@ -27,24 +28,27 @@ std::shared_ptr<redisContext> RedisConnectionPool::get_connection()
             return false;
         return !connections_.empty(); });
 
+    if (stop_flag_)
+        return nullptr;
+
     auto conn = connections_.front();
     connections_.pop();
 
-    std::shared_ptr<redisContext> conn_ptr(conn, [this](redisContext *redis_conn) {
+    std::shared_ptr<redisContext> conn_ptr(conn, [this](redisContext *redis_conn)
+                                           {
         mutex_.lock();
         connections_.push(redis_conn);
         mutex_.unlock();
-        cond_.notify_one();
-    });
+        cond_.notify_one(); });
 
     return conn_ptr;
 }
 
 void RedisConnectionPool::stop()
 {
-    
+
     stop_flag_ = true;
-    
+
     std::lock_guard<std::mutex> locker(mutex_);
     cond_.notify_all();
     while (!connections_.empty())
@@ -52,7 +56,6 @@ void RedisConnectionPool::stop()
         close(connections_.front());
         connections_.pop();
     }
-
 }
 
 redisContext *RedisConnectionPool::connect(const string &host, int port)

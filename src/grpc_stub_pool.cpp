@@ -5,7 +5,7 @@ GrpcStubPool::GrpcStubPool(size_t size, std::string host, std::string port) : po
     for (size_t i = 0; i < pool_size_; i++)
     {
         std::shared_ptr<Channel> channel = grpc::CreateChannel(host + ":" + port, grpc::InsecureChannelCredentials());
-        
+
         stubs_.push(VerifyService::NewStub(channel));
 
         // 以下是错误示范：
@@ -40,6 +40,8 @@ std::unique_ptr<VerifyService::Stub> GrpcStubPool::get_grpc_stub()
             return false;
         return !stubs_.empty(); });
 
+    if (stop_flag_)
+        return nullptr;
     std::unique_ptr<VerifyService::Stub> stub = std::move(stubs_.front());
 
     stubs_.pop();

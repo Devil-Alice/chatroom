@@ -17,6 +17,7 @@
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <grpcpp/grpcpp.h>
+#include <hiredis/hiredis.h>
 #include "singleton.h"
 #include "config_manager.h"
 #include "my_message.pb.h"

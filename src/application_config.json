@@ -5,5 +5,9 @@
     "rpc_server": {
         "host": "127.0.0.1",
         "port": 50051
+    },
+    "redis_server": {
+        "host": "127.0.0.1",
+        "port": 6379
     }
 }

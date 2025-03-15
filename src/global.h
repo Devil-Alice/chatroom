@@ -40,10 +40,19 @@ using my_message::GetVerifyRequest;
 using my_message::GetVerifyResponse;
 using my_message::VerifyService;
 
-enum MY_ERROR_CODE
+const std::string verify_code_prefix = "verify_code_";
+
+enum MY_STATUS_CODE
 {
-    JSON = 0x0001,
-    RPC_RAILED = 0x002,
-    TIMEOUT = 0x0003,
-    NETWORK = 0x0004
+    SUCCESS = 0,
+    JSON_ERROR = 1001,
+    RPC_RAILED = 1002,
+    TIMEOUT = 1003,
+    VERIFY_CODE_EXPIRED = 1004,
+    VERIFY_CODE_ERROR = 1005,
+    USER_EXIST = 1006,
+    PHONE_INVALID = 1007,
+    PASSWORD_ERROR = 1008,
+    NETWORK_FAILED = 1009
 };
+

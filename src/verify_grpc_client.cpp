@@ -20,7 +20,7 @@ GetVerifyResponse VerifyGrpcClient::get_rerify_code(std::string phone)
 
     Status status = stub->get_verify_code(&context, req, &rsp);
     if (!status.ok())
-        rsp.set_error(MY_ERROR_CODE::RPC_RAILED);
+        rsp.set_error(MY_STATUS_CODE::RPC_RAILED);
 
     // 返还stub
     grpc_stub_pool->return_grpc_stub(std::move(stub));

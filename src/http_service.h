@@ -2,7 +2,7 @@
 #include "global.h"
 
 class HttpConnection;
-using HttpHandler = std::function<void(std::shared_ptr<HttpConnection>)>;
+using HttpHandler = std::function<bool(std::shared_ptr<HttpConnection>)>;
 
 class HttpService : public Singleton<HttpService>
 {
@@ -17,8 +17,8 @@ private:
 
 public:
     ~HttpService();
-    void regist_get(std::string url, HttpHandler handler);
-    void regist_post(std::string url, HttpHandler handler);
+    void register_get(std::string url, HttpHandler handler);
+    void register_post(std::string url, HttpHandler handler);
     bool handle_get(std::string url, std::shared_ptr<HttpConnection> http_conn);
     bool handle_post(std::string url, std::shared_ptr<HttpConnection> http_conn);
 

@@ -35,10 +35,7 @@ std::unique_ptr<VerifyService::Stub> GrpcStubPool::get_grpc_stub()
 {
     std::unique_lock<std::mutex> locker(mutex_);
     cond_.wait(locker, [this]() -> bool
-               {
-        if (stop_flag_)
-            return false;
-        return !stubs_.empty(); });
+               { return stop_flag_ || !stubs_.empty(); });
 
     if (stop_flag_)
         return nullptr;

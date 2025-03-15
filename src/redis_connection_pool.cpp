@@ -23,10 +23,7 @@ std::shared_ptr<redisContext> RedisConnectionPool::get_connection()
 {
     std::unique_lock<std::mutex> locker(mutex_);
     cond_.wait(locker, [this]() -> bool
-               {
-        if (stop_flag_)
-            return false;
-        return !connections_.empty(); });
+               { return stop_flag_ || !connections_.empty(); });
 
     if (stop_flag_)
         return nullptr;
@@ -46,10 +43,8 @@ std::shared_ptr<redisContext> RedisConnectionPool::get_connection()
 
 void RedisConnectionPool::stop()
 {
-
-    stop_flag_ = true;
-
     std::lock_guard<std::mutex> locker(mutex_);
+    stop_flag_ = true;
     cond_.notify_all();
     while (!connections_.empty())
     {

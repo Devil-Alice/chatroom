@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <thread>
 #include <memory>
 #include <mutex>
 #include <condition_variable>
@@ -9,19 +10,28 @@
 #include <queue>
 #include <map>
 #include <vector>
+// jsoncpp 头文件
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>
+// boost http网络相关头文件
 #include <boost/beast/http.hpp>
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
+// grpc 头文件
 #include <grpcpp/grpcpp.h>
+// redis hiredis头文件
 #include <hiredis/hiredis.h>
-#include "singleton.h"
-#include "config_manager.h"
+// mysql c++头文件
+#include <mysql-cppconn/mysql/jdbc.h>
+
 #include "my_message.pb.h"
 #include "my_message.grpc.pb.h"
+#include "singleton.h"
+#include "raii.h"
+#include "config_manager.h"
+
 
 // 简化命名空间
 namespace beast = boost::beast;

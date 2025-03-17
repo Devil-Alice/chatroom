@@ -59,4 +59,5 @@ ${_GRPC_GRPCPP}
 ${_PROTOBUF_LIBPROTOBUF}
 jsoncpp
 hiredis
+mysqlcppconn
 )

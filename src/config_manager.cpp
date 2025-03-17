@@ -29,8 +29,10 @@ ConfigManager::ConfigManager()
     {
         std::map<std::string, std::string> data;
 
+        // std::cout << it_i.key().asString() << std::endl;
         for (Json::Value::iterator it_j = it_i->begin(); it_j != it_i->end(); it_j++)
         {
+            // std::cout << "\t" << it_j.key().asString() << std::endl;
             data[it_j.key().asString()] = it_j->asString();
         }
 
@@ -38,5 +40,4 @@ ConfigManager::ConfigManager()
         info.set_data(data);
         config_map_[it_i.key().asString()] = info;
     }
-
 }

@@ -296,7 +296,32 @@ bool RedisManager::exists(const string &key)
     return true;
 }
 
+bool RedisManager::expire(const string &key, int time_s)
+{
+    auto context = pool_->get_connection();
+    if (context == nullptr)
+    {
+        std::cout << "redis get connection failed" << std::endl;
+        return false;
+    }
+
+    redisReply *reply = (redisReply *)redisCommand(context.get(), "expire %s %d", key.data(), time_s);
+
+    Raii raii([reply]()
+              {
+        if (reply)
+        freeReplyObject(reply); });
+
+    if (reply == nullptr || reply->type != REDIS_REPLY_INTEGER)
+    {
+        std::cout << "redis expire [" << key << "] failed" << std::endl;
+        return false;
+    }
+
+    std::cout << "redis expire [" << key << "] success" << std::endl;
+    return true;
+}
+
 void RedisManager::close()
 {
-
 }

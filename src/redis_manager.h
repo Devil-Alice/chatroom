@@ -29,5 +29,6 @@ public:
     string hget(const string &key, const string &hkey);
     bool del(const string &key);
     bool exists(const string &key);
+    bool expire(const string &key, int time_s);
     void close();
 };

@@ -33,6 +33,13 @@ body {
     /* 使得阴影效果更明显 */
 }
 
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 /* 基础样式 */
 
@@ -52,22 +59,32 @@ h2 {
     color: #333;
 }
 
+.err_msg{
+    text-align: center;
+    color: rgb(255, 63, 63);
+    margin: 5px;
+}
+
+.input-group{
+    margin: 5px;
+}
+
 .input-group label {
     font-size: 14px;
     color: #888;
-    display: block;
-    margin-bottom: 6px;
+    display: flex;
 }
 
-.input-group input[type="text"],
-.input-group input[type="password"],
-.input-group input[type="email"] {
+/* .input-group input[type="text"],
+.input-group input[type="password"], */
+/* .input-group input[type="email"] */
+.input-group input {
     width: 100%;
     padding: 15px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin: 5px;
     box-sizing: border-box;
 }
 
@@ -110,6 +127,30 @@ h2 {
 
 .ls-link a:hover {
     text-decoration: underline;
+}
+
+.phone-code-container {
+    display: flex;
+    align-items: center;
+}
+
+.phone-code-container input
+{
+    width: 100%;
+}
+
+.phone-code-container .verify-send-button{
+    min-width: 100px;
+    padding: 15px;
+    margin: 5px;
+    background-color: #34c759;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
 }
 
 

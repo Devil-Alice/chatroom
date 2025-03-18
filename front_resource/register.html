@@ -1,38 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注册</title>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
+
 <body class="body">
-    <div class="register-container">
+    <div id="app" class="register-container">
         <div class="form-box">
             <h2>注册</h2>
             <form action="/register" method="POST">
                 <div class="input-group">
                     <label for="username">用户名</label>
-                    <input type="text" id="username" name="username" required>
+                    <input v-model="name" type="text" id="username" name="username" required>
                 </div>
                 <div class="input-group">
-                    <label for="email">邮箱</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="phone">手机号</label>
+                    <input v-model="phone" type="text" id="phone" name="phone" required>
+                </div>
+                <div class="input-group">
+                    <label for="verify-code">短信验证码</label>
+                    <div class="phone-code-container">
+                        <input v-model="verify_code" type="text" id="verify-code" name="verify-code" required>
+                        <button @click="send_verify_code" type="button" class="verify-send-button">发送(60s)</button>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label for="password">密码</label>
-                    <input type="password" id="password" name="password" required>
+                    <input v-model="password" type="password" id="password" name="password" required>
                 </div>
                 <div class="input-group">
-                    <label for="confirm-password">确认密码</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    <label for="confirm_password">确认密码</label>
+                    <input v-model="confirm_password" type="password" id="confirm_password" name="confirm_password"
+                        required>
                 </div>
-                <button class="button" type="submit">注册</button>
-                <div class="ls-link">
-                    已经有账号？<a href="login.html">立即登录</a>
+
+
+                <div class="container">
+                    <label class="err_msg" v-text="err_msg" v-show="err_msg"></label>
                 </div>
+
+
+                <div class="input-group">
+                    <button @click="register" class="button" type="button">注册</button>
+                    <div class="ls-link">
+                        已经有账号？<a href="login.html">立即登录</a>
+                    </div>
+                </div>
+
+
             </form>
         </div>
     </div>
 </body>
+
+<script src="./js/vue.global.js"></script>
+<script src="./js/axios.min.js"></script>
+<script>
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+        data() {
+            return {
+                name: "alice",
+                phone: "18912345678",
+                verify_code: "",
+                password: "alice",
+                confirm_password: "alice",
+                err_msg: "",
+            }
+        },
+        methods: {
+            async send_verify_code() {
+
+                this.err_msg = "";
+
+                if (!this.phone) {
+                    this.err_msg = "手机号不能为空";
+                    return;
+                }
+
+                // 发送异步请求到服务器
+                axios.get("api/verify_code",
+                    { params: { phone: this.phone } }
+                ).then((response) => {
+                    this.verify_code = response.data;
+                }).catch().finally();
+
+                // 让发送按钮倒计时
+
+            },
+            async register() {
+                axios.post("/api/user", {
+                    name: this.name,
+                    phone: this.phone,
+                    verify_code: this.verify_code,
+                    password: this.password
+
+                }).then((response) => {
+                    this.err_msg = response.data;
+                }).catch().finally;
+            }
+        }
+
+    })
+    app.mount('#app')
+
+</script>
+
 </html>

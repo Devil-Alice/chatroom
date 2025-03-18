@@ -61,13 +61,14 @@ bool UserDao::add_user(User &user)
 
         // 提交事务
         conn->conn_->commit();
+        return true;
     }
     catch (std::exception &ex)
     {
         std::cout << "add_user failed:" << ex.what() << std::endl;
         conn->conn_->rollback();
     }
-    return true;
+    return false;
 }
 
 bool UserDao::delete_user(User &user)
@@ -80,8 +81,35 @@ bool UserDao::update_user(User &user)
     return false;
 }
 
-User UserDao::get_user_by_id(string id)
+std::shared_ptr<User> UserDao::get_user_by_name(string name)
 {
-    User user;
-    return user;
+    auto conn = MysqlPool::instance().get_connection();
+    if (conn == nullptr)
+        throw std::runtime_error("get mysql connection failed");
+
+    try
+    {
+        std::unique_ptr<sql::PreparedStatement> stmt(conn->conn_->prepareStatement("select * from user where name = ?;"));
+        stmt->setString(1, name);
+        std::unique_ptr<sql::ResultSet> result(stmt->executeQuery());
+
+        if (!result->next())
+        {
+            return nullptr;
+        }
+
+        std::shared_ptr<User> user_ptr = std::make_shared<User>();
+        user_ptr->set_uid(result->getString("uid"));
+        user_ptr->set_name(name);
+        user_ptr->set_phone(result->getString("uid"));
+        user_ptr->set_password(result->getString("uid"));
+
+        return user_ptr;
+    }
+    catch (std::exception &ex)
+    {
+        std::cout << "add_user failed:" << ex.what() << std::endl;
+    }
+
+    return nullptr;
 }

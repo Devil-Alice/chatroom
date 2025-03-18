@@ -40,5 +40,5 @@ public:
     bool add_user(User &user);
     bool delete_user(User &user);
     bool update_user(User &user);
-    User get_user_by_id(string id);
+    std::shared_ptr<User> get_user_by_name(string name);
 };

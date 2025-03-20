@@ -38,7 +38,7 @@ HttpService::HttpService()
             cout << "handle /verify_code failed: " << ex.what() << endl;
         }
 
-        return false;
+        return true;
     });
    
 

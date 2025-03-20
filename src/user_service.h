@@ -1,5 +1,6 @@
 #pragma once
 #include "user_dao.h"
+#include "redis_manager.h"
 
 class UserService : public Singleton<UserService>
 {
@@ -7,6 +8,7 @@ class UserService : public Singleton<UserService>
     using string = std::string;
 private:
     UserDao &user_dao_;
+    RedisManager &redis_;
     UserService();
 public:
     ~UserService();

@@ -1,8 +1,7 @@
 #include "user_service.h"
-#include "redis_manager.h"
 #include "verify_grpc_client.h"
 
-UserService::UserService() : user_dao_(UserDao::instance())
+UserService::UserService() : user_dao_(UserDao::instance()), redis_(RedisManager::instance())
 {
 }
 
@@ -27,10 +26,11 @@ bool UserService::register_user(User &user)
 
 std::string UserService::get_verify_code(string phone)
 {
-    // 现在redis中查找
-    RedisManager &redis = RedisManager::instance();
+    // todo:查找当前的phone是否已经注册
+
+    // 先在redis中查找
     string verify_code = "";
-    bool success = redis.get(verify_code_prefix + phone, verify_code);
+    bool success = redis_.get(verify_code_prefix + phone, verify_code);
     // redis中存在，直接返回
     if (success && !verify_code.empty())
     {
@@ -50,7 +50,8 @@ std::string UserService::get_verify_code(string phone)
     verify_code = rsp.code();
 
     // 获取成功，将验证码存入redis
-    redis.set(verify_code_prefix + phone, verify_code);
+    redis_.set(verify_code_prefix + phone, verify_code);
+    redis_.expire(verify_code_prefix + phone, 60);
 
     return verify_code;
 }

@@ -1,0 +1,41 @@
+/* 全局背景颜色 */
+QWidget {
+    background-color: white;
+}
+
+/* 所有输入框 */
+QLineEdit {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+/* 输入框聚焦时高亮 */
+QLineEdit:focus {
+    border: 2px solid #34c759;
+}
+
+/* 按钮样式 */
+QPushButton {
+    background-color: #34c759;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    height: 40px;
+}
+
+/* 按钮鼠标悬停 */
+QPushButton:hover {
+    background-color: #34c759;
+}
+
+/* 消息提示的样式 */
+#label_register_msg[status="success"] {
+    color: #28a745;
+}
+
+
+#label_register_msg[status="error"] {
+    color: #FF3B30;
+}

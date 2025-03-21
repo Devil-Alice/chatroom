@@ -30,6 +30,9 @@ public:
     void from_json_string(string json_string) override
     {
         Json::Value json_array = parse_json_string(json_string);
+
+        if  (!json_array.isArray())
+        throw std::runtime_error("JsonObject parse_json_string error");
     
         this->clear();
         for (auto &item : json_array)

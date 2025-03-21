@@ -29,6 +29,7 @@
 #include "my_message.pb.h"
 #include "my_message.grpc.pb.h"
 #include "singleton.h"
+#include "json_object.h"
 #include "raii.h"
 #include "config_manager.h"
 #include "my_utils.h"

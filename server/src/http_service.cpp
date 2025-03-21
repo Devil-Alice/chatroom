@@ -14,6 +14,7 @@ HttpService::HttpService()
 
     register_get("/verify_code", [](std::shared_ptr<HttpConnection> http_conn)
                 {
+        auto response_body_ostream = beast::ostream(http_conn->response_.body());
         try
         {
             // 获取手机号
@@ -29,7 +30,7 @@ HttpService::HttpService()
             string verify_code = UserService::instance().get_verify_code(phone);
             // 写入请求体
             http_conn->response_.set(http::field::content_type, "text/plain");
-            boost::beast::ostream(http_conn->response_.body()) << verify_code;
+            response_body_ostream << verify_code;
 
             return true;
         }
@@ -40,11 +41,47 @@ HttpService::HttpService()
 
         return true;
     });
+
+    register_post("/verify_code", [](std::shared_ptr<HttpConnection> http_conn)
+    {
+        auto response_body_ostream = beast::ostream(http_conn->response_.body());
+        CommonResult result(1, "获取验证码失败");
+        try
+        {
+            // 获取手机号
+            Json::Value root = JsonObject::parse_json_string(beast::buffers_to_string(http_conn->request_.body().data()));
+            
+            string phone = root["phone"].asString();
+
+            // 检查手机号是否传入
+            if (phone.empty())
+            {
+                // 没有手机号
+                cout << "error: phone not found" << endl;
+                return false;
+            }
+            string verify_code = UserService::instance().get_verify_code(phone);
+            // 写入请求体
+            http_conn->response_.set(http::field::content_type, "text/plain");
+
+            response_body_ostream << result.set(0, "ok").to_json_string();
+
+            return true;
+        }
+        catch (std::exception &ex)
+        {
+            cout << "handle /verify_code failed: " << ex.what() << endl;
+            response_body_ostream << result.set(1, "发送失败").to_json_string();
+        }
+
+        return true;
+    });
    
 
     register_post("/user", [](std::shared_ptr<HttpConnection> http_conn)
                   {
-        auto body_ostream = beast::ostream(http_conn->response_.body());
+        auto response_body_ostream = beast::ostream(http_conn->response_.body());
+        CommonResult result(1, "注册用户失败");
         try 
         {
             string body_str = boost::beast::buffers_to_string(http_conn->request_.body().data());
@@ -54,21 +91,14 @@ HttpService::HttpService()
             // 检查是否为空
             if (body_str.empty())
             {
-                beast::ostream(http_conn->response_.body()) << "信息请填写完整";
+                response_body_ostream << result.set(1, "信息请填写完整").to_json_string();
                 return true;
             }
     
             // 解析json字符串为user
             Json::Reader reader;
             Json::Value src_root;
-            Json::Value root;
-    
-            bool success = reader.parse(body_str, src_root);
-            if (!success || !src_root.isObject())
-            {
-                beast::ostream(http_conn->response_.body()) << "json解析失败";
-                return true;
-            }
+            Json::Value root = JsonObject::parse_json_string(body_str);
     
             boost::uuids::random_generator gen;
             string uuid = boost::uuids::to_string(gen());
@@ -77,19 +107,19 @@ HttpService::HttpService()
             string password = src_root["password"].asString();
     
             User user(uuid, name, phone, password);
-            success = UserService::instance().register_user(user);
+            bool success = UserService::instance().register_user(user);
             if (!success)
             {
-                beast::ostream(http_conn->response_.body()) << "添加失败";
+                response_body_ostream << result.set(1, "注册失败").to_json_string();
                 return true;
             }
     
-            beast::ostream(http_conn->response_.body()) << "添加成功";
+            response_body_ostream << result.set(1, "注册成功").to_json_string();
             return true; 
         } 
         catch (std::exception &ex)
         {
-            body_ostream << ex.what();
+            response_body_ostream << result.set(1, ex.what()).to_json_string();
             cout << "handle /user failed: " << ex.what() << endl;
         }
         return true;

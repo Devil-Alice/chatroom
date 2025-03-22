@@ -15,11 +15,11 @@ UserService::~UserService()
 bool UserService::register_user(User &user)
 {
     // 插入前先检查是否存在该用户
-    std::shared_ptr<User> user_ptr = user_dao_.get_user_by_name(user.get_name());
+    std::shared_ptr<User> user_ptr = user_dao_.get_user_by_phone(user.get_phone());
     // 用户已存在
     if (user_ptr != nullptr)
     {
-        throw std::runtime_error("user is already exist");
+        throw std::runtime_error("phone already exists");
     }
 
     // 生成uid

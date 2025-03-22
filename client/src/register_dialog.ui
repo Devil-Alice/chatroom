@@ -95,7 +95,7 @@
          <item>
           <widget class="QPushButton" name="btn_get_verify_code">
            <property name="text">
-            <string>发送(60s)</string>
+            <string>发送</string>
            </property>
           </widget>
          </item>

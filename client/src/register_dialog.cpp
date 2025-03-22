@@ -6,17 +6,55 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent),
                                                   ui(new Ui::RegisterDialog)
 {
     ui->setupUi(this);
+    
+    
+    // 测试信息：-----------------
+    ui->text_name->setText("barbara");
+    ui->text_password->setText("123");
+    ui->text_confirm_password->setText("123");
+    ui->text_phone->setText("18912345678");
+    // 测试信息：++++++++++++++++++
+    
+    
+    // 初始化定时器
+    timer_ = new QTimer(this);
 
+    // 设置定时器事件
+    connect(timer_, &QTimer::timeout, this, [this](){
+        if (time_count_ <= 0)
+        {   
+            ui->btn_get_verify_code->setText("发送");
+            timer_->stop();
+            ui->btn_get_verify_code->setEnabled(true);
+            return;
+        }
+
+        time_count_--;
+        ui->btn_get_verify_code->setText("发送(" + QString::number(time_count_) +"s)");
+        
+    });
+
+
+    // 初始化网络处理事件
     init_request_handler();
 
+    // 设置密码不可见
     ui->text_password->setEchoMode(QLineEdit::Password);
     ui->text_confirm_password->setEchoMode(QLineEdit::Password);
 
+    // 注册用户输入检查事件
+    connect(ui->text_name, &QLineEdit::editingFinished, this,               &slot_check_name);
+    connect(ui->text_phone, &QLineEdit::editingFinished, this,              &slot_check_phone);
+    connect(ui->text_verify_code, &QLineEdit::editingFinished, this,        &slot_check_verify_code);
+    connect(ui->text_password, &QLineEdit::editingFinished, this,           &slot_check_password);
+    connect(ui->text_confirm_password, &QLineEdit::editingFinished, this,   &slot_check_confirm_password);
+
     // 注册界面收到网络响应后的事件
     connect(HttpManager::instance().get(), &HttpManager::signal_resigter_request_finished, this, &RegisterDialog::slot_register_request_finished);
-    
+
     // 获取验证码的按钮点击事件
     connect(ui->btn_get_verify_code, &QPushButton::clicked, this, &RegisterDialog::slot_get_verify_code);
+    connect(ui->btn_register, &QPushButton::clicked, this, &RegisterDialog::slot_register_user);
 }
 
 RegisterDialog::~RegisterDialog()
@@ -48,6 +86,89 @@ void RegisterDialog::slot_register_request_finished(MY_STATUS_CODE code, REQUEST
     return;
 }
 
+void RegisterDialog::slot_check_name()
+{
+    if (ui->text_name->text().isEmpty())
+    {
+        add_tip("name", "用户名不能为空");
+        return;
+    }
+
+    remove_tip("name");
+}
+
+void RegisterDialog::slot_check_phone()
+{
+    if (ui->text_phone->text().isEmpty())
+    {
+        add_tip("phone", "手机号不能为空");
+        return;
+    }
+
+    // 利用正则表达式验证手机号
+    QString phone = ui->text_phone->text();
+    QRegularExpression regex("^1[3-9]\\d{9}$");
+    bool match = regex.match(phone).hasMatch();
+    // 验证失败
+    if (!match)
+    {
+        add_tip("phone", "手机号不正确");
+        return;
+    }
+
+    remove_tip("phone");
+
+}
+
+void RegisterDialog::slot_check_verify_code()
+{
+    if (ui->text_verify_code->text().isEmpty())
+    {
+        add_tip("verify_code", "验证码不能为空");
+        return;
+    }
+    remove_tip("verify_code");
+}
+
+void RegisterDialog::slot_check_password()
+{
+    if (ui->text_password->text().isEmpty())
+    {
+        add_tip("password", "密码不能为空");
+        return;
+    }
+
+    // 检查两次密码是否一致
+    if (!(ui->text_password->text() == ui->text_confirm_password->text()))
+    {
+        add_tip("same_password", "两次密码不一致");
+        return; 
+    }
+
+    remove_tip("same_password");
+    remove_tip("password");
+    
+}
+
+void RegisterDialog::slot_check_confirm_password()
+{
+    if (ui->text_confirm_password->text().isEmpty())
+    {
+        add_tip("confirm_password", "确认密码不能为空");
+        return;
+    }
+
+    // 检查两次密码是否一致
+    if (!(ui->text_password->text() == ui->text_confirm_password->text()))
+    {
+        add_tip("same_password", "两次密码不一致");
+        return; 
+    }
+
+    remove_tip("same_password");
+    remove_tip("confirm_password");
+}
+
 void RegisterDialog::init_request_handler()
 {
     http_request_handler_[REQUEST_ID::GET_VERIFY_CODE] = [this](QJsonObject &json_obj)
@@ -59,6 +180,27 @@ void RegisterDialog::init_request_handler()
             return;
         }
 
+        // 禁用按钮
+        ui->btn_get_verify_code->setEnabled(false);
+        ui->btn_get_verify_code->setText("发送(60s)");
+        // 启用定时器
+        timer_->setInterval(1000);
+        time_count_ = 60;
+        timer_->start();
+
+        show_register_msg(json_obj["message"].toString(), "success");
+        return;
+    };
+
+    http_request_handler_[REQUEST_ID::REGISTER_USER] = [this](QJsonObject &json_obj)
+    {
+        int error_code = json_obj["status"].toInt();
+        if (error_code != MY_STATUS_CODE::SUCCESS)
+        {
+            show_register_msg("发送失败，请检查信息是否正确", "error");
+            return;
+        }
+        
         show_register_msg(json_obj["message"].toString(), "success");
         return;
     };
@@ -73,18 +215,40 @@ void RegisterDialog::show_register_msg(QString msg, QString status)
     return;
 }
 
-void RegisterDialog::slot_get_verify_code()
+void RegisterDialog::show_tip()
 {
-    // 利用正则表达式验证手机号
-    QString phone = ui->text_phone->text();
-    QRegularExpression regex("^1[3-9]\\d{9}$");
-    bool match = regex.match(phone).hasMatch();
-    // 验证失败
-    if (!match)
+    if (tips_.isEmpty())
     {
-        show_register_msg("手机号不正确", "error");
+        ui->label_register_msg->clear();
         return;
     }
+    QString tip_msg = tips_.first();
+    show_register_msg(tip_msg, "error");
+
+}
+
+void RegisterDialog::add_tip(QString key, QString value)
+{
+    tips_[key] = value;
+    show_tip();
+}
+
+void RegisterDialog::remove_tip(QString key)
+{
+    tips_.remove(key);
+    show_tip();
+}
+
+void RegisterDialog::slot_get_verify_code()
+{
+    // 存在手机号错误
+    if (tips_.find("phone") != tips_.end())
+    {
+        show_tip();
+        return;
+    }
+    
+    QString phone = ui->text_phone->text();
 
     // 验证成功
     // 向服务器请求发送验证码
@@ -98,7 +262,26 @@ void RegisterDialog::slot_get_verify_code()
 
     std::shared_ptr<HttpManager> http_manager(HttpManager::instance());
 
-     http_manager->post_request(url, json_obj, MODULE::REGISTER, REQUEST_ID::GET_VERIFY_CODE);
+    http_manager->post_request(url, json_obj, MODULE::REGISTER, REQUEST_ID::GET_VERIFY_CODE);
 
     return;
+}
+
+void RegisterDialog::slot_register_user()
+{
+    if (!tips_.isEmpty())
+    {
+        show_tip();
+        return;
+    }
+
+    QJsonObject json_obj;
+    json_obj["name"] = ui->text_name->text();
+    json_obj["phone"] = ui->text_phone->text();
+    json_obj["verify_code"] = ui->text_verify_code->text();
+    json_obj["password"] = md5_encrypt(ui->text_password->text());
+
+    HttpManager::instance()->post_request(QUrl(gate_url_prefix + "/user"), json_obj, MODULE::REGISTER, REQUEST_ID::REGISTER_USER);
+    return;
+
 }

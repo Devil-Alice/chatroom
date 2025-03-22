@@ -52,6 +52,9 @@ using grpc::Status;
 using my_message::GetVerifyRequest;
 using my_message::GetVerifyResponse;
 using my_message::VerifyService;
+using my_message::StatusService;
+using my_message::GetChatServerRequest;
+using my_message::GetChatServerResponse;
 
 const std::string verify_code_prefix = "verify_code_";
 
@@ -59,7 +62,7 @@ enum MY_STATUS_CODE
 {
     SUCCESS = 0,
     JSON_ERROR = 1001,
-    RPC_RAILED = 1002,
+    RPC_FAILED = 1002,
     TIMEOUT = 1003,
     VERIFY_CODE_EXPIRED = 1004,
     VERIFY_CODE_ERROR = 1005,

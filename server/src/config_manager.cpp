@@ -16,7 +16,7 @@ ConfigManager::ConfigManager()
     Json::Reader reader;
     Json::Value root;
 
-    std::ifstream ifs("./application_config.json");
+    std::ifstream ifs("./app_config.json");
     bool success = reader.parse(ifs, root);
     if (!success || !root.isObject())
     {

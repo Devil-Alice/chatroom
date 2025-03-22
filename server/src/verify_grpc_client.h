@@ -8,7 +8,7 @@ class VerifyGrpcClient : public Singleton<VerifyGrpcClient>
 
 private:
     // std::unique_ptr<VerifyService::Stub> stub_;
-    std::unique_ptr<GrpcStubPool<VerifyService, VerifyService::Stub>> grpc_stub_pool;
+    std::unique_ptr<GrpcStubPool<VerifyService, VerifyService::Stub>> grpc_stub_pool_;
     VerifyGrpcClient();
 
 public:

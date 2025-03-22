@@ -2,9 +2,13 @@
     "gate_server": {
         "port": 8080
     },
-    "rpc_server": {
+    "verify_server": {
         "host": "127.0.0.1",
         "port": 50051
+    },
+    "status_server": {
+        "host": "127.0.0.1",
+        "port": 50052
     },
     "redis_server": {
         "host": "127.0.0.1",

@@ -5,6 +5,8 @@ syntax = "proto3";
 package my_message;
 
 
+// 获取验证码服务以及对象的proto代码---------------------------------------------------------
+
 // service 用于定义 RPC（远程过程调用）服务。RPC 是一种协议，用于允许客户端和服务器之间进行通信
 // VerifyService 是服务的名称，表示这是一个名为 VerifyService 的服务
 service VerifyService
@@ -27,4 +29,26 @@ message GetVerifyResponse
     int32 error = 1;
     string phone = 2;
     string code = 3;
+}
+
+
+// 获取聊天服务器的服务以及对象的proto代码 ------------------------------------------------
+
+message GetChatServerRequest
+{
+    int32 uid = 1;
+}
+
+
+message GetChatServerResponse
+{
+    int32 error = 1;
+    string host = 2;
+    string port = 3;
+    string token = 4;
+}
+
+service StatusService
+{
+    rpc get_chat_server(GetChatServerRequest) returns (GetChatServerResponse) {}
 }

@@ -4,7 +4,7 @@ VerifyGrpcClient::VerifyGrpcClient()
 {
     std::string host = app_config["rpc_server"]["host"];
     std::string port = app_config["rpc_server"]["port"];
-    grpc_stub_pool.reset(new GrpcStubPool(10, host, port));
+    grpc_stub_pool.reset(new GrpcStubPool<VerifyService, VerifyService::Stub>(10, host, port));
 }
 
 GetVerifyResponse VerifyGrpcClient::get_rerify_code(std::string phone)

@@ -4,9 +4,7 @@
 #include "redis_manager.h"
 #include "user_dao.h"
 #include "user_service.h"
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
+
 
 HttpService::HttpService()
 {
@@ -27,7 +25,7 @@ HttpService::HttpService()
                 cout << "error: phone not found" << endl;
                 return false;
             }
-            string verify_code = UserService::instance().get_verify_code(phone);
+            string verify_code = UserService::instance().generate_verify_code(phone);
             // 写入请求体
             http_conn->response_.set(http::field::content_type, "text/plain");
             response_body_ostream << verify_code;
@@ -60,7 +58,7 @@ HttpService::HttpService()
                 cout << "error: phone not found" << endl;
                 return false;
             }
-            string verify_code = UserService::instance().get_verify_code(phone);
+            string verify_code = UserService::instance().generate_verify_code(phone);
             // 写入请求体
             http_conn->response_.set(http::field::content_type, "text/plain");
 
@@ -97,16 +95,20 @@ HttpService::HttpService()
     
             // 解析json字符串为user
             Json::Reader reader;
-            Json::Value src_root;
-            Json::Value root = JsonObject::parse_json_string(body_str);
+            Json::Value root = JsonObject::parse_json_string(body_str);;
     
-            boost::uuids::random_generator gen;
-            string uuid = boost::uuids::to_string(gen());
-            string name = src_root["name"].asString();
-            string phone = src_root["phone"].asString();
-            string password = src_root["password"].asString();
-    
-            User user(uuid, name, phone, password);
+            string phone = root["phone"].asString();
+            string verify_code = root["verify_code"].asString();
+            string verify_code_redis = UserService::instance().get_verify_code_from_redis(phone);
+            if (verify_code_redis.empty() || verify_code_redis != verify_code)
+            {
+                response_body_ostream << result.set(1, "验证码错误").to_json_string();
+                return true;
+            }
+     
+            string name = root["name"].asString();
+            string password = root["password"].asString();
+            User user(name, phone, password);
             bool success = UserService::instance().register_user(user);
             if (!success)
             {
@@ -114,7 +116,7 @@ HttpService::HttpService()
                 return true;
             }
     
-            response_body_ostream << result.set(1, "注册成功").to_json_string();
+            response_body_ostream << result.set(0, "注册成功").to_json_string();
             return true; 
         } 
         catch (std::exception &ex)

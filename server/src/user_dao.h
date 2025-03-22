@@ -14,7 +14,7 @@ private:
 
 public:
     User();
-    User(string uid, string name, string phone, string password);
+    User(string name, string phone, string password);
     ~User();
 
     int get_id();

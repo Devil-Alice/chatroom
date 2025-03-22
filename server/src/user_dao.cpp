@@ -3,9 +3,8 @@
 
 User::User() {}
 
-User::User(string uid, string name, string phone, string password)
+User::User(string name, string phone, string password)
 {
-    uid_ = uid;
     name_ = name;
     phone_ = phone;
     password_ = password;

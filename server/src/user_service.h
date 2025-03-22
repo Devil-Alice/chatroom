@@ -13,5 +13,6 @@ private:
 public:
     ~UserService();
     bool register_user(User &user);
-    string get_verify_code(string phone);
+    string get_verify_code_from_redis(string phone);
+    string generate_verify_code(string phone);
 };

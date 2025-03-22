@@ -1,5 +1,8 @@
 #include "user_service.h"
 #include "verify_grpc_client.h"
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 UserService::UserService() : user_dao_(UserDao::instance()), redis_(RedisManager::instance())
 {
@@ -19,26 +22,36 @@ bool UserService::register_user(User &user)
         throw std::runtime_error("user is already exist");
     }
 
+    // 生成uid
+    boost::uuids::random_generator gen;
+    user.set_uid(boost::uuids::to_string(gen()));
+
     // 添加用户
     bool success = user_dao_.add_user(user);
     return success;
 }
 
-std::string UserService::get_verify_code(string phone)
+std::string UserService::get_verify_code_from_redis(string phone)
 {
-    // todo:查找当前的phone是否已经注册
+    string verify_code = "";
+    redis_.get(verify_code_prefix + phone, verify_code);
+    std::cout << verify_code_prefix + phone << ": " << verify_code << std::endl;
+    return verify_code;
+}
+
+std::string UserService::generate_verify_code(string phone)
+{
+    // todo: 写一个清除redis验证码的函数，避免用户在不同阶段混用验证码
 
     // 先在redis中查找
-    string verify_code = "";
-    bool success = redis_.get(verify_code_prefix + phone, verify_code);
-    // redis中存在，直接返回
-    if (success && !verify_code.empty())
+    string verify_code = get_verify_code_from_redis(phone);
+    if (!verify_code.empty())
     {
+        std::cout << verify_code_prefix + phone << " exist: " << verify_code << std::endl;
         return verify_code;
     }
 
-    // redi中不存在，则向rpc获取
-    std::cout << verify_code_prefix + phone << " dosen't exist" << std::endl;
+    // redis中不存在，则向rpc获取
     std::cout << "request from grpc service" << std::endl;
     // 从grpc获取验证码
     GetVerifyResponse rsp = VerifyGrpcClient::instance().get_rerify_code(phone);

@@ -1,19 +1,19 @@
-#include "status_grpc_client.h"
+#include "grpc_status_client.h"
 
-StatusGrpcClient::StatusGrpcClient()
+GrpcStatusClient::GrpcStatusClient()
 {
     string host = app_config["status_server"]["host"];
     string port = app_config["status_server"]["port"];
-    grpc_stub_pool_.reset(new GrpcStubPool<StatusService, StatusService::Stub>(10, host, port));
+    grpc_stub_pool_.reset(new GrpcStubPool<my_grpc::Status, my_grpc::Status::Stub>(10, host, port));
 
 }
 
-StatusGrpcClient::~StatusGrpcClient()
+GrpcStatusClient::~GrpcStatusClient()
 {
 
 }
 
-GetChatServerResponse StatusGrpcClient::get_chat_server(int uid)
+GetChatServerResponse GrpcStatusClient::get_chat_server(int uid)
 {
     auto conn = grpc_stub_pool_->get_grpc_stub();
 

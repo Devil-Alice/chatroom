@@ -1,17 +1,17 @@
 #pragma once
 #include <grpcpp/grpcpp.h>
-#include "my_message.pb.h"
-#include "my_message.grpc.pb.h"
+#include "my_grpc.pb.h"
+#include "my_grpc.grpc.pb.h"
 
 using grpc::ServerContext;
 using grpc::Service;
 using grpc::Status;
 
-using my_message::GetVerifyRequest;
-using my_message::GetVerifyResponse;
-using my_message::VerifyService;
+using my_grpc::GetVerifyRequest;
+using my_grpc::GetVerifyResponse;
 
-class VerifyGrpcServer : public VerifyService::Service
+
+class GrpcVerifyServer final: public my_grpc::Verify::Service
 {
 private:
 public:

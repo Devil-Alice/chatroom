@@ -1,7 +1,7 @@
-#include "verify_grpc_server.h"
+#include "grpc_verify_server.h"
 #include <random>
 
-Status VerifyGrpcServer::get_verify_code(ServerContext *context, const GetVerifyRequest *req, GetVerifyResponse *rsp)
+Status GrpcVerifyServer::get_verify_code(ServerContext *context, const GetVerifyRequest *req, GetVerifyResponse *rsp)
 {
 
     //  获取手机号

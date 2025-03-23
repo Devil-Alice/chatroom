@@ -1,6 +1,6 @@
 #include <iostream>
 #include <grpcpp/grpcpp.h>
-#include "verify_grpc_server.h"
+#include "grpc_verify_server.h"
 
 
 using namespace std;
@@ -9,7 +9,7 @@ using namespace grpc;
 void run_server()
 {
     string server_address = "0.0.0.0:50051";
-    VerifyGrpcServer verify_service;
+    GrpcVerifyServer verify_service;
 
     ServerBuilder builder;
     builder.AddListeningPort(server_address, InsecureServerCredentials());

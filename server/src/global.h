@@ -26,8 +26,8 @@
 // mysql c++头文件
 #include <mysql-cppconn/mysql/jdbc.h>
 
-#include "my_message.pb.h"
-#include "my_message.grpc.pb.h"
+#include "my_grpc.pb.h"
+#include "my_grpc.grpc.pb.h"
 #include "singleton.h"
 #include "json_object.h"
 #include "common_result.h"
@@ -49,12 +49,12 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 
-using my_message::GetVerifyRequest;
-using my_message::GetVerifyResponse;
-using my_message::VerifyService;
-using my_message::StatusService;
-using my_message::GetChatServerRequest;
-using my_message::GetChatServerResponse;
+
+using my_grpc::GetVerifyRequest;
+using my_grpc::GetVerifyResponse;
+
+using my_grpc::GetChatServerRequest;
+using my_grpc::GetChatServerResponse;
 
 const std::string verify_code_prefix = "verify_code_";
 

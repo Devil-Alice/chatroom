@@ -1,5 +1,5 @@
 #include "user_service.h"
-#include "verify_grpc_client.h"
+#include "grpc_verify_client.h"
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -54,7 +54,7 @@ std::string UserService::generate_verify_code(string phone)
     // redis中不存在，则向rpc获取
     std::cout << "request from grpc service" << std::endl;
     // 从grpc获取验证码
-    GetVerifyResponse rsp = VerifyGrpcClient::instance().get_rerify_code(phone);
+    GetVerifyResponse rsp = GrpcVerifyClient::instance().get_rerify_code(phone);
     if (rsp.error() != MY_STATUS_CODE::SUCCESS)
     {
         // rpc获取失败了

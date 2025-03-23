@@ -2,14 +2,14 @@
 syntax = "proto3";
 
 // 包名，类似c++的namespace
-package my_message;
+package my_grpc;
 
 
 // 获取验证码服务以及对象的proto代码---------------------------------------------------------
 
 // service 用于定义 RPC（远程过程调用）服务。RPC 是一种协议，用于允许客户端和服务器之间进行通信
-// VerifyService 是服务的名称，表示这是一个名为 VerifyService 的服务
-service VerifyService
+// Verify 是服务的名称，表示这是一个名为 Verify 的服务
+service Verify
 {
     // rpc 表示你要定义一个服务端的接口方法，客户端可以调用这个方法来请求服务。通过 rpc 定义的函数是异步的、网络通信的函数，客户端通过这些 RPC 方法与服务器进行交互
     // 这句表示定义了一个方法 get_verify_code，它接受一个 GetVerifyRequest 类型的请求，并返回一个 GetVerifyResponse 类型的响应
@@ -48,7 +48,7 @@ message GetChatServerResponse
     string token = 4;
 }
 
-service StatusService
+service Status
 {
     rpc get_chat_server(GetChatServerRequest) returns (GetChatServerResponse) {}
 }

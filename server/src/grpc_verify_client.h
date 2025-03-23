@@ -2,14 +2,14 @@
 #include "global.h"
 #include "grpc_stub_pool.h"
 
-class VerifyGrpcClient : public Singleton<VerifyGrpcClient>
+class GrpcVerifyClient : public Singleton<GrpcVerifyClient>
 {
-    friend class Singleton<VerifyGrpcClient>;
+    friend class Singleton<GrpcVerifyClient>;
 
 private:
     // std::unique_ptr<VerifyService::Stub> stub_;
-    std::unique_ptr<GrpcStubPool<VerifyService, VerifyService::Stub>> grpc_stub_pool_;
-    VerifyGrpcClient();
+    std::unique_ptr<GrpcStubPool<my_grpc::Verify, my_grpc::Verify::Stub>> grpc_stub_pool_;
+    GrpcVerifyClient();
 
 public:
     // ~VerifyGrpcClient();

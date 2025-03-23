@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-set(PROJECT_NAME "grpc_server")
+set(PROJECT_NAME "verify_server")
 project(${PROJECT_NAME} C CXX)
 add_definitions("-Wall -g")
 
@@ -43,10 +43,10 @@ endif()
 
 
 # Include source files
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../proto_files)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../../proto_files)
 
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
-file(GLOB PBSOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../proto_files/*.cc)
+file(GLOB PBSOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../proto_files/*.cc)
 add_executable(${PROJECT_NAME} ${SOURCES} ${PBSOURCES})
 
 target_link_libraries(${PROJECT_NAME}

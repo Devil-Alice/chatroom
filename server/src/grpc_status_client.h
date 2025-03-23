@@ -1,7 +1,7 @@
 #include "global.h"
 #include "grpc_stub_pool.h"
 
-class GrpcStatusClient : Singleton<GrpcStatusClient>
+class GrpcStatusClient : public Singleton<GrpcStatusClient>
 {
     friend class Singleton<GrpcStatusClient>;
     using string = std::string;

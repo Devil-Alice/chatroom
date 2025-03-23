@@ -19,6 +19,9 @@
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 // grpc 头文件
 #include <grpcpp/grpcpp.h>
 // redis hiredis头文件

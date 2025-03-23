@@ -1,8 +1,5 @@
 #include "user_service.h"
 #include "grpc_verify_client.h"
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
 
 UserService::UserService() : user_dao_(UserDao::instance()), redis_(RedisManager::instance())
 {

@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <QCryptographicHash>
+#include <QMessageBox>
 #include "singleton.h"
 #include "config_manager.h"
 
@@ -26,13 +27,15 @@ QString md5_encrypt(const QString &data);
 // MODULE和REQUEST_ID: 服务网络请求的回调, 标记响应的数据是当时哪个模块的哪个功能
 enum MODULE
 {
-    REGISTER = 1001
+    REGISTER = 1001,
+    LOGIN = 1002
 };
 
 enum REQUEST_ID
 {
     GET_VERIFY_CODE = 1001, //获取验证码
     REGISTER_USER = 1002, //用户注册
+    USER_LOGIN = 1003
 
 };
 
@@ -40,7 +43,7 @@ enum MY_STATUS_CODE
 {
     SUCCESS = 0,
     JSON_ERROR = 1001,
-    RPC_FAILED = 1002,
+    RPC_RAILED = 1002,
     TIMEOUT = 1003,
     VERIFY_CODE_EXPIRED = 1004,
     VERIFY_CODE_ERROR = 1005,

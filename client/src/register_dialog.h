@@ -17,6 +17,9 @@ public:
     explicit RegisterDialog(QWidget *parent = nullptr);
     ~RegisterDialog();
 
+signals:
+    void signal_return();
+
 public slots:
     void slot_get_verify_code();
     void slot_register_user();
@@ -28,11 +31,11 @@ public slots:
     void slot_check_confirm_password();
 
 private:
-    QMap<REQUEST_ID, std::function<void(QJsonObject &json_obj)>> http_request_handler_;
+    QMap<REQUEST_ID, std::function<void(QJsonObject &json_obj)>> http_response_handler_;
     int time_count_;
     QTimer *timer_;
     QMap<QString, QString> tips_;
-    void init_request_handler();
+    void init_response_handler();
     // status 有两种，“success”是绿色，“error”是红色
     void show_register_msg(QString msg, QString status);
     void show_tip();

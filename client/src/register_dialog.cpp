@@ -36,7 +36,7 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent),
 
 
     // 初始化网络处理事件
-    init_request_handler();
+    init_response_handler();
 
     // 设置密码不可见
     ui->text_password->setEchoMode(QLineEdit::Password);
@@ -52,8 +52,13 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent),
     // 注册界面收到网络响应后的事件
     connect(HttpManager::instance().get(), &HttpManager::signal_resigter_request_finished, this, &RegisterDialog::slot_register_request_finished);
 
+    // 返回按钮的点击事件
+    connect(ui->btn_return, &QPushButton::clicked, this, [this](){
+        emit signal_return();
+    });
     // 获取验证码的按钮点击事件
     connect(ui->btn_get_verify_code, &QPushButton::clicked, this, &RegisterDialog::slot_get_verify_code);
+    // 注册按钮的点击事件
     connect(ui->btn_register, &QPushButton::clicked, this, &RegisterDialog::slot_register_user);
 }
 
@@ -81,7 +86,7 @@ void RegisterDialog::slot_register_request_finished(MY_STATUS_CODE code, REQUEST
     QJsonObject json_obj = json_doc.object();
 
     // todo: 判断返回的内容
-    http_request_handler_[request_id](json_obj);
+    http_response_handler_[request_id](json_obj);
 
     return;
 }
@@ -169,14 +174,14 @@ void RegisterDialog::slot_check_confirm_password()
     remove_tip("confirm_password");
 }
 
-void RegisterDialog::init_request_handler()
+void RegisterDialog::init_response_handler()
 {
-    http_request_handler_[REQUEST_ID::GET_VERIFY_CODE] = [this](QJsonObject &json_obj)
+    http_response_handler_[REQUEST_ID::GET_VERIFY_CODE] = [this](QJsonObject &json_obj)
     {
         int error_code = json_obj["status"].toInt();
         if (error_code != MY_STATUS_CODE::SUCCESS)
         {
-            show_register_msg("发送失败，请检查信息是否正确", "error");
+            show_register_msg(json_obj["message"].toString(), "error");
             return;
         }
 
@@ -192,12 +197,12 @@ void RegisterDialog::init_request_handler()
         return;
     };
 
-    http_request_handler_[REQUEST_ID::REGISTER_USER] = [this](QJsonObject &json_obj)
+    http_response_handler_[REQUEST_ID::REGISTER_USER] = [this](QJsonObject &json_obj)
     {
         int error_code = json_obj["status"].toInt();
         if (error_code != MY_STATUS_CODE::SUCCESS)
         {
-            show_register_msg("发送失败，请检查信息是否正确", "error");
+            show_register_msg(json_obj["message"].toString(), "error");
             return;
         }
         

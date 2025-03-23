@@ -113,24 +113,24 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="leftMargin">
-        <number>100</number>
+        <number>20</number>
        </property>
        <property name="rightMargin">
-        <number>100</number>
+        <number>20</number>
        </property>
-       <item>
-        <widget class="QPushButton" name="btn_register">
-         <property name="text">
-          <string>注册</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QPushButton" name="btn_login">
          <property name="text">
           <string>登录</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_register">
+         <property name="text">
+          <string>注册</string>
          </property>
         </widget>
        </item>

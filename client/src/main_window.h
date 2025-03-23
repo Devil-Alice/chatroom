@@ -20,6 +20,7 @@ public:
 
 public slots:
     void slot_goto_register();
+    void slot_goto_login();
 
 private:
     Ui::MainWindow *ui;

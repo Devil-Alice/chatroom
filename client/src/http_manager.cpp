@@ -39,9 +39,15 @@ void HttpManager::post_request(QUrl url, QJsonObject request_json_obj, MODULE mo
 
 void HttpManager::slot_request_finished(MY_STATUS_CODE code, MODULE module, REQUEST_ID request_id, QString response)
 {
-    if (module == REGISTER)
+    if (module == MODULE::REGISTER)
     {
         emit signal_resigter_request_finished(code, request_id, response);
+        return;
+    }
+
+    if (module == MODULE::LOGIN)
+    {
+        emit signal_login_request_finished(code, request_id, response);
     }
 
     return;

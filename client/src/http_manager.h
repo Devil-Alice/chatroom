@@ -17,6 +17,7 @@ public:
 signals:
     void signal_request_finished(MY_STATUS_CODE code, MODULE module, REQUEST_ID request_id, QString response);
     void signal_resigter_request_finished(MY_STATUS_CODE code, REQUEST_ID request_id, QString response);
+    void signal_login_request_finished(MY_STATUS_CODE code, REQUEST_ID request_id, QString response);
 private slots:
     void slot_request_finished(MY_STATUS_CODE code, MODULE module, REQUEST_ID request_id, QString response);
 };

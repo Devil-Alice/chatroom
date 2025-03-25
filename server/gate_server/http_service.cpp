@@ -4,7 +4,7 @@
 #include "redis_manager.h"
 #include "user_dao.h"
 #include "user_service.h"
-
+#include "common_result.h"
 
 HttpService::HttpService()
 {

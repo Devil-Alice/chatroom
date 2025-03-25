@@ -33,7 +33,6 @@
 #include "my_grpc.grpc.pb.h"
 #include "singleton.h"
 #include "json_object.h"
-#include "common_result.h"
 #include "raii.h"
 #include "config_manager.h"
 #include "my_utils.h"

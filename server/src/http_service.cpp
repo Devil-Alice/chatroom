@@ -1,6 +1,6 @@
 #include "http_service.h"
 #include "http_connection.h"
-#include "verify_grpc_client.h"
+#include "grpc_verify_client.h"
 #include "redis_manager.h"
 #include "user_dao.h"
 #include "user_service.h"
@@ -98,6 +98,7 @@ HttpService::HttpService()
             Json::Value root = JsonObject::parse_json_string(body_str);;
     
             string phone = root["phone"].asString();
+            // 检查验证码是否正确
             string verify_code = root["verify_code"].asString();
             string verify_code_redis = UserService::instance().get_verify_code_from_redis(phone);
             if (verify_code_redis.empty() || verify_code_redis != verify_code)
@@ -124,6 +125,30 @@ HttpService::HttpService()
             response_body_ostream << result.set(1, ex.what()).to_json_string();
             cout << "handle /user failed: " << ex.what() << endl;
         }
+        return true;
+    });
+
+    register_post("/login", [](std::shared_ptr<HttpConnection> conn){
+
+        auto response_body_ostream = beast::ostream(conn->response_.body());
+        CommonResult result;
+        try
+        {
+            string body_str = beast::buffers_to_string(conn->request_.body().data());
+
+            Json::Value root = JsonObject::parse_json_string(body_str);
+
+            string phone = root["phone"].asString();
+            string password = root["password"].asString();
+            
+
+
+        }
+        catch (std::exception &ex)
+        {
+
+        }
+
         return true;
     });
 
@@ -157,7 +182,7 @@ HttpService::HttpService()
         // 解析成功
         string value = src_root[deteced_key].asString();
         // 调用rpc方法获取验证码
-        GetVerifyResponse rsp = VerifyGrpcClient::instance().get_rerify_code(value);
+        GetVerifyResponse rsp = GrpcVerifyClient::instance().get_rerify_code(value);
         if (rsp.error() != 0)
         {
         }

@@ -80,3 +80,6 @@ jsoncpp
 hiredis
 mysqlcppconn
 )
+
+# copy configuration file
+configure_file(${CMAKE_CURRENT_LIST_DIR}/app_config.json ${CMAKE_BINARY_DIR}/app_config.json COPYONLY)

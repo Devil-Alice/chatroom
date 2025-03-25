@@ -17,7 +17,8 @@ SOURCES += \
     login_dialog.cpp \
     main.cpp \
     main_window.cpp \
-    register_dialog.cpp
+    register_dialog.cpp \
+    tcp_manager.cpp
 
 HEADERS += \
     config_manager.h \
@@ -26,7 +27,8 @@ HEADERS += \
     login_dialog.h \
     main_window.h \
     register_dialog.h \
-    singleton.h
+    singleton.h \
+    tcp_manager.h
 
 FORMS += \
     login_dialog.ui \

@@ -15,6 +15,7 @@
 #include <QRegularExpression>
 #include <QCryptographicHash>
 #include <QMessageBox>
+#include <QTcpSocket>
 #include "singleton.h"
 #include "config_manager.h"
 
@@ -33,9 +34,11 @@ enum MODULE
 
 enum REQUEST_ID
 {
+    UNKNOWN = 1000,
     GET_VERIFY_CODE = 1001, //获取验证码
     REGISTER_USER = 1002, //用户注册
-    USER_LOGIN = 1003
+    USER_LOGIN = 1003, // 用户登录
+    CHAT_LOGIN = 1004  //聊天服务器登录
 
 };
 

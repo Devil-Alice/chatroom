@@ -16,6 +16,12 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent),
 
     // 处理httpmanager发送来的信号
     connect(HttpManager::instance().get(), &HttpManager::signal_login_request_finished, this, &LoginDialog::slot_login_request_finished);
+
+    // 处理tcp连接信号
+    connect(this, &LoginDialog::signal_connect_to_server, TcpManager::instance().get(), &TcpManager::slot_connect_to_server);
+
+    // 处理连接完成的信号
+    connect(TcpManager::instance().get(), &TcpManager::signal_connection_status, this, &LoginDialog::slot_handle_connection_status);
 }
 
 LoginDialog::~LoginDialog()
@@ -35,6 +41,18 @@ void LoginDialog::init_response_handler()
         }
         
         QMessageBox::information(this, "info",json_obj["message"].toString());
+
+
+        QJsonObject json_obj_data = json_obj["data"].toObject();
+
+        // 登录成功后，尝试连接tcp服务器
+        ConnectoinInfo info;
+        info.uid = json_obj["uid"].toString();
+        info.host= json_obj["host"].toString();
+        info.port= json_obj["port"].toInt();
+        info.token= json_obj["token"].toString();
+
+        emit signal_connect_to_server(info);
         return; });
 }
 
@@ -61,6 +79,7 @@ void LoginDialog::slot_user_login()
     json_obj["password"] = password;
     HttpManager::instance()->post_request(QUrl(gate_url_prefix + "/login"), json_obj, MODULE::LOGIN, REQUEST_ID::USER_LOGIN);
 
+
     return;
 }
 
@@ -83,6 +102,26 @@ void LoginDialog::slot_login_request_finished(MY_STATUS_CODE code, REQUEST_ID re
 
     QJsonObject json_obj = json_doc.object();
     http_response_handler_[request_id](json_obj);
+
+    return;
+}
+
+void LoginDialog::slot_handle_connection_status(bool success)
+{
+    if (!success)
+    {
+        qDebug() << "login tcp connection failed";
+        return;
+    }
+
+    QJsonObject json_obj;
+    json_obj["uid"] = uid_;
+    json_obj["token"] = token_;
+
+    QJsonDocument json_doc(json_obj);
+    QByteArray data = json_doc.toJson();
+    
+    emit TcpManager::instance()->signal_send_message(REQUEST_ID::CHAT_LOGIN, data);
 
     return;
 }

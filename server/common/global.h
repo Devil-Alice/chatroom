@@ -74,3 +74,11 @@ enum MY_STATUS_CODE
     NETWORK_FAILED = 1009
 };
 
+enum REQUEST_ID
+{
+    UNKNOWN = 1000,
+    GET_VERIFY_CODE = 1001, //获取验证码
+    REGISTER_USER = 1002, //用户注册
+    USER_LOGIN = 1003, // 用户登录
+    CHAT_LOGIN = 1004  //聊天服务器登录
+};

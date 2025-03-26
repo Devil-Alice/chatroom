@@ -7,11 +7,13 @@ class Package
 {
     // 请求数据包分为三部分：request_id(2字节)，message_length(2字节)，message
     friend class Session;
+
 private:
     int16_t request_id_;
     int16_t message_length_;
     std::string message_;
     char *buffer_;
+
 public:
     Package();
     ~Package();
@@ -19,6 +21,7 @@ public:
     void clear_buffer();
     void parse_head();
     void parse_message();
+    char *build_buffer();
 };
 
 // 会话类，表示与一个客户端连接通信的类

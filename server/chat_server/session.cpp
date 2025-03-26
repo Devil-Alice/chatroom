@@ -26,6 +26,10 @@ void Package::parse_head()
 {
     memcpy(&request_id_, buffer_, sizeof(request_id_));
     memcpy(&message_length_, buffer_ + sizeof(request_id_), sizeof(message_length_));
+
+    request_id_ = ntohs(request_id_);
+    message_length_ = ntohs(message_length_);
+
     // 拷贝之后清空buff，为接收消息准备
     clear_buffer();
     return;
@@ -39,9 +43,20 @@ void Package::parse_message()
     return;
 }
 
+char *Package::build_buffer()
+{
+    // 转换字节序
+    request_id_ = htons(request_id_);
+    message_length_ = htons(message_length_);
 
+    // 将包头写入buffer
+    memcpy(buffer_, &request_id_, sizeof(request_id_));
+    memcpy(buffer_ + sizeof(request_id_), &message_length_, sizeof(message_length_));
+    // 将消息体写入buffer
+    memcpy(buffer_ + sizeof(request_id_) + sizeof(message_length_), message_.data(), message_.length());
 
-
+    return buffer_;
+}
 
 Session::Session(asio::io_context &ioc) : ioc_(ioc), socket_(ioc)
 {
@@ -64,8 +79,6 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
     // 此处应该写入的位置为 起始地址 + 已经读取的长度，能写入的大小为，期望读取的长度 - 已经读取的长度
     socket_.async_read_some(asio::buffer(buf + length_read, length - length_read), [self, handler, length, length_read](boost::system::error_code err_code, size_t size)
                             {
-        if (size<0)
-            std::cout << "async_read_some read " << size << " bytes" << std::endl;
 
         // 计算当前长度
         size_t cur_len = size + length_read;

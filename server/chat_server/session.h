@@ -16,7 +16,12 @@ private:
 
 public:
     Package();
+    Package(const Package& package);
     ~Package();
+
+    int16_t get_request_id() { return request_id_; }
+    int16_t get_message_length() { return message_length_; }
+    std::string get_message() { return message_; }
 
     void clear_buffer();
     void parse_head();
@@ -35,16 +40,34 @@ private:
     // 与客户端连接的socket
     tcp::socket socket_;
     size_t head_length_;
-    // 数据包队列，保证异步处理时的序列，同时防止数据覆盖
-    std::queue<std::shared_ptr<Package>> packages_;
+    // 接收的请求数据包，不用队列的原因：接收时是通过链式回调接收的，只有在接收到一个数据包才会进行下一次的循环，所以request_package_在接收时是安全的，在接收到后，会将副本存入packages_request_
+    std::shared_ptr<Package> request_;
 
-    std::mutex mutex_recv;
-    std::mutex mutex_send;
+    // 数据包队列，只用来存取，不用来读写,可以保证异步处理时的序列，同时防止数据覆盖，操作时加锁
+    std::queue<std::shared_ptr<Package>> packages_request_;
+    std::queue<std::shared_ptr<Package>> packages_response_;
+
+    std::mutex mutex_request_;
+    std::mutex mutex_response_;
+
+    // 为了尽快接收客户端的请求，我们在读取完一个数据包后，剩下的工作交给处理线程，然后继续开始接收请求
+    std::atomic<bool> flag_stop_;
+    std::condition_variable cond_send_response_;;
+    std::thread thread_send_response_;
+    void init_thread_send_response();
 
 public:
     using read_handler = std::function<void(boost::system::error_code, size_t)>;
     Session(asio::io_context &ioc);
     ~Session();
+    // 添加请求，将请求放入packages_request_中
+    void add_request(std::shared_ptr<Package> package);
+    // 获取请求，从packages_request_中移除
+    std::shared_ptr<Package> get_request();
+    // 设置回复，将回复放入packages_response_
+    void add_response(std::shared_ptr<Package> package);
+    // 添加响应，同时从packages_response_移除
+    std::shared_ptr<Package> get_response();
     /// @brief 异步读取固定长度的数据
     /// @param handler 读取完毕，或者出错的处理函数
     /// @note length_read不应该手动传入，而是作为反复调用该函数所需的参数，自动传入
@@ -52,6 +75,8 @@ public:
     void async_read_fixed_length(size_t length, read_handler handler, size_t length_read = 0);
     // 异步读取整个数据包
     void receive_package();
+    // 处理请求
+    void handle_request();
     // 向客户端发送数据包
     void send_package();
     // 异步读取头部

@@ -11,6 +11,6 @@ private:
 public:
     GrpcStatusClient();
     ~GrpcStatusClient();
-    GetChatServerResponse get_chat_server(int uid);
+    GetChatServerResponse get_chat_server(string uid);
 
 };

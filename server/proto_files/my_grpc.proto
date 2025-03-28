@@ -36,7 +36,7 @@ message GetVerifyResponse
 
 message GetChatServerRequest
 {
-    int32 uid = 1;
+    string uid = 1;
 }
 
 
@@ -48,7 +48,21 @@ message GetChatServerResponse
     string token = 4;
 }
 
+message UserLoginRequest
+{
+    string uid = 1;
+    string token = 2;
+}
+
+message UserLoginResponse
+{
+    int32 error = 1;
+    string uid = 2;
+    string tolen = 3;
+}
+
 service Status
 {
     rpc get_chat_server(GetChatServerRequest) returns (GetChatServerResponse) {}
+    rpc user_login(UserLoginRequest) returns (UserLoginResponse) {}
 }

@@ -13,7 +13,7 @@ GrpcStatusClient::~GrpcStatusClient()
 
 }
 
-GetChatServerResponse GrpcStatusClient::get_chat_server(int uid)
+GetChatServerResponse GrpcStatusClient::get_chat_server(string uid)
 {
     auto conn = grpc_stub_pool_->get_grpc_stub();
 

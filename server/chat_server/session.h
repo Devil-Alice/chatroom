@@ -1,7 +1,10 @@
 #pragma once
 #include "global.h"
+#include "server.h"
 
 #define BUFFER_MAX_LEN 8192
+
+class Server;
 
 class Package
 {
@@ -39,6 +42,13 @@ private:
     asio::io_context &ioc_;
     // 与客户端连接的socket
     tcp::socket socket_;
+
+    // 从属的服务器
+    std::shared_ptr<Server> server_;
+    
+    // session的uuid
+    string uuid_;
+    
     size_t head_length_;
     // 接收的请求数据包，不用队列的原因：接收时是通过链式回调接收的，只有在接收到一个数据包才会进行下一次的循环，所以request_package_在接收时是安全的，在接收到后，会将副本存入packages_request_
     std::shared_ptr<Package> request_;
@@ -58,8 +68,10 @@ private:
 
 public:
     using read_handler = std::function<void(boost::system::error_code, size_t)>;
-    Session(asio::io_context &ioc);
+    Session(asio::io_context &ioc, std::shared_ptr<Server> server);
     ~Session();
+    tcp::socket &get_socket();
+    string get_uuid();
     // 添加请求，将请求放入packages_request_中
     void add_request(std::shared_ptr<Package> package);
     // 获取请求，从packages_request_中移除

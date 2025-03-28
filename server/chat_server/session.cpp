@@ -83,8 +83,10 @@ void Session::init_thread_send_response()
     });
 }
 
-Session::Session(asio::io_context &ioc) : ioc_(ioc), socket_(ioc)
+Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server) 
+: ioc_(ioc), socket_(ioc), server_(server)
 {
+    uuid_ = my_utils::generate_uuid();
     head_length_ = sizeof(uint16_t) * 2;
     request_ = std::make_shared<Package>();
     flag_stop_ = false;
@@ -111,11 +113,21 @@ Session::~Session()
     mutex_response_.unlock();
 }
 
+tcp::socket &Session::get_socket()
+{
+    return socket_;
+}
+
+std::string Session::get_uuid()
+{
+    return uuid_;
+}
+
 void Session::add_request(std::shared_ptr<Package> package)
 {
     std::lock_guard<std::mutex> locker(mutex_request_);
     // 这里要emplace调用拷贝构造，创建一个package的副本
-    packages_request_.emplace(*package);
+    packages_request_.emplace(std::make_shared<Package>(*package));
     return;
 }
 
@@ -202,7 +214,7 @@ void Session::send_package()
     {
         // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
         // 如果需要重发，将数据包重新放回
-        if (err_code || size <= pkg->message_length_)
+        if (err_code || size <= (size_t)pkg->message_length_)
         {
             std::cout << "read_head error: " << err_code.message() << std::endl; 
             return;

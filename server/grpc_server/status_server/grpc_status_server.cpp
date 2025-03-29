@@ -29,10 +29,11 @@ GrpcStatusServer::~GrpcStatusServer()
 
 grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, const GetChatServerRequest *request, GetChatServerResponse *response)
 {
-    // todo: server是公共资源，而grpc处理多个任务是多线程，所以需要加锁
+    // chat_servers_infos_是公共资源，而grpc处理多个任务是多线程，所以需要加锁
     std::lock_guard<std::mutex> locker(mutex_);
     std::cout << "get_chat_server uid:" << request->uid() << std::endl;
     ChatServerInfo server = chat_servers_infos_[poll_idx_];
+    // 轮询获取，更新下标
     poll_idx_ = (poll_idx_ + 1) % chat_servers_infos_.size();
 
     // 用户请求聊天服务器的时候，给他生成一个token，传回
@@ -52,9 +53,20 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
 
 grpc::Status GrpcStatusServer::user_login(grpc::ServerContext *context, const UserLoginRequest *request, UserLoginResponse *response)
 {
+    std::lock_guard<std::mutex> locker(mutex_);
+    response->set_error(MY_STATUS_CODE::SUCCESS);
 
     std::string uid = request->uid();
     std::string token = request->token();
+
+    // 从tokens中查询uid对应的token是否存在
+    if (tokens_.find(uid) == tokens_.end())
+    {
+        response->set_error(MY_STATUS_CODE::TOKEN_INVAILED);
+    }
+
+    response->set_uid(uid);
+    response->set_token(token);
 
     return grpc::Status::OK;
 }

@@ -26,10 +26,32 @@ GetChatServerResponse GrpcStatusClient::get_chat_server(string uid)
     grpc::Status status = conn->get_chat_server(&context, request, &response);
     if (!status.ok())
     {
-        std::cout << "get_chat_server error: " << status.error_code() << std::endl;
         response.set_error(MY_STATUS_CODE::RPC_FAILED);
+        std::cout << "get_chat_server error: " << status.error_code() << std::endl;
     }
 
     grpc_stub_pool_->return_grpc_stub(std::move(conn));
     return response;
+}
+
+UserLoginResponse GrpcStatusClient::user_login(string uid, string token)
+{
+    ClientContext context;
+    UserLoginRequest request;
+    UserLoginResponse response;
+
+    request.set_uid(uid);
+    request.set_token(token);
+
+    auto stub = grpc_stub_pool_->get_grpc_stub();
+    grpc::Status status = stub->user_login(&context, request, &response);
+
+    if (!status.ok())
+    {
+        response.set_error(MY_STATUS_CODE::RPC_FAILED);
+        std::cout << "user_login error: " << status.error_code() << std::endl;
+    }
+
+    grpc_stub_pool_->return_grpc_stub(std::move(stub));
+    return UserLoginResponse();
 }

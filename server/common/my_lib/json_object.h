@@ -14,7 +14,7 @@ public:
         Json::Value root;
 
         bool success = reader.parse(json_string, root);
-        if (!success || !root.isObject())
+        if (!success)
             throw std::runtime_error("JsonObject parse_json_string error");
         return root;
     }

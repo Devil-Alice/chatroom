@@ -14,16 +14,11 @@ private:
     int status_;
     string message_;
     // 响应的数据
-    std::shared_ptr<JsonObject> data_;
+    string data_;
 
 public:
-    CommonResult() {};
-    CommonResult(int status, string message, std::shared_ptr<JsonObject> data = nullptr)
-        : status_(status), message_(message), data_(data) {}
-    ~CommonResult() {};
-
     // 方便链式调用
-    CommonResult &set(int status, string message, std::shared_ptr<JsonObject> data = nullptr)
+    CommonResult &set(int status, string message, string data = "")
     {
         status_ = status;
         message_ = message;
@@ -31,16 +26,20 @@ public:
         return *this;
     }
 
+    CommonResult() {};
+    CommonResult(int status, string message, string data = "")
+    {
+        set(status, message, data);
+    }
+    ~CommonResult() {};
+
     string to_json_string()
     {
         Json::Value root;
 
         root["status"] = status_;
         root["message"] = message_;
-        if (data_)
-            root["data"] = data_->to_json();
-        else
-            root["data"] = Json::Value();
+        root["data"] = data_;
 
         return root.toStyledString();
     }

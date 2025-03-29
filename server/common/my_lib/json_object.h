@@ -2,6 +2,7 @@
 #include <string>
 #include <jsoncpp/json/json.h>
 
+// json对象类，继承该类，实现json序列化以及反序列化，需要重写to_json和from_json_string函数
 class JsonObject
 {
     using string = std::string;

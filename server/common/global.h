@@ -19,9 +19,6 @@
 #include <boost/beast.hpp>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
-// #include <boost/uuid/uuid.hpp>
-// #include <boost/uuid/uuid_generators.hpp>
-// #include <boost/uuid/uuid_io.hpp>
 // grpc 头文件
 #include <grpcpp/grpcpp.h>
 // redis hiredis头文件
@@ -36,6 +33,7 @@
 #include "raii.h"
 #include "config_manager.h"
 #include "my_utils.h"
+#include "common_result.h"
 
 
 // 简化命名空间

@@ -58,6 +58,9 @@ using my_grpc::GetVerifyResponse;
 using my_grpc::GetChatServerRequest;
 using my_grpc::GetChatServerResponse;
 
+using my_grpc::UserLoginRequest;
+using my_grpc::UserLoginResponse;
+
 const std::string verify_code_prefix = "verify_code_";
 
 enum MY_STATUS_CODE

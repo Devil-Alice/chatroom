@@ -7,18 +7,16 @@ class SectionInfo
 {
 private:
     std::map<std::string, std::string> data_;
+    std::string str_;
 
 public:
     SectionInfo() { data_.clear(); }
     ~SectionInfo() { data_.clear(); }
-    std::string operator[](const std::string &key)
-    {
-        if (data_.find(key) == data_.end())
-            return "";
-
-        return data_[key];
-    }
-    void set_data(std::map<std::string, std::string> data);
+    
+    std::map<std::string, std::string> &get_data() ;
+    std::string get_str();
+    void set_str(std::string str) ;
+    std::string operator[](const std::string &key);
 };
 
 class ConfigManager : public Singleton<ConfigManager>
@@ -32,18 +30,9 @@ private:
     ConfigManager();
 
 public:
-    ~ConfigManager()
-    {
-        config_map_.clear();
-    };
+    ~ConfigManager();
 
-    SectionInfo operator[](const std::string &section_name)
-    {
-        if (config_map_.find(section_name) == config_map_.end())
-            return SectionInfo();
-
-        return config_map_[section_name];
-    }
+    SectionInfo operator[](const std::string &section_name);
 };
 
 extern ConfigManager &app_config;

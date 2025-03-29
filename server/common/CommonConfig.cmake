@@ -61,6 +61,13 @@ file(GLOB BOOST_UTILS_SOURCES ${BOOST_UTILS_DIR}/*.cpp)
 message(STATUS "Common include path add: ${BOOST_UTILS_DIR}")
 # ++++++++++[my boost utils source]++++++++++
 
+# ----------[dao source]----------
+set (DAO_DIR ${CMAKE_CURRENT_LIST_DIR}/dao)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${DAO_DIR})
+file(GLOB DAO_SOURCE ${DAO_DIR}/*.cpp)
+message(STATUS "Common include path add: ${DAO_DIR}")
+# ++++++++++[dao source]++++++++++
+
 # ----------[my grpc client source]----------
 set (GRPC_CLIENT_DIR ${CMAKE_CURRENT_LIST_DIR}/grpc_client)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${GRPC_CLIENT_DIR})
@@ -96,6 +103,13 @@ file(GLOB REDIS_MANAGER_SOURCES ${REDIS_MANAGER_DIR}/*.cpp)
 message(STATUS "Common include path add: ${REDIS_MANAGER_DIR}")
 # ++++++++++[my redis manager source]++++++++++
 
+# ----------[my service source]----------
+set (MY_SERVICE_DIR ${CMAKE_CURRENT_LIST_DIR}/service)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${MY_SERVICE_DIR})
+file(GLOB MY_SERVICE_SOURCES ${MY_SERVICE_DIR}/*.cpp)
+message(STATUS "Common include path add: ${MY_SERVICE_DIR}")
+# ++++++++++[my service source]]++++++++++
+
 # ----------[my xxx]----------
 # ++++++++++[my xxx]++++++++++
 
@@ -105,11 +119,13 @@ file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES}
 ${COMMON_SOURCES} 
 ${BOOST_UTILS_SOURCES}
+${DAO_SOURCE}
 ${GRPC_CLIENT_SOURCES}
 ${MY_LIB_SOURCES}
 ${MYSQL_MANAGER_SOURCES}
 ${PB_SOURCES} 
 ${REDIS_MANAGER_SOURCES}
+${MY_SERVICE_SOURCES}
 )
 
 

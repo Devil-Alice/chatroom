@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class ChatServer
+class ChatServerInfo
 {
     using string = std::string;
 public:

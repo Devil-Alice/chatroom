@@ -30,7 +30,7 @@ inline constexpr UserLoginResponse::Impl_::Impl_(
       : uid_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
-        tolen_(
+        token_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         error_{0},
@@ -237,7 +237,7 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginResponse, _impl_.error_),
         PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginResponse, _impl_.uid_),
-        PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginResponse, _impl_.tolen_),
+        PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginResponse, _impl_.token_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -267,7 +267,7 @@ const char descriptor_table_protodef_my_5fgrpc_2eproto[] ABSL_ATTRIBUTE_SECTION_
     "\005\022\014\n\004host\030\002 \001(\t\022\014\n\004port\030\003 \001(\t\022\r\n\005token\030\004"
     " \001(\t\".\n\020UserLoginRequest\022\013\n\003uid\030\001 \001(\t\022\r\n"
     "\005token\030\002 \001(\t\">\n\021UserLoginResponse\022\r\n\005err"
-    "or\030\001 \001(\005\022\013\n\003uid\030\002 \001(\t\022\r\n\005tolen\030\003 \001(\t2T\n\006"
+    "or\030\001 \001(\005\022\013\n\003uid\030\002 \001(\t\022\r\n\005token\030\003 \001(\t2T\n\006"
     "Verify\022J\n\017get_verify_code\022\031.my_grpc.GetV"
     "erifyRequest\032\032.my_grpc.GetVerifyResponse"
     "\"\0002\243\001\n\006Status\022R\n\017get_chat_server\022\035.my_gr"
@@ -1441,7 +1441,7 @@ inline PROTOBUF_NDEBUG_INLINE UserLoginResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::my_grpc::UserLoginResponse& from_msg)
       : uid_(arena, from.uid_),
-        tolen_(arena, from.tolen_),
+        token_(arena, from.token_),
         _cached_size_{0} {}
 
 UserLoginResponse::UserLoginResponse(
@@ -1461,7 +1461,7 @@ inline PROTOBUF_NDEBUG_INLINE UserLoginResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : uid_(arena),
-        tolen_(arena),
+        token_(arena),
         _cached_size_{0} {}
 
 inline void UserLoginResponse::SharedCtor(::_pb::Arena* arena) {
@@ -1476,7 +1476,7 @@ UserLoginResponse::~UserLoginResponse() {
 inline void UserLoginResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
   _impl_.uid_.Destroy();
-  _impl_.tolen_.Destroy();
+  _impl_.token_.Destroy();
   _impl_.~Impl_();
 }
 
@@ -1526,9 +1526,9 @@ const ::_pbi::TcParseTable<2, 3, 0, 42, 2> UserLoginResponse::_table_ = {
     // string uid = 2;
     {::_pbi::TcParser::FastUS1,
      {18, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.uid_)}},
-    // string tolen = 3;
+    // string token = 3;
     {::_pbi::TcParser::FastUS1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.tolen_)}},
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.token_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1538,8 +1538,8 @@ const ::_pbi::TcParseTable<2, 3, 0, 42, 2> UserLoginResponse::_table_ = {
     // string uid = 2;
     {PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.uid_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string tolen = 3;
-    {PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.tolen_), 0, 0,
+    // string token = 3;
+    {PROTOBUF_FIELD_OFFSET(UserLoginResponse, _impl_.token_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }},
   // no aux_entries
@@ -1547,7 +1547,7 @@ const ::_pbi::TcParseTable<2, 3, 0, 42, 2> UserLoginResponse::_table_ = {
     "\31\0\3\5\0\0\0\0"
     "my_grpc.UserLoginResponse"
     "uid"
-    "tolen"
+    "token"
   }},
 };
 
@@ -1559,7 +1559,7 @@ PROTOBUF_NOINLINE void UserLoginResponse::Clear() {
   (void) cached_has_bits;
 
   _impl_.uid_.ClearToEmpty();
-  _impl_.tolen_.ClearToEmpty();
+  _impl_.token_.ClearToEmpty();
   _impl_.error_ = 0;
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -1586,11 +1586,11 @@ PROTOBUF_NOINLINE void UserLoginResponse::Clear() {
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // string tolen = 3;
-  if (!this->_internal_tolen().empty()) {
-    const std::string& _s = this->_internal_tolen();
+  // string token = 3;
+  if (!this->_internal_token().empty()) {
+    const std::string& _s = this->_internal_token();
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "my_grpc.UserLoginResponse.tolen");
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "my_grpc.UserLoginResponse.token");
     target = stream->WriteStringMaybeAliased(3, _s, target);
   }
 
@@ -1618,10 +1618,10 @@ PROTOBUF_NOINLINE void UserLoginResponse::Clear() {
                                     this->_internal_uid());
   }
 
-  // string tolen = 3;
-  if (!this->_internal_tolen().empty()) {
+  // string token = 3;
+  if (!this->_internal_token().empty()) {
     total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                    this->_internal_tolen());
+                                    this->_internal_token());
   }
 
   // int32 error = 1;
@@ -1645,8 +1645,8 @@ void UserLoginResponse::MergeImpl(::google::protobuf::MessageLite& to_msg, const
   if (!from._internal_uid().empty()) {
     _this->_internal_set_uid(from._internal_uid());
   }
-  if (!from._internal_tolen().empty()) {
-    _this->_internal_set_tolen(from._internal_tolen());
+  if (!from._internal_token().empty()) {
+    _this->_internal_set_token(from._internal_token());
   }
   if (from._internal_error() != 0) {
     _this->_impl_.error_ = from._impl_.error_;
@@ -1668,7 +1668,7 @@ void UserLoginResponse::InternalSwap(UserLoginResponse* PROTOBUF_RESTRICT other)
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uid_, &other->_impl_.uid_, arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.tolen_, &other->_impl_.tolen_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.token_, &other->_impl_.token_, arena);
         swap(_impl_.error_, other->_impl_.error_);
 }
 

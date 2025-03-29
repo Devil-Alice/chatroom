@@ -58,7 +58,7 @@ message UserLoginResponse
 {
     int32 error = 1;
     string uid = 2;
-    string tolen = 3;
+    string token = 3;
 }
 
 service Status

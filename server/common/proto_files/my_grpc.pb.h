@@ -206,7 +206,7 @@ class UserLoginResponse final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kUidFieldNumber = 2,
-    kTolenFieldNumber = 3,
+    kTokenFieldNumber = 3,
     kErrorFieldNumber = 1,
   };
   // string uid = 2;
@@ -225,20 +225,20 @@ class UserLoginResponse final : public ::google::protobuf::Message
   std::string* _internal_mutable_uid();
 
   public:
-  // string tolen = 3;
-  void clear_tolen() ;
-  const std::string& tolen() const;
+  // string token = 3;
+  void clear_token() ;
+  const std::string& token() const;
   template <typename Arg_ = const std::string&, typename... Args_>
-  void set_tolen(Arg_&& arg, Args_... args);
-  std::string* mutable_tolen();
-  PROTOBUF_NODISCARD std::string* release_tolen();
-  void set_allocated_tolen(std::string* value);
+  void set_token(Arg_&& arg, Args_... args);
+  std::string* mutable_token();
+  PROTOBUF_NODISCARD std::string* release_token();
+  void set_allocated_token(std::string* value);
 
   private:
-  const std::string& _internal_tolen() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_tolen(
+  const std::string& _internal_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_token(
       const std::string& value);
-  std::string* _internal_mutable_tolen();
+  std::string* _internal_mutable_token();
 
   public:
   // int32 error = 1;
@@ -278,7 +278,7 @@ class UserLoginResponse final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const UserLoginResponse& from_msg);
     ::google::protobuf::internal::ArenaStringPtr uid_;
-    ::google::protobuf::internal::ArenaStringPtr tolen_;
+    ::google::protobuf::internal::ArenaStringPtr token_;
     ::int32_t error_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -1870,54 +1870,54 @@ inline void UserLoginResponse::set_allocated_uid(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:my_grpc.UserLoginResponse.uid)
 }
 
-// string tolen = 3;
-inline void UserLoginResponse::clear_tolen() {
+// string token = 3;
+inline void UserLoginResponse::clear_token() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.tolen_.ClearToEmpty();
+  _impl_.token_.ClearToEmpty();
 }
-inline const std::string& UserLoginResponse::tolen() const
+inline const std::string& UserLoginResponse::token() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:my_grpc.UserLoginResponse.tolen)
-  return _internal_tolen();
+  // @@protoc_insertion_point(field_get:my_grpc.UserLoginResponse.token)
+  return _internal_token();
 }
 template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void UserLoginResponse::set_tolen(Arg_&& arg,
+inline PROTOBUF_ALWAYS_INLINE void UserLoginResponse::set_token(Arg_&& arg,
                                                      Args_... args) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.tolen_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:my_grpc.UserLoginResponse.tolen)
+  _impl_.token_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:my_grpc.UserLoginResponse.token)
 }
-inline std::string* UserLoginResponse::mutable_tolen() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_tolen();
-  // @@protoc_insertion_point(field_mutable:my_grpc.UserLoginResponse.tolen)
+inline std::string* UserLoginResponse::mutable_token() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_token();
+  // @@protoc_insertion_point(field_mutable:my_grpc.UserLoginResponse.token)
   return _s;
 }
-inline const std::string& UserLoginResponse::_internal_tolen() const {
+inline const std::string& UserLoginResponse::_internal_token() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.tolen_.Get();
+  return _impl_.token_.Get();
 }
-inline void UserLoginResponse::_internal_set_tolen(const std::string& value) {
+inline void UserLoginResponse::_internal_set_token(const std::string& value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.tolen_.Set(value, GetArena());
+  _impl_.token_.Set(value, GetArena());
 }
-inline std::string* UserLoginResponse::_internal_mutable_tolen() {
+inline std::string* UserLoginResponse::_internal_mutable_token() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.tolen_.Mutable( GetArena());
+  return _impl_.token_.Mutable( GetArena());
 }
-inline std::string* UserLoginResponse::release_tolen() {
+inline std::string* UserLoginResponse::release_token() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:my_grpc.UserLoginResponse.tolen)
-  return _impl_.tolen_.Release();
+  // @@protoc_insertion_point(field_release:my_grpc.UserLoginResponse.token)
+  return _impl_.token_.Release();
 }
-inline void UserLoginResponse::set_allocated_tolen(std::string* value) {
+inline void UserLoginResponse::set_allocated_token(std::string* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.tolen_.SetAllocated(value, GetArena());
+  _impl_.token_.SetAllocated(value, GetArena());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        if (_impl_.tolen_.IsDefault()) {
-          _impl_.tolen_.Set("", GetArena());
+        if (_impl_.token_.IsDefault()) {
+          _impl_.token_.Set("", GetArena());
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:my_grpc.UserLoginResponse.tolen)
+  // @@protoc_insertion_point(field_set_allocated:my_grpc.UserLoginResponse.token)
 }
 
 #ifdef __GNUC__

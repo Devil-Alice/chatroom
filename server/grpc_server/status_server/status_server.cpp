@@ -12,21 +12,25 @@ using boost::asio::ip::tcp;
 
 int main()
 {
+    // 从配置文件中读取服务器信息
+    std::string bind_ip = app_config["status_server"]["bind_ip"];
+    std::string port = app_config["status_server"]["port"];
+
     // 创建状态服务
-    std::string server_address = "0.0.0.0:50052";
+    std::string server_address = bind_ip + ":" + port;
     GrpcStatusServer status_server;
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService( &status_server);
+    builder.RegisterService(&status_server);
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-
 
     // 用boost库接收终止信号，退出进程
     asio::io_context ioc{1};
     asio::signal_set signal(ioc, SIGINT, SIGTERM);
 
-    signal.async_wait([&server](boost::system::error_code err_code, int signal) -> void{
+    signal.async_wait([&server](boost::system::error_code err_code, int signal) -> void
+                      {
 
         if (err_code)
         {
@@ -37,18 +41,15 @@ int main()
         // 终止server
         server->Shutdown();
         std::cout << "signal.async_wait triggered: ioc exit"<< std::endl;
-        return;
-    });
-
+        return; });
 
     // 由于ioc会阻塞，所以要单独运行一个线程
-    std::thread([&ioc](){
-        ioc.run();
-    }).detach();
+    std::thread([&ioc]()
+                { ioc.run(); })
+        .detach();
 
     std::cout << "Server listening on " << server_address << std::endl;
-    
+
     server->Wait(); // Block until the server shuts down.
     ioc.stop();
-
 }

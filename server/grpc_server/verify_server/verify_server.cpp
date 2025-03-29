@@ -1,5 +1,6 @@
 #include <iostream>
 #include <grpcpp/grpcpp.h>
+#include "global.h"
 #include "grpc_verify_server.h"
 
 
@@ -8,7 +9,10 @@ using namespace grpc;
 
 void run_server()
 {
-    string server_address = "0.0.0.0:50051";
+    string bind_ip = app_config["verify_server"]["bind_ip"];
+    string port = app_config["verify_server"]["port"];
+    
+    string server_address = bind_ip + ":" + port;
     GrpcVerifyServer verify_service;
 
     ServerBuilder builder;

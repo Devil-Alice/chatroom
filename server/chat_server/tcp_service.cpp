@@ -1,15 +1,57 @@
 #include "tcp_service.h"
+#include "user_service.h"
+#include "grpc_status_client.h"
 
 TcpService::TcpService()
 {
     register_service(REQUEST_ID::CHAT_LOGIN, [](std::shared_ptr<Package> package){
-        // 查询数据库，用户是否存在
+        //构建结果package的message
+        CommonResult result;
         
-        // 从状态服务获取该用户的token
+        // 获取请求信息
+        string msg = package->get_message();
+        Json::Value json_request = JsonObject::parse_json_string(msg);
+        
+        // 查询数据库，用户是否存在
+        string phone = json_request["phone"].asString();
+        string password = json_request["password"].asString();
+        string token = json_request["token"].asString();
+        
+        auto user = UserDao::instance().get_user_by_phone(phone);
+        // 没查到用户，设置错误
+        if (user == nullptr)
+        {
+            result.set(MY_STATUS_CODE::USER_NOT_FOUND, "user not found");
+        }
+        else
+        {
+            // 查到了用户，就根据uid查token
+            // 从状态服务获取该用户的token
+            // 匹配token是否正确
+            UserLoginResponse rsp = GrpcStatusClient::instance().user_login(user->get_uid(), token);
+            
+            // 将rsp的错误设置到result中
+            if (rsp.error() != MY_STATUS_CODE::SUCCESS)
+            {
+                result.set(MY_STATUS_CODE::TOKEN_INVALID, "token invalid");
+            }
+            else 
+            {
+                // token查询成功，将uid和token返回给用户
+                Json::Value json_result;
+                json_result["uid"] = user->get_uid();
+                json_result["token"] = token;
 
-        // 匹配token是否正确
+                result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result.toStyledString());
+            }
+        }
 
-        return nullptr;
+        // 先构建一个package
+        std::shared_ptr<Package> result_pkg = std::make_shared<Package>();
+        result_pkg->set_request_id(package->get_request_id());
+        result_pkg->set_message(result.to_json_string());
+
+        return result_pkg;
     });
 }
 

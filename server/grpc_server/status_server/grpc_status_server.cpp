@@ -62,7 +62,7 @@ grpc::Status GrpcStatusServer::user_login(grpc::ServerContext *context, const Us
     // 从tokens中查询uid对应的token是否存在
     if (tokens_.find(uid) == tokens_.end())
     {
-        response->set_error(MY_STATUS_CODE::TOKEN_INVAILED);
+        response->set_error(MY_STATUS_CODE::TOKEN_INVALID);
     }
 
     response->set_uid(uid);

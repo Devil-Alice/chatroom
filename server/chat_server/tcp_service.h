@@ -5,6 +5,7 @@
 class TcpService : public Singleton<TcpService>
 {
     friend class Singleton<TcpService>;
+    using string = std::string;
 private:
     using TcpHandler = std::function<std::shared_ptr<Package>(std::shared_ptr<Package>)>;
     std::map<REQUEST_ID, TcpHandler> services_;

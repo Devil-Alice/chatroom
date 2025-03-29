@@ -19,12 +19,20 @@ private:
 
 public:
     Package();
-    Package(const Package& package);
+    Package(const Package &package);
     ~Package();
 
     int16_t get_request_id() { return request_id_; }
+    void set_request_id(int16_t request_id) { request_id_ = request_id; }
+
     int16_t get_message_length() { return message_length_; }
+
     std::string get_message() { return message_; }
+    void set_message(std::string message)
+    {
+        message_ = message;
+        message_length_ = message_.length();
+    }
 
     void clear_buffer();
     void parse_head();
@@ -45,10 +53,10 @@ private:
 
     // 从属的服务器
     std::shared_ptr<Server> server_;
-    
+
     // session的uuid
     string uuid_;
-    
+
     size_t head_length_;
     // 接收的请求数据包，不用队列的原因：接收时是通过链式回调接收的，只有在接收到一个数据包才会进行下一次的循环，所以request_package_在接收时是安全的，在接收到后，会将副本存入packages_request_
     std::shared_ptr<Package> request_;
@@ -62,7 +70,8 @@ private:
 
     // 为了尽快接收客户端的请求，我们在读取完一个数据包后，剩下的工作交给处理线程，然后继续开始接收请求
     std::atomic<bool> flag_stop_;
-    std::condition_variable cond_send_response_;;
+    std::condition_variable cond_send_response_;
+    ;
     std::thread thread_send_response_;
     void init_thread_send_response();
 

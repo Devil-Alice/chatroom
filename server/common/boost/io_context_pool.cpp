@@ -40,4 +40,8 @@ void IoContextPool::stop()
     {
         t.join();
     }
+
+    threads_.clear();
+    works_.clear();
+
 }

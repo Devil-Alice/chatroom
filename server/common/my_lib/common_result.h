@@ -14,11 +14,11 @@ private:
     int status_;
     string message_;
     // 响应的数据
-    string data_;
+    Json::Value data_;
 
 public:
     // 方便链式调用
-    CommonResult &set(int status, string message, string data = "")
+    CommonResult &set(int status, string message, Json::Value data = Json::Value())
     {
         status_ = status;
         message_ = message;
@@ -27,7 +27,7 @@ public:
     }
 
     CommonResult() {};
-    CommonResult(int status, string message, string data = "")
+    CommonResult(int status, string message, Json::Value data = Json::Value())
     {
         set(status, message, data);
     }

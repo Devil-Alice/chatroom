@@ -42,7 +42,7 @@ TcpService::TcpService()
                 json_result["uid"] = user->get_uid();
                 json_result["token"] = token;
 
-                result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result.toStyledString());
+                result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
             }
         }
 

@@ -125,13 +125,11 @@ inline constexpr GetChatServerResponse::Impl_::Impl_(
       : host_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
-        port_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()),
         token_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
         error_{0},
+        port_{0},
         _cached_size_{0} {}
 
 template <typename>
@@ -264,7 +262,7 @@ const char descriptor_table_protodef_my_5fgrpc_2eproto[] ABSL_ATTRIBUTE_SECTION_
     "\022\r\n\005error\030\001 \001(\005\022\r\n\005phone\030\002 \001(\t\022\014\n\004code\030\003"
     " \001(\t\"#\n\024GetChatServerRequest\022\013\n\003uid\030\001 \001("
     "\t\"Q\n\025GetChatServerResponse\022\r\n\005error\030\001 \001("
-    "\005\022\014\n\004host\030\002 \001(\t\022\014\n\004port\030\003 \001(\t\022\r\n\005token\030\004"
+    "\005\022\014\n\004host\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\022\r\n\005token\030\004"
     " \001(\t\".\n\020UserLoginRequest\022\013\n\003uid\030\001 \001(\t\022\r\n"
     "\005token\030\002 \001(\t\">\n\021UserLoginResponse\022\r\n\005err"
     "or\030\001 \001(\005\022\013\n\003uid\030\002 \001(\t\022\r\n\005token\030\003 \001(\t2T\n\006"
@@ -942,7 +940,6 @@ inline PROTOBUF_NDEBUG_INLINE GetChatServerResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::my_grpc::GetChatServerResponse& from_msg)
       : host_(arena, from.host_),
-        port_(arena, from.port_),
         token_(arena, from.token_),
         _cached_size_{0} {}
 
@@ -955,7 +952,13 @@ GetChatServerResponse::GetChatServerResponse(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
-  _impl_.error_ = from._impl_.error_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, error_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, error_),
+           offsetof(Impl_, port_) -
+               offsetof(Impl_, error_) +
+               sizeof(Impl_::port_));
 
   // @@protoc_insertion_point(copy_constructor:my_grpc.GetChatServerResponse)
 }
@@ -963,13 +966,17 @@ inline PROTOBUF_NDEBUG_INLINE GetChatServerResponse::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
       : host_(arena),
-        port_(arena),
         token_(arena),
         _cached_size_{0} {}
 
 inline void GetChatServerResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.error_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, error_),
+           0,
+           offsetof(Impl_, port_) -
+               offsetof(Impl_, error_) +
+               sizeof(Impl_::port_));
 }
 GetChatServerResponse::~GetChatServerResponse() {
   // @@protoc_insertion_point(destructor:my_grpc.GetChatServerResponse)
@@ -979,7 +986,6 @@ GetChatServerResponse::~GetChatServerResponse() {
 inline void GetChatServerResponse::SharedDtor() {
   ABSL_DCHECK(GetArena() == nullptr);
   _impl_.host_.Destroy();
-  _impl_.port_.Destroy();
   _impl_.token_.Destroy();
   _impl_.~Impl_();
 }
@@ -1005,7 +1011,7 @@ GetChatServerResponse::GetClassData() const {
   return _data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 0, 51, 2> GetChatServerResponse::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 0, 47, 2> GetChatServerResponse::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
@@ -1032,9 +1038,9 @@ const ::_pbi::TcParseTable<2, 4, 0, 51, 2> GetChatServerResponse::_table_ = {
     // string host = 2;
     {::_pbi::TcParser::FastUS1,
      {18, 63, 0, PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.host_)}},
-    // string port = 3;
-    {::_pbi::TcParser::FastUS1,
-     {26, 63, 0, PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.port_)}},
+    // int32 port = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(GetChatServerResponse, _impl_.port_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.port_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1044,19 +1050,18 @@ const ::_pbi::TcParseTable<2, 4, 0, 51, 2> GetChatServerResponse::_table_ = {
     // string host = 2;
     {PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.host_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // string port = 3;
+    // int32 port = 3;
     {PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.port_), 0, 0,
-    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
     // string token = 4;
     {PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.token_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }},
   // no aux_entries
   {{
-    "\35\0\4\4\5\0\0\0"
+    "\35\0\4\0\5\0\0\0"
     "my_grpc.GetChatServerResponse"
     "host"
-    "port"
     "token"
   }},
 };
@@ -1069,9 +1074,10 @@ PROTOBUF_NOINLINE void GetChatServerResponse::Clear() {
   (void) cached_has_bits;
 
   _impl_.host_.ClearToEmpty();
-  _impl_.port_.ClearToEmpty();
   _impl_.token_.ClearToEmpty();
-  _impl_.error_ = 0;
+  ::memset(&_impl_.error_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.port_) -
+      reinterpret_cast<char*>(&_impl_.error_)) + sizeof(_impl_.port_));
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -1097,12 +1103,11 @@ PROTOBUF_NOINLINE void GetChatServerResponse::Clear() {
     target = stream->WriteStringMaybeAliased(2, _s, target);
   }
 
-  // string port = 3;
-  if (!this->_internal_port().empty()) {
-    const std::string& _s = this->_internal_port();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "my_grpc.GetChatServerResponse.port");
-    target = stream->WriteStringMaybeAliased(3, _s, target);
+  // int32 port = 3;
+  if (this->_internal_port() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_port(), target);
   }
 
   // string token = 4;
@@ -1137,12 +1142,6 @@ PROTOBUF_NOINLINE void GetChatServerResponse::Clear() {
                                     this->_internal_host());
   }
 
-  // string port = 3;
-  if (!this->_internal_port().empty()) {
-    total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                    this->_internal_port());
-  }
-
   // string token = 4;
   if (!this->_internal_token().empty()) {
     total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1153,6 +1152,12 @@ PROTOBUF_NOINLINE void GetChatServerResponse::Clear() {
   if (this->_internal_error() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
         this->_internal_error());
+  }
+
+  // int32 port = 3;
+  if (this->_internal_port() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_port());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1170,14 +1175,14 @@ void GetChatServerResponse::MergeImpl(::google::protobuf::MessageLite& to_msg, c
   if (!from._internal_host().empty()) {
     _this->_internal_set_host(from._internal_host());
   }
-  if (!from._internal_port().empty()) {
-    _this->_internal_set_port(from._internal_port());
-  }
   if (!from._internal_token().empty()) {
     _this->_internal_set_token(from._internal_token());
   }
   if (from._internal_error() != 0) {
     _this->_impl_.error_ = from._impl_.error_;
+  }
+  if (from._internal_port() != 0) {
+    _this->_impl_.port_ = from._impl_.port_;
   }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1196,9 +1201,13 @@ void GetChatServerResponse::InternalSwap(GetChatServerResponse* PROTOBUF_RESTRIC
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.host_, &other->_impl_.host_, arena);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.port_, &other->_impl_.port_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.token_, &other->_impl_.token_, arena);
-        swap(_impl_.error_, other->_impl_.error_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.port_)
+      + sizeof(GetChatServerResponse::_impl_.port_)
+      - PROTOBUF_FIELD_OFFSET(GetChatServerResponse, _impl_.error_)>(
+          reinterpret_cast<char*>(&_impl_.error_),
+          reinterpret_cast<char*>(&other->_impl_.error_));
 }
 
 ::google::protobuf::Metadata GetChatServerResponse::GetMetadata() const {

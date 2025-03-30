@@ -992,9 +992,9 @@ class GetChatServerResponse final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kHostFieldNumber = 2,
-    kPortFieldNumber = 3,
     kTokenFieldNumber = 4,
     kErrorFieldNumber = 1,
+    kPortFieldNumber = 3,
   };
   // string host = 2;
   void clear_host() ;
@@ -1010,22 +1010,6 @@ class GetChatServerResponse final : public ::google::protobuf::Message
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_host(
       const std::string& value);
   std::string* _internal_mutable_host();
-
-  public:
-  // string port = 3;
-  void clear_port() ;
-  const std::string& port() const;
-  template <typename Arg_ = const std::string&, typename... Args_>
-  void set_port(Arg_&& arg, Args_... args);
-  std::string* mutable_port();
-  PROTOBUF_NODISCARD std::string* release_port();
-  void set_allocated_port(std::string* value);
-
-  private:
-  const std::string& _internal_port() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_port(
-      const std::string& value);
-  std::string* _internal_mutable_port();
 
   public:
   // string token = 4;
@@ -1054,13 +1038,23 @@ class GetChatServerResponse final : public ::google::protobuf::Message
   void _internal_set_error(::int32_t value);
 
   public:
+  // int32 port = 3;
+  void clear_port() ;
+  ::int32_t port() const;
+  void set_port(::int32_t value);
+
+  private:
+  ::int32_t _internal_port() const;
+  void _internal_set_port(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:my_grpc.GetChatServerResponse)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
       2, 4, 0,
-      51, 2>
+      47, 2>
       _table_;
 
   static constexpr const void* _raw_default_instance_ =
@@ -1081,9 +1075,9 @@ class GetChatServerResponse final : public ::google::protobuf::Message
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const GetChatServerResponse& from_msg);
     ::google::protobuf::internal::ArenaStringPtr host_;
-    ::google::protobuf::internal::ArenaStringPtr port_;
     ::google::protobuf::internal::ArenaStringPtr token_;
     ::int32_t error_;
+    ::int32_t port_;
     mutable ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -1590,54 +1584,26 @@ inline void GetChatServerResponse::set_allocated_host(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:my_grpc.GetChatServerResponse.host)
 }
 
-// string port = 3;
+// int32 port = 3;
 inline void GetChatServerResponse::clear_port() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.port_.ClearToEmpty();
+  _impl_.port_ = 0;
 }
-inline const std::string& GetChatServerResponse::port() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::int32_t GetChatServerResponse::port() const {
   // @@protoc_insertion_point(field_get:my_grpc.GetChatServerResponse.port)
   return _internal_port();
 }
-template <typename Arg_, typename... Args_>
-inline PROTOBUF_ALWAYS_INLINE void GetChatServerResponse::set_port(Arg_&& arg,
-                                                     Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.port_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+inline void GetChatServerResponse::set_port(::int32_t value) {
+  _internal_set_port(value);
   // @@protoc_insertion_point(field_set:my_grpc.GetChatServerResponse.port)
 }
-inline std::string* GetChatServerResponse::mutable_port() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_port();
-  // @@protoc_insertion_point(field_mutable:my_grpc.GetChatServerResponse.port)
-  return _s;
-}
-inline const std::string& GetChatServerResponse::_internal_port() const {
+inline ::int32_t GetChatServerResponse::_internal_port() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.port_.Get();
+  return _impl_.port_;
 }
-inline void GetChatServerResponse::_internal_set_port(const std::string& value) {
+inline void GetChatServerResponse::_internal_set_port(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.port_.Set(value, GetArena());
-}
-inline std::string* GetChatServerResponse::_internal_mutable_port() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.port_.Mutable( GetArena());
-}
-inline std::string* GetChatServerResponse::release_port() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:my_grpc.GetChatServerResponse.port)
-  return _impl_.port_.Release();
-}
-inline void GetChatServerResponse::set_allocated_port(std::string* value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.port_.SetAllocated(value, GetArena());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-        if (_impl_.port_.IsDefault()) {
-          _impl_.port_.Set("", GetArena());
-        }
-  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:my_grpc.GetChatServerResponse.port)
+  _impl_.port_ = value;
 }
 
 // string token = 4;

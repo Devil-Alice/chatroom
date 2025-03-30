@@ -17,7 +17,7 @@ GrpcStatusServer::GrpcStatusServer()
         ChatServerInfo info;
         info.host = it->get("host", "").asString();
         info.port = it->get("port", 0).asInt();
-        // std::cout << info.host << " " << info.port << std::endl;
+        std::cout << info.host << " " << info.port << std::endl;
         chat_servers_infos_.push_back(info);
     }
 
@@ -31,17 +31,17 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
 {
     // chat_servers_infos_是公共资源，而grpc处理多个任务是多线程，所以需要加锁
     std::lock_guard<std::mutex> locker(mutex_);
-    std::cout << "get_chat_server uid:" << request->uid() << std::endl;
     ChatServerInfo server = chat_servers_infos_[poll_idx_];
     // 轮询获取，更新下标
     poll_idx_ = (poll_idx_ + 1) % chat_servers_infos_.size();
 
     // 用户请求聊天服务器的时候，给他生成一个token，传回
     string token = my_utils::generate_uuid();
+    std::cout << "get_chat_server uid: " << request->uid() << ", gen token: " << token << std::endl;
 
     response->set_error(0);
     response->set_host(server.host);
-    response->set_port(std::to_string(server.port));
+    response->set_port(server.port);
     response->set_token(token);
 
     // 将token插入tokens

@@ -15,4 +15,6 @@ public:
     bool register_user(User &user);
     string get_verify_code_from_redis(string phone);
     string generate_verify_code(string phone);
+    // 用户登陆，验证用户的手机号、密码
+    CommonResult user_login(string phone, string password);
 };

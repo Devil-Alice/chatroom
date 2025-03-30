@@ -1,5 +1,6 @@
 #include "user_service.h"
 #include "grpc_verify_client.h"
+#include "grpc_status_client.h"
 
 UserService::UserService() : user_dao_(UserDao::instance()), redis_(RedisManager::instance())
 {
@@ -20,8 +21,7 @@ bool UserService::register_user(User &user)
     }
 
     // 生成uid
-    boost::uuids::random_generator gen;
-    user.set_uid(boost::uuids::to_string(gen()));
+    user.set_uid(my_utils::generate_uuid());
 
     // 添加用户
     bool success = user_dao_.add_user(user);
@@ -64,4 +64,32 @@ std::string UserService::generate_verify_code(string phone)
     redis_.expire(verify_code_prefix + phone, 60);
 
     return verify_code;
+}
+
+CommonResult UserService::user_login(string phone, string password)
+{
+    CommonResult result;
+
+    auto user = user_dao_.get_user_by_phone(phone);
+    if (user == nullptr)
+        return result.set(MY_STATUS_CODE::USER_NOT_FOUND, "user not found");
+
+    if (user->get_password() != password)
+        return result.set(MY_STATUS_CODE::PASSWORD_ERROR, "password error");
+
+    // 分配、获取聊天服务器的信息
+    GetChatServerResponse rsp = GrpcStatusClient::instance().get_chat_server(user->get_uid());
+    if (rsp.error() != MY_STATUS_CODE::SUCCESS)
+        return result.set(MY_STATUS_CODE::RPC_FAILED, "rpc fauled");
+
+    Json::Value json_result;
+    json_result["uid"] = user->get_uid();
+    json_result["name"] = user->get_name();
+    json_result["phone"] = user->get_phone();
+    json_result["host"] = rsp.host();
+    json_result["port"] = rsp.port();
+    json_result["token"] = rsp.token();
+
+
+    return result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
 }

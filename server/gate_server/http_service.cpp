@@ -141,7 +141,9 @@ HttpService::HttpService()
             string phone = root["phone"].asString();
             string password = root["password"].asString();
             
+            result = UserService::instance().user_login(phone, password);
 
+            response_body_ostream << result.to_json_string();
 
         }
         catch (std::exception &ex)

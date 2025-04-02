@@ -14,10 +14,11 @@ message(STATUS "Importing common config: ${CMAKE_CURRENT_LIST_DIR}/CommonConfig.
 
 # Find Protobuf installation
 # Looks for protobuf-config.cmake file installed by Protobuf's cmake installation.
-set(gRPC_DIR "/home/alice/app/grpc/lib/cmake/grpc")
-set(Protobuf_DIR "/home/alice/app/grpc/lib/cmake/protobuf")
-set(absl_DIR "/home/alice/app/grpc/lib/cmake/absl")
-set(utf8_range_DIR "/home/alice/app/grpc/lib/cmake/utf8_range")
+set(gRPC_CMAKE_DIR "/root/.local/lib/cmake")
+set(gRPC_DIR "${gRPC_CMAKE_DIR}/grpc")
+set(Protobuf_DIR "${gRPC_CMAKE_DIR}/protobuf")
+set(absl_DIR "${gRPC_CMAKE_DIR}/absl")
+set(utf8_range_DIR "${gRPC_CMAKE_DIR}/utf8_range")
 
 option(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)

@@ -24,7 +24,7 @@
 // redis hiredis头文件
 #include <hiredis/hiredis.h>
 // mysql c++头文件
-#include <mysql-cppconn/mysql/jdbc.h>
+#include <mysql/jdbc.h>
 
 #include "my_grpc.pb.h"
 #include "my_grpc.grpc.pb.h"

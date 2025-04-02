@@ -26,6 +26,7 @@
 #include <grpcpp/support/status.h>
 #include <grpcpp/support/stub_options.h>
 #include <grpcpp/support/sync_stream.h>
+#include <grpcpp/ports_def.inc>
 
 namespace my_grpc {
 
@@ -613,4 +614,5 @@ class Status final {
 }  // namespace my_grpc
 
 
+#include <grpcpp/ports_undef.inc>
 #endif  // GRPC_my_5fgrpc_2eproto__INCLUDED

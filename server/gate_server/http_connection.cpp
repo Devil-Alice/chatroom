@@ -54,7 +54,7 @@ void HttpConnection::handle_request()
     // 处理get请求
     if (request_.method() == http::verb::get)
     {
-        parse_url(request_.target().to_string());
+        parse_url(request_.target());
         bool success = HttpService::instance().handle_get(request_url_, shared_from_this());
         if (!success)
         {
@@ -73,7 +73,7 @@ void HttpConnection::handle_request()
     // 处理post请求
     if (request_.method() == http::verb::post)
     {
-        parse_url(request_.target().to_string());
+        parse_url(request_.target());
         bool success = HttpService::instance().handle_post(request_url_, shared_from_this());
         if (!success)
         {

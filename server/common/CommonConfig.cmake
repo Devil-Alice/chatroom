@@ -8,6 +8,16 @@ add_definitions("-Wall -g")
 message(STATUS "Importing common config: ${CMAKE_CURRENT_LIST_DIR}/CommonConfig.cmake")
 
 # ----------[basic config]----------
+
+# 设置所有可执行文件的输出目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 设置所有库文件的输出目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# 设置静态库的输出目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
 # basic config:
 # This branch assumes that gRPC and all its dependencies are already installed
 # on this system, so they can be located by find_package().
@@ -15,10 +25,11 @@ message(STATUS "Importing common config: ${CMAKE_CURRENT_LIST_DIR}/CommonConfig.
 # Find Protobuf installation
 # Looks for protobuf-config.cmake file installed by Protobuf's cmake installation.
 set(gRPC_CMAKE_DIR "/root/.local/lib/cmake")
-set(gRPC_DIR "${gRPC_CMAKE_DIR}/grpc")
-set(Protobuf_DIR "${gRPC_CMAKE_DIR}/protobuf")
-set(absl_DIR "${gRPC_CMAKE_DIR}/absl")
-set(utf8_range_DIR "${gRPC_CMAKE_DIR}/utf8_range")
+list(APPEND CMAKE_PREFIX_PATH ${gRPC_CMAKE_DIR})
+# set(gRPC_DIR "${gRPC_CMAKE_DIR}/grpc")
+# set(Protobuf_DIR "${gRPC_CMAKE_DIR}/protobuf")
+# set(absl_DIR "${gRPC_CMAKE_DIR}/absl")
+# set(utf8_range_DIR "${gRPC_CMAKE_DIR}/utf8_range")
 
 option(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
@@ -116,7 +127,9 @@ message(STATUS "Common include path add: ${MY_SERVICE_DIR}")
 
 
 # source files
+message(STATUS "Current source path: ${CMAKE_CURRENT_SOURCE_DIR}")
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+
 add_executable(${PROJECT_NAME} ${SOURCES}
 ${COMMON_SOURCES} 
 ${BOOST_UTILS_SOURCES}
@@ -145,4 +158,4 @@ mysqlcppconn
 )
 
 # copy configuration file
-configure_file(${CMAKE_CURRENT_LIST_DIR}/app_config.json ${CMAKE_BINARY_DIR}/app_config.json COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/app_config.json ${CMAKE_BINARY_DIR}/bin/app_config.json COPYONLY)

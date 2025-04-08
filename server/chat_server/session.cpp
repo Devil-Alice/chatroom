@@ -73,6 +73,8 @@ void Session::init_thread_send_response()
         // 持续发送数据包
         while (!flag_stop_)
         {
+            // todo :使用条件变量优化获取请求的函数，在没有请求时阻塞，避免占用资源过多
+
             // 先处理数据包
             handle_request();
     
@@ -193,7 +195,7 @@ void Session::handle_request()
     auto pkg = get_request();
     if (pkg == nullptr)
     {
-        std::cout << "get_request error" << std::endl;
+        // std::cout << "get_request error" << std::endl;
         return;
     }
 
@@ -207,6 +209,8 @@ void Session::handle_request()
 void Session::send_package()
 {
     auto pkg = get_response();
+    if(pkg == nullptr)
+        return;
     pkg->build_buffer();
     socket_.async_send(asio::buffer(pkg->buffer_, pkg->message_length_), 
     [pkg](boost::system::error_code err_code, size_t size)

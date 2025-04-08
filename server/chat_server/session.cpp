@@ -71,7 +71,7 @@ void Session::init_thread_send_response()
 {
     thread_send_response_ = std::thread([this](){
         // 持续发送数据包
-        while (flag_stop_)
+        while (!flag_stop_)
         {
             // 先处理数据包
             handle_request();
@@ -213,7 +213,7 @@ void Session::send_package()
     {
         // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
         // 如果需要重发，将数据包重新放回
-        if (err_code || size <= (size_t)pkg->message_length_)
+        if (err_code || size < (size_t)pkg->message_length_)
         {
             std::cout << "send_package error: " << err_code.message() << std::endl; 
             return;
@@ -227,7 +227,7 @@ void Session::read_head()
     // 读取固定长度的头
     async_read_fixed_length(head_length_, [self](boost::system::error_code err_code, size_t size)
                             {
-        if (err_code || size <= self->head_length_)
+        if (err_code || size < self->head_length_)
         {
             std::cout << "read_head error: " << err_code.message() << std::endl; 
             return;
@@ -246,7 +246,7 @@ void Session::read_message()
     async_read_fixed_length(request_->message_length_, [self](boost::system::error_code err_code, size_t size)
                             {
 
-        if (err_code || size <= (size_t)self->request_->message_length_)
+        if (err_code || size < (size_t)self->request_->message_length_)
         {
             std::cout << "read_message error: " << err_code.message() << std::endl;
             return;
@@ -257,6 +257,11 @@ void Session::read_message()
 
         // 将解析好的消息放入request队列中，处理线程在内部会处理这个请求
         self->add_request(self->request_);
+
+        // 调试信息
+        std::cout << "read_message received a message: " << std::endl <<
+        "reqest id: " << self->request_->get_request_id() << std:: endl <<
+        "request message: " << self->request_->get_message() << std::endl;
 
         // 继续接收数据包
         self->receive_package();

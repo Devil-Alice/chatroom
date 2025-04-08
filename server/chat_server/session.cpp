@@ -69,16 +69,15 @@ char *Package::build_buffer()
 
 void Session::init_thread_send_response()
 {
-    auto self = shared_from_this();
-    thread_send_response_ = std::thread([self](){
+    thread_send_response_ = std::thread([this](){
         // 持续发送数据包
-        while (self->flag_stop_)
+        while (flag_stop_)
         {
             // 先处理数据包
-            self->handle_request();
+            handle_request();
     
             // 异步发送response
-            self->send_package();
+            send_package();
         }
     });
 }
@@ -172,7 +171,7 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
         // 出错了，或者是长度达到，调用回调
         if (err_code || cur_len >= length)
         {
-            handler(err_code, size);
+            handler(err_code, cur_len);
             return;  
         }
 
@@ -216,7 +215,7 @@ void Session::send_package()
         // 如果需要重发，将数据包重新放回
         if (err_code || size <= (size_t)pkg->message_length_)
         {
-            std::cout << "read_head error: " << err_code.message() << std::endl; 
+            std::cout << "send_package error: " << err_code.message() << std::endl; 
             return;
         }
     });

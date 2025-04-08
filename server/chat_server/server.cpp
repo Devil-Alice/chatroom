@@ -1,7 +1,7 @@
 #include "server.h"
 
-Server::Server(string host, int port, asio::io_context &ioc)
-    : host_(host), port_(port), ioc_(ioc), acceptor_(ioc_, tcp::endpoint(asio::ip::address::from_string(host_), port_))
+Server::Server(int port, asio::io_context &ioc)
+    : port_(port), ioc_(ioc), acceptor_(ioc_, tcp::endpoint(tcp::v4(), port_))
 {
 }
 
@@ -10,7 +10,7 @@ Server::~Server()
     ioc_.stop();
 }
 
-void Server::accpet_client()
+void Server::accept_client()
 {
     auto self = shared_from_this();
 
@@ -33,7 +33,7 @@ void Server::accpet_client()
         // 让session启动
         session->receive_package();
 
-        self->accpet_client();
+        self->accept_client();
     });
 
 }

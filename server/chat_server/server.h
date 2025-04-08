@@ -11,7 +11,6 @@ class Server : public std::enable_shared_from_this<Server>
     using string = std::string;
 private:
     // 服务器信息，通过配置文件自动解析
-    string host_;
     int port_;
 
     // asio框架中，通信所需的对象：
@@ -22,8 +21,8 @@ private:
     std::map<string, std::shared_ptr<Session>> sessions_;
     
 public:
-    Server(string host, int port, asio::io_context &ioc);
+    Server(int port, asio::io_context &ioc);
     ~Server();
-    void accpet_client();
+    void accept_client();
 
 };

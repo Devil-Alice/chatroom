@@ -1,5 +1,6 @@
 #include "global.h"
 #include "io_context_pool.h"
+#include "server.h"
 
 int main()
 {
@@ -21,6 +22,11 @@ int main()
             return;
         });
 
+        // 解析配置文件
+        int port = 55555;
+
+        std::shared_ptr<Server> server = std::make_shared<Server>(port, ioc);
+        server->accept_client();
         std::cout << "chat server running..." << std::endl;
         ioc.run();
         

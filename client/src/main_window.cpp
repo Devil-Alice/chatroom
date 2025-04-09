@@ -11,8 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
     login_dialog = new LoginDialog(this);
     // 设置无边框
     login_dialog->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-    setFixedSize(login_dialog->size());
+    resize(login_dialog->size());
     setCentralWidget(login_dialog);
+    move_to_screen_center(this);
 
     // connect注册消息处理
     connect(login_dialog, &LoginDialog::signal_goto_register, this, &MainWindow::slot_goto_register);
@@ -35,7 +36,8 @@ void MainWindow::slot_goto_login()
 
     setCentralWidget(login_dialog);
     register_dialog->hide();
-    setFixedSize(login_dialog->size());
+    resize(login_dialog->size());
+    move_to_screen_center(this);
     login_dialog->show();
 }
 
@@ -50,6 +52,7 @@ void MainWindow::slot_goto_register()
 
     setCentralWidget(register_dialog);
     login_dialog->hide();
-    setFixedSize(register_dialog->size());
+    resize(register_dialog->size());
+    move_to_screen_center(this);
     register_dialog->show();
 }

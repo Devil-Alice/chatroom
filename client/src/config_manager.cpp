@@ -59,7 +59,7 @@ ConfigManager::ConfigManager()
         config_map_[it_i.key()] = info;
     }
 
-    qDebug() << "配置文件解析成功";
+    qDebug() << "configuration parse success";
 }
 
 ConfigManager::~ConfigManager()

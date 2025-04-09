@@ -67,6 +67,9 @@ TcpManager::TcpManager()
     connect(&socket_, &QTcpSocket::readyRead, this, &TcpManager::receive_message);
     // 当发送信号来临时，发送数据
     connect(this, &TcpManager::signal_send_message, this, &TcpManager::slot_send_message);
+
+    // 收到消息的处理事件
+    connect(this, &TcpManager::signal_message_received, this, &TcpManager::slot_message_received);
 }
 
 void TcpManager::connect_to_server(ConnectoinInfo info)
@@ -87,20 +90,28 @@ void TcpManager::receive_message()
     if (!flag_head_complete_)
     {
         // 头部信息如果不够，则返回继续接收
-        if(buffer_.length() >= head_length_)
+        if(buffer_.length() < head_length_)
             return;
 
         stream >> request_id_ >> message_length_;
         buffer_.remove(0, head_length_);
         flag_head_complete_ = true;
+
+        qDebug() << "request id: " << request_id_ << endl
+                 << "message length: " << message_length_ << endl;
     }
 
     // 消息长度不够，继续接收
-    if (buffer_.length() >= message_length_)
+    if (buffer_.length() < message_length_)
         return;
 
+    // 全部接收完毕
     QString message = buffer_.mid(0, message_length_);
     buffer_.remove(0, message_length_);
+    // 重置状态接收头部
+    flag_head_complete_ = false;
+
+    qDebug() << "message: " << message << endl;
 
     emit signal_message_received((REQUEST_ID)request_id_, message);
     return;
@@ -139,6 +150,24 @@ void TcpManager::slot_connect_to_server(ConnectoinInfo info)
 void TcpManager::slot_send_message(REQUEST_ID request_id, QString message)
 {
     send_message(request_id, message);
+}
+
+void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
+{
+
+    // 将message转换为json对象
+    QJsonDocument json_doc = QJsonDocument::fromJson(message.toUtf8());
+    if (json_doc.isNull() || !json_doc.isObject())
+    {
+        QMessageBox::information(nullptr, "info", "json解析错误");
+        return;
+    }
+
+
+    if (request_id == REQUEST_ID::CHAT_LOGIN)
+    {
+        emit signal_chat_login_finished(json_doc.object());
+    }
 }
 
 TcpManager::~TcpManager()

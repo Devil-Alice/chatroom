@@ -9,7 +9,7 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent),
     
     
     // 测试信息：-----------------
-    ui->text_name->setText("barbara");
+    ui->text_name->setText("alice");
     ui->text_password->setText("123");
     ui->text_confirm_password->setText("123");
     ui->text_phone->setText("18912345678");

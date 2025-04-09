@@ -16,6 +16,7 @@
 #include <QCryptographicHash>
 #include <QMessageBox>
 #include <QTcpSocket>
+#include <QDesktopWidget>
 #include "singleton.h"
 #include "config_manager.h"
 
@@ -24,6 +25,8 @@ extern QString gate_url_prefix;
 void refresh_style(QWidget *widget);
 
 QString md5_encrypt(const QString &data);
+
+void move_to_screen_center(QWidget *window);
 
 // MODULE和REQUEST_ID: 服务网络请求的回调, 标记响应的数据是当时哪个模块的哪个功能
 enum MODULE

@@ -32,6 +32,7 @@ public slots:
     void slot_user_login();
     void slot_login_request_finished(MY_STATUS_CODE code, REQUEST_ID request_id, QString response);
     void slot_handle_connection_status(bool success);
+    void slot_chat_login_finished(QJsonObject json_data);
 };
 
 #endif // LOGIN_DIALOG_H

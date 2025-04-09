@@ -8,6 +8,8 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent),
 
     ui->text_password->setEchoMode(QLineEdit::Password);
 
+    init_response_handler();
+
     // 当点击click时，发送signal_goto_register信号
     connect(ui->btn_register, &QPushButton::clicked, this, &LoginDialog::signal_goto_register);
 
@@ -22,6 +24,9 @@ LoginDialog::LoginDialog(QWidget *parent) : QDialog(parent),
 
     // 处理连接完成的信号
     connect(TcpManager::instance().get(), &TcpManager::signal_connection_status, this, &LoginDialog::slot_handle_connection_status);
+
+    // 处理chat_login的tcp回复
+    connect(TcpManager::instance().get(), &TcpManager::signal_chat_login_finished, this, &LoginDialog::slot_chat_login_finished);
 }
 
 LoginDialog::~LoginDialog()
@@ -42,15 +47,25 @@ void LoginDialog::init_response_handler()
         
         QMessageBox::information(this, "info",json_obj["message"].toString());
 
+        // 确保 data 部分存在并解析
+        if (!json_obj.contains("data") || !json_obj["data"].isObject())
+        {
+            QMessageBox::information(this, "Error", "Invalid response data.");
+            return;
+        }
 
         QJsonObject json_obj_data = json_obj["data"].toObject();
 
         // 登录成功后，尝试连接tcp服务器
         ConnectoinInfo info;
-        info.uid = json_obj["uid"].toString();
-        info.host= json_obj["host"].toString();
-        info.port= json_obj["port"].toInt();
-        info.token= json_obj["token"].toString();
+        info.uid = json_obj_data["uid"].toString();
+        info.host= json_obj_data["host"].toString();
+        info.port= json_obj_data["port"].toInt();
+        info.token= json_obj_data["token"].toString();
+
+        // 记录token和uid
+        uid_ = info.uid;
+        token_ = info.token;
 
         emit signal_connect_to_server(info);
         return; });
@@ -73,12 +88,10 @@ void LoginDialog::slot_user_login()
         return;
     }
 
-
     QJsonObject json_obj;
     json_obj["phone"] = phone;
-    json_obj["password"] = password;
+    json_obj["password"] = md5_encrypt(password);
     HttpManager::instance()->post_request(QUrl(gate_url_prefix + "/login"), json_obj, MODULE::LOGIN, REQUEST_ID::USER_LOGIN);
-
 
     return;
 }
@@ -115,13 +128,28 @@ void LoginDialog::slot_handle_connection_status(bool success)
     }
 
     QJsonObject json_obj;
+    json_obj["phone"] = ui->text_phone->text();
     json_obj["uid"] = uid_;
     json_obj["token"] = token_;
 
     QJsonDocument json_doc(json_obj);
     QByteArray data = json_doc.toJson();
-    
-    emit TcpManager::instance()->signal_send_message(REQUEST_ID::CHAT_LOGIN, data);
 
+    emit TcpManager::instance() -> signal_send_message(REQUEST_ID::CHAT_LOGIN, data);
+
+    return;
+}
+
+void LoginDialog::slot_chat_login_finished(QJsonObject json_data)
+{
+
+    QString status = json_data["status"].toString();
+    QString message = json_data["message"].toString();
+    if (status != MY_STATUS_CODE::SUCCESS)
+    {
+        QMessageBox::information(this, "info", message);
+    }
+
+    QJsonObject data = json_data["data"].toObject();
     return;
 }

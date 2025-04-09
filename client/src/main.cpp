@@ -6,6 +6,9 @@
 
 int main(int argc, char *argv[])
 {
+            
+    // 启用自动 DPI 缩放
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     QApplication a(argc, argv);
 
     // try
@@ -20,10 +23,12 @@ int main(int argc, char *argv[])
         }
         else
         {
-            qDebug() << "qss 文件加载失败！请检查资源文件路径是否正确。";
+            qDebug() << "qss file load failed";
         }
 
         gate_url_prefix = "http://" + (*app_config)["server"]["host"] + ":" + (*app_config)["server"]["port"];
+
+
 
         // 启动主窗口
         MainWindow w;

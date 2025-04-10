@@ -38,6 +38,7 @@ public:
     void parse_head();
     void parse_message();
     char *build_buffer();
+    size_t get_total_length();
 };
 
 // 会话类，表示与一个客户端连接通信的类

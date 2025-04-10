@@ -67,6 +67,11 @@ char *Package::build_buffer()
     return buffer_;
 }
 
+size_t Package::get_total_length()
+{
+    return 2 + 2 + message_.length();
+}
+
 void Session::init_thread_send_response()
 {
     thread_send_response_ = std::thread([this](){
@@ -227,12 +232,12 @@ void Session::send_package()
     if(pkg == nullptr)
         return;
     pkg->build_buffer();
-    socket_.async_send(asio::buffer(pkg->buffer_, pkg->message_length_), 
+    socket_.async_send(asio::buffer(pkg->buffer_, pkg->get_total_length()), 
     [pkg](boost::system::error_code err_code, size_t size)
     {
         // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
         // 如果需要重发，将数据包重新放回
-        if (err_code || size < (size_t)pkg->message_length_)
+        if (err_code || size < pkg->get_total_length())
         {
             std::cout << "send_package error: " << err_code.message() << std::endl; 
             return;

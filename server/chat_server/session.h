@@ -70,8 +70,8 @@ private:
 
     // 为了尽快接收客户端的请求，我们在读取完一个数据包后，剩下的工作交给处理线程，然后继续开始接收请求
     std::atomic<bool> flag_stop_;
+    std::condition_variable cond_handle_request_;
     std::condition_variable cond_send_response_;
-    ;
     std::thread thread_send_response_;
     void init_thread_send_response();
 

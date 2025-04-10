@@ -97,6 +97,8 @@ Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server)
 Session::~Session()
 {
     flag_stop_ = true;
+    cond_handle_request_.notify_all();
+    cond_send_response_.notify_all();
     thread_send_response_.join();
 
     mutex_request_.lock();
@@ -129,14 +131,31 @@ void Session::add_request(std::shared_ptr<Package> package)
     std::lock_guard<std::mutex> locker(mutex_request_);
     // 这里要emplace调用拷贝构造，创建一个package的副本
     packages_request_.emplace(std::make_shared<Package>(*package));
+    cond_handle_request_.notify_one();
     return;
 }
 
 std::shared_ptr<Package> Session::get_request()
 {
-    std::lock_guard<std::mutex> locker(mutex_request_);
-    if (packages_request_.size() <= 0)
+    std::unique_lock<std::mutex> locker(mutex_request_);
+    cond_handle_request_.wait(locker, 
+    [this]() -> bool
+    {
+        if (flag_stop_)
+        {
+            return true;
+        }
+        else if (packages_request_.size() <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    });
+
+    if (flag_stop_)
         return nullptr;
+    
     auto pkg = packages_request_.front();
     packages_request_.pop();
     return pkg;
@@ -191,13 +210,9 @@ void Session::receive_package()
 
 void Session::handle_request()
 {
-    // 如果没有请求，会在这里阻塞
     auto pkg = get_request();
     if (pkg == nullptr)
-    {
-        // std::cout << "get_request error" << std::endl;
         return;
-    }
 
     // handle_request一般不返回null，如果出错会以package返回一个错误包
     auto response = TcpService::instance().handle_request(pkg);

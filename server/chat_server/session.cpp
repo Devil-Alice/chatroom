@@ -119,6 +119,7 @@ Session::~Session()
         packages_response_.pop();
     }
     mutex_response_.unlock();
+    std::cout << "session[" << uuid_ << "] destruct" << std::endl;
 }
 
 tcp::socket &Session::get_socket()
@@ -192,10 +193,17 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
     socket_.async_read_some(asio::buffer(buf + length_read, length - length_read), 
     [self, handler, length, length_read](boost::system::error_code err_code, size_t size)
     {
+        // 出现错误，关闭socket
+        if (err_code)
+        {
+            self->shutdown(err_code);
+            return;
+        }
+
         // 计算当前长度 = 本次读取的长度size + 之前累积读取的长度length_read
         size_t cur_len = size + length_read;
-        // 出错了，或者是长度达到，调用回调
-        if (err_code || cur_len >= length)
+        // 长度达到，调用回调
+        if (cur_len >= length)
         {
             handler(err_code, cur_len);
             return;  
@@ -235,11 +243,16 @@ void Session::send_package()
     socket_.async_send(asio::buffer(pkg->buffer_, pkg->get_total_length()), 
     [pkg](boost::system::error_code err_code, size_t size)
     {
-        // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
-        // 如果需要重发，将数据包重新放回
-        if (err_code || size < pkg->get_total_length())
+        if (err_code)
         {
             std::cout << "send_package error: " << err_code.message() << std::endl; 
+            return;
+        }
+        // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
+        // 如果需要重发，将数据包重新放回
+        if (size < pkg->get_total_length())
+        {
+            std::cout << "send_package length not enough " << std::endl; 
             return;
         }
     });
@@ -251,7 +264,7 @@ void Session::read_head()
     // 读取固定长度的头
     async_read_fixed_length(head_length_, [self](boost::system::error_code err_code, size_t size)
                             {
-        if (err_code || size < self->head_length_)
+        if (size < self->head_length_)
         {
             std::cout << "read_head error: " << err_code.message() << std::endl; 
             return;
@@ -291,4 +304,19 @@ void Session::read_message()
         self->receive_package();
 
         return; });
+}
+
+void Session::shutdown(boost::system::error_code err_code)
+{
+    std::cout << "session socket[" << uuid_ << "] shutdown: " << err_code.what() << std::endl;
+    flag_stop_ = true;
+    socket_.shutdown(asio::socket_base::shutdown_both, err_code);
+    
+    // 唤醒正在阻塞的地方
+    cond_handle_request_.notify_all();
+    cond_send_response_.notify_all();
+    // socket_.close();
+
+    // 从server的map中移除此session
+    server_->remove_session(uuid_);
 }

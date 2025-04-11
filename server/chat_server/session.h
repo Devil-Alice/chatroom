@@ -105,4 +105,6 @@ public:
     void read_head();
     // 异步读取消息的函数
     void read_message();
+    // 关闭函数
+    void shutdown(boost::system::error_code err_code);
 };

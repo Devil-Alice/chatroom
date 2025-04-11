@@ -99,7 +99,10 @@ void HttpConnection::send_response()
                       {
                           // 关闭这一方的连接
                           self->socket_.shutdown(tcp::socket::shutdown_send, ec);
-                          self->timer_.cancel(); });
+                          self->timer_.cancel(); 
+                          self->socket_.close(ec);
+                        //   std::cout << "http connection close" << std::endl;
+                        });
 }
 
 // 解析 URL
@@ -133,6 +136,8 @@ void HttpConnection::parse_url(const std::string &url)
     }
 }
 
+
+// todo 编码、解码放入myutils
 // URL 编码函数
 std::string url_encode(const std::string &str)
 {

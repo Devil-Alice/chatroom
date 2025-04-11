@@ -37,3 +37,9 @@ void Server::accept_client()
     });
 
 }
+
+void Server::remove_session(string session_uuid)
+{
+    sessions_.erase(session_uuid);
+    return;
+}

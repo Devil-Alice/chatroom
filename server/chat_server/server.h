@@ -24,5 +24,6 @@ public:
     Server(int port, asio::io_context &ioc);
     ~Server();
     void accept_client();
+    void remove_session(string session_uuid);
 
 };

@@ -28,6 +28,7 @@ private:
 signals:
     void signal_goto_register();
     void signal_connect_to_server(ConnectoinInfo info);
+    void signal_goto_main_interface();
 public slots:
     void slot_user_login();
     void slot_login_request_finished(MY_STATUS_CODE code, REQUEST_ID request_id, QString response);

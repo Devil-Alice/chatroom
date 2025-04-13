@@ -14,12 +14,12 @@ TcpManager::TcpManager()
 
     connect(&socket_, &QTcpSocket::connected, this, [this]()
         { 
-        qDebug() << "connected to the server successfully"; 
+        qDebug() << "connected to the server successfully";
         emit signal_connection_status(true);
         });
 
     connect(&socket_, &QTcpSocket::disconnected, this, [this](){
-        qDebug() << "connected to the server failed"; 
+        qDebug() << "server disconnected "; 
         emit signal_connection_status(false);
     });
 
@@ -101,6 +101,7 @@ void TcpManager::receive_message()
                  << "message length: " << message_length_ << endl;
     }
 
+    qDebug() << "current message length: " << buffer_.length() << endl;
     // 消息长度不够，继续接收
     if (buffer_.length() < message_length_)
         return;

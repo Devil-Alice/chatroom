@@ -11,28 +11,42 @@ DESTDIR = ./bin
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    chat_form.cpp \
     config_manager.cpp \
+    friend_list_form.cpp \
     global.cpp \
     http_manager.cpp \
     login_dialog.cpp \
     main.cpp \
+    main_interface_form.cpp \
     main_window.cpp \
+    recent_message_list_form.cpp \
     register_dialog.cpp \
-    tcp_manager.cpp
+    tcp_manager.cpp \
+    user.cpp
 
 HEADERS += \
+    chat_form.h \
     config_manager.h \
+    friend_list_form.h \
     global.h \
     http_manager.h \
     login_dialog.h \
+    main_interface_form.h \
     main_window.h \
+    recent_message_list_form.h \
     register_dialog.h \
     singleton.h \
-    tcp_manager.h
+    tcp_manager.h \
+    user.h
 
 FORMS += \
+    chat_form.ui \
+    friend_list_form.ui \
     login_dialog.ui \
+    main_interface_form.ui \
     main_window.ui \
+    recent_message_list_form.ui \
     register_dialog.ui
 
 # Default rules for deployment.

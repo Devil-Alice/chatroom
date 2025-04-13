@@ -73,6 +73,11 @@ void LoginDialog::init_response_handler()
 
 void LoginDialog::slot_user_login()
 {
+
+    // emit signal_goto_main_interface();
+    // return;
+
+
     QString phone = ui->text_phone->text();
     QString password = ui->text_password->text();
 
@@ -151,5 +156,11 @@ void LoginDialog::slot_chat_login_finished(QJsonObject json_data)
     }
 
     QJsonObject data = json_data["data"].toObject();
+
+
+    //跳转到主页
+    emit signal_goto_main_interface();
+
+
     return;
 }

@@ -1,14 +1,19 @@
 #include "chat_form.h"
-#include "ui_chat_list_form.h"
+#include "ui_chat_form.h"
 
-ChatListForm::ChatListForm(QWidget *parent) :
+ChatForm::ChatForm(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ChatListForm)
+    ui(new Ui::ChatForm)
 {
     ui->setupUi(this);
+
+    ui->splitter->setStretchFactor(0, 1);
+    ui->splitter->setStretchFactor(1, 0);
+
+    
 }
 
-ChatListForm::~ChatListForm()
+ChatForm::~ChatForm()
 {
     delete ui;
 }

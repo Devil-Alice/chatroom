@@ -43,7 +43,7 @@
         <number>0</number>
        </property>
        <widget class="QWidget" name="verticalLayoutWidget_3">
-        <layout class="QVBoxLayout" name="layout_menu">
+        <layout class="QVBoxLayout" name="layout_sidebar">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -87,7 +87,7 @@
         </layout>
        </widget>
        <widget class="QWidget" name="verticalLayoutWidget_5">
-        <layout class="QVBoxLayout" name="layout_right" stretch="">
+        <layout class="QVBoxLayout" name="layout_right">
          <property name="spacing">
           <number>0</number>
          </property>

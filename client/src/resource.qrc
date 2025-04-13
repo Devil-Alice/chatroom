@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>image/cat.jpg</file>
         <file>style/styles.css</file>
+        <file>image/message.png</file>
+        <file>image/friend.png</file>
     </qresource>
 </RCC>

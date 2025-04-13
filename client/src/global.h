@@ -17,11 +17,7 @@
 #include <QMessageBox>
 #include <QTcpSocket>
 #include <QDesktopWidget>
-#include <QScreen>
-#include <QStandardItemModel>
-#include <QStandardItem>
-#include <QStyledItemDelegate>
-#include <QPainter>
+#include <QListWidgetItem>
 #include "singleton.h"
 #include "config_manager.h"
 

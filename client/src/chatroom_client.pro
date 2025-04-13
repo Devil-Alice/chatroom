@@ -14,6 +14,7 @@ SOURCES += \
     chat_form.cpp \
     config_manager.cpp \
     friend_list_form.cpp \
+    friend_list_item_form.cpp \
     global.cpp \
     http_manager.cpp \
     login_dialog.cpp \
@@ -21,7 +22,9 @@ SOURCES += \
     main_interface_form.cpp \
     main_window.cpp \
     recent_message_list_form.cpp \
+    recent_message_list_item_form.cpp \
     register_dialog.cpp \
+    sidebar_form.cpp \
     tcp_manager.cpp \
     user.cpp
 
@@ -29,13 +32,16 @@ HEADERS += \
     chat_form.h \
     config_manager.h \
     friend_list_form.h \
+    friend_list_item_form.h \
     global.h \
     http_manager.h \
     login_dialog.h \
     main_interface_form.h \
     main_window.h \
     recent_message_list_form.h \
+    recent_message_list_item_form.h \
     register_dialog.h \
+    sidebar_form.h \
     singleton.h \
     tcp_manager.h \
     user.h
@@ -43,11 +49,14 @@ HEADERS += \
 FORMS += \
     chat_form.ui \
     friend_list_form.ui \
+    friend_list_item_form.ui \
     login_dialog.ui \
     main_interface_form.ui \
     main_window.ui \
     recent_message_list_form.ui \
-    register_dialog.ui
+    recent_message_list_item_form.ui \
+    register_dialog.ui \
+    sidebar_form.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

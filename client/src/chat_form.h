@@ -4,19 +4,19 @@
 #include <QWidget>
 
 namespace Ui {
-class ChatListForm;
+class ChatForm;
 }
 
-class ChatListForm : public QWidget
+class ChatForm : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ChatListForm(QWidget *parent = nullptr);
-    ~ChatListForm();
+    explicit ChatForm(QWidget *parent = nullptr);
+    ~ChatForm();
 
 private:
-    Ui::ChatListForm *ui;
+    Ui::ChatForm *ui;
 };
 
 #endif // CHAT_FORM_H

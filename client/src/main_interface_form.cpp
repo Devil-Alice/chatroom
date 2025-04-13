@@ -16,11 +16,18 @@ MainInterfaceForm::MainInterfaceForm(QWidget *parent) :
     ui->splitter_y->setStretchFactor(1, 1);
 
     // 初始化成员变量
+    sidebar_form_ = new SidebarForm(this);
+    recent_message_list_form_ = new RecentMessageListForm(this);
     friend_list_form_ = new FriendListForm(this);
-    chat_list_from_ = new ChatListForm(this);
+    chat_list_from_ = new ChatForm(this);
 
+    ui->layout_sidebar->addWidget(sidebar_form_);
+    ui->layout_left->addWidget(recent_message_list_form_);
+    // recent_message_list_form_->hide();
     ui->layout_left->addWidget(friend_list_form_);
+    friend_list_form_->hide();
     ui->layout_right->addWidget(chat_list_from_);
+
 
 }
 

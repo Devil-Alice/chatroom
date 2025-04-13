@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
 {
             
     // 启用自动 DPI 缩放
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // 启用高 DPI 缩放
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);   // 启用高 DPI 图片支持
     QApplication a(argc, argv);
 
     // try

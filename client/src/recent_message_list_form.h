@@ -2,6 +2,8 @@
 #define RECENT_MESSAGE_LIST_FORM_H
 
 #include <QWidget>
+#include "global.h"
+#include "recent_message_list_item_form.h"
 
 namespace Ui {
 class RecentMessageListForm;

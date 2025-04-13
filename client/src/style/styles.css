@@ -3,12 +3,21 @@ QWidget {
     background-color: white;
 }
 
+/* 设置全局字体为微软雅黑，大小12px */
+* {
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-size: 12pt;
+}
+
+QLabel {
+    background: transparent;
+}
+
 /* 所有输入框 */
 QLineEdit {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 8px;
-    font-size: 12px;
 }
 
 /* 输入框聚焦时高亮 */
@@ -20,11 +29,13 @@ QLineEdit:focus {
 QPushButton {
     background-color: #34c759;
     color: white;
-    padding-left: 20px; /* 左边距 */
-    padding-right: 20px; /* 右边距 */
-    font-size: 16px;
+    padding-left: 20px;
+    /* 左边距 */
+    padding-right: 20px;
+    /* 右边距 */
     border-radius: 5px;
     height: 40px;
+    /* margin: 5px; */
 }
 
 /* 按钮鼠标悬停 */
@@ -40,4 +51,42 @@ QPushButton:hover {
 
 #label_register_msg[status="error"] {
     color: #FF3B30;
+}
+
+
+/* 设置 QListWidget 背景和边框 */
+QListWidget {
+    background-color: #ffffff;
+    /* 背景白色 */
+    border: 1px solid #dcdcdc;
+    /* 边框灰色 */
+    border-radius: 5px;
+    /* 圆角边框 */
+    outline: none;
+}
+
+/* 设置 QListWidgetItem 的样式 */
+QListWidget::item {
+    border-radius: 5px;
+    color: #333333;
+    font-weight: normal;
+}
+
+/* 设置 QListWidgetItem 点击后的样式 */
+QListWidget::item:selected {
+    /* 选中时背景颜色 */
+    background-color: #e5e5e5;
+    /* 选中时字体颜色 */
+    color: #ffffff;
+}
+
+/* 设置 QListWidgetItem 悬浮时的样式 */
+/* QListWidget::item:hover {
+    background-color: #e0e0e0; 
+} 
+*/
+
+
+RecentMessageListItemForm #label_date, #label_message {
+    font-size: 10pt;
 }

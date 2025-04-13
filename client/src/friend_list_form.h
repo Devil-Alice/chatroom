@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "global.h"
+#include "friend_list_item_form.h"
 
 namespace Ui {
 class FriendListForm;
@@ -15,6 +16,10 @@ class FriendListForm : public QWidget
 public:
     explicit FriendListForm(QWidget *parent = nullptr);
     ~FriendListForm();
+
+public slots:
+    void slot_item_clicked(QListWidgetItem *item);
+
 
 private:
     Ui::FriendListForm *ui;

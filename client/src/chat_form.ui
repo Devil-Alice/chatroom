@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ChatListForm</class>
- <widget class="QWidget" name="ChatListForm">
+ <class>ChatForm</class>
+ <widget class="QWidget" name="ChatForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -31,12 +31,6 @@
    </property>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
-     <property name="font">
-      <font>
-       <family>微软雅黑 Light</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -44,35 +38,16 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="font">
-       <font>
-        <family>微软雅黑 Light</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
         <number>0</number>
        </property>
        <item>
-        <widget class="QListView" name="listView">
-         <property name="font">
-          <font>
-           <family>微软雅黑 Light</family>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-        </widget>
+        <widget class="QListView" name="listView"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="font">
-       <font>
-        <family>微软雅黑 Light</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
        <property name="spacing">
         <number>0</number>
@@ -90,55 +65,43 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QTextEdit" name="textEdit">
-           <property name="font">
-            <font>
-             <family>微软雅黑 Light</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-          </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QTextEdit" name="textEdit"/>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_3">
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
          <property name="leftMargin">
-          <number>0</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
-          <number>0</number>
+          <number>5</number>
          </property>
-         <property name="spacing">
-          <number>0</number>
+         <property name="rightMargin">
+          <number>5</number>
          </property>
-         <item row="0" column="0">
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <family>微软雅黑 Light</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
            <property name="text">
-            <string>PushButton</string>
+            <string>发送</string>
            </property>
           </widget>
          </item>

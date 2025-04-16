@@ -90,3 +90,19 @@ QListWidget::item:selected {
 RecentMessageListItemForm #label_date, #label_message {
     font-size: 10pt;
 }
+
+SidebarForm QPushButton {
+    background-color: transparent;
+}
+
+SidebarForm QPushButton:hover {
+    background-color: #e5e5e5;
+}
+
+ChatMessageItemForm QTextEdit {
+    background-color: #f5f5f7;
+    border: 0px;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+}
+

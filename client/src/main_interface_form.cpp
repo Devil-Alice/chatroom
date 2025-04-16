@@ -29,9 +29,28 @@ MainInterfaceForm::MainInterfaceForm(QWidget *parent) :
     ui->layout_right->addWidget(chat_list_from_);
 
 
+
+    // 窗口切换事件
+    connect(sidebar_form_, &SidebarForm::signal_goto_recent_message_list, this, &MainInterfaceForm::show_recent_message_list);
+    connect(sidebar_form_, &SidebarForm::signal_goto_friend_list, this, &MainInterfaceForm::show_friend_list);
+
 }
 
 MainInterfaceForm::~MainInterfaceForm()
 {
     delete ui;
 }
+
+void MainInterfaceForm::show_recent_message_list()
+{
+    friend_list_form_->hide();
+    recent_message_list_form_->show();
+}
+
+void MainInterfaceForm::show_friend_list()
+{
+    recent_message_list_form_->hide();
+    friend_list_form_->show();
+}
+
+

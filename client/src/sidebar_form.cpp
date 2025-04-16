@@ -7,8 +7,9 @@ SidebarForm::SidebarForm(QWidget *parent) :
 {
     ui->setupUi(this);
     
-    // setFixedWidth(60);
 
+    connect(ui->btn_friend, &QPushButton::clicked, this, &SidebarForm::signal_goto_friend_list);
+    connect(ui->btn_message, &QPushButton::clicked, this, &SidebarForm::signal_goto_recent_message_list);
 
 }
 

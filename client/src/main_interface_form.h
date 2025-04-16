@@ -22,6 +22,10 @@ public:
     ~MainInterfaceForm();
 
 private:
+    void show_recent_message_list();
+    void show_friend_list();
+
+private:
     Ui::MainInterfaceForm *ui;
     SidebarForm *sidebar_form_;
     RecentMessageListForm *recent_message_list_form_;

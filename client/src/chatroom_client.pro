@@ -12,6 +12,7 @@ DESTDIR = ./bin
 
 SOURCES += \
     chat_form.cpp \
+    chat_message_item_form.cpp \
     config_manager.cpp \
     friend_list_form.cpp \
     friend_list_item_form.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
 
 HEADERS += \
     chat_form.h \
+    chat_message_item_form.h \
     config_manager.h \
     friend_list_form.h \
     friend_list_item_form.h \
@@ -48,6 +50,7 @@ HEADERS += \
 
 FORMS += \
     chat_form.ui \
+    chat_message_item_form.ui \
     friend_list_form.ui \
     friend_list_item_form.ui \
     login_dialog.ui \

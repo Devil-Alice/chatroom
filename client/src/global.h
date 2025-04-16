@@ -18,6 +18,8 @@
 #include <QTcpSocket>
 #include <QDesktopWidget>
 #include <QListWidgetItem>
+#include <QPainter>
+#include <QTextBlock>
 #include "singleton.h"
 #include "config_manager.h"
 

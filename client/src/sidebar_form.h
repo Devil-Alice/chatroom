@@ -15,6 +15,10 @@ public:
     explicit SidebarForm(QWidget *parent = nullptr);
     ~SidebarForm();
 
+signals:
+    void signal_goto_friend_list();
+    void signal_goto_recent_message_list();
+
 private:
     Ui::SidebarForm *ui;
 };

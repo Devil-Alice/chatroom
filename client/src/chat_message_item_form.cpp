@@ -14,7 +14,7 @@ ChatMessageItemForm::ChatMessageItemForm(int role, QWidget *parent) : QWidget(pa
     ui->text_message->setReadOnly(true);
     ui->text_message->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->text_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // ui->text_message->document()->setDocumentMargin(0);
+    ui->text_message->document()->setDocumentMargin(0);
 
     margins[0] = 0;
     margins[1] = 0;
@@ -34,7 +34,7 @@ ChatMessageItemForm::ChatMessageItemForm(int role, QWidget *parent) : QWidget(pa
         ui->horizontalLayout_message->setAlignment(Qt::AlignRight);
     }
 
-    // ui->text_message->setText("test");
+    ui->text_message->setText("test");
 }
 
 ChatMessageItemForm::~ChatMessageItemForm()
@@ -69,7 +69,7 @@ void ChatMessageItemForm::set_width()
     qDebug() << "padding" << ui->text_message->document()->documentMargin();
 
     int doc_margin = ui->text_message->document()->documentMargin() * 2 + margins[0] + margins[2];
-    ui->text_message->setMaximumWidth(qMin(max_line_text_width, max_message_width_) + doc_margin + 4);
+    ui->text_message->setMaximumWidth(qMin(max_line_text_width, max_message_width_) + doc_margin + 2);
 }
 
 void ChatMessageItemForm::paintEvent(QPaintEvent *evnet)

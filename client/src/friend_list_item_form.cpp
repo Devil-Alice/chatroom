@@ -7,7 +7,9 @@ FriendListItemForm::FriendListItemForm(QWidget *parent) : QWidget(parent),
     ui->setupUi(this);
 
     QPixmap avatar(":/image/cat.jpg");
-    avatar = avatar.scaled({50, 50}, Qt::KeepAspectRatio);
+    ui->label_avatar->setFixedSize(40, 40);
+    ui->label_avatar->setScaledContents(true);
+    ui->label_avatar->setScaledContents(true);
     ui->label_avatar->setPixmap(avatar);
 
     ui->label_name->setText("alice");

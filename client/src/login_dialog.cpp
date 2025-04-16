@@ -74,6 +74,7 @@ void LoginDialog::init_response_handler()
 void LoginDialog::slot_user_login()
 {
 
+    // test code
     // emit signal_goto_main_interface();
     // return;
 

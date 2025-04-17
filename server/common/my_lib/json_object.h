@@ -9,6 +9,10 @@ class JsonObject
 
 public:
     virtual ~JsonObject(){};
+    virtual Json::Value to_json() = 0;
+    virtual string to_json_string() { return to_json().toStyledString(); }
+    virtual void from_json_string(string json_string) = 0;
+
     static Json::Value parse_json_string(string json_string)
     {
         Json::Reader reader;
@@ -20,7 +24,14 @@ public:
         return root;
     }
 
-    virtual Json::Value to_json() = 0;
-    virtual string to_json_string() { return to_json().toStyledString(); }
-    virtual void from_json_string(string json_string) = 0;
+    static Json::Value to_json_array(std::vector<std::shared_ptr<JsonObject>> array)
+    {
+        Json::Value json_array(Json::arrayValue);
+        for (std::shared_ptr<JsonObject> &item : array)
+        {
+            Json::Value json_obj = item->to_json();
+            json_array.append(json_obj);
+        }
+        return json_array;
+    }
 };

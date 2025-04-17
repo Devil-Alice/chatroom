@@ -9,4 +9,6 @@ namespace my_utils
 {
     using namespace std;
     string generate_uuid();
+    bool is_all_digit(const string &str);
+
 }

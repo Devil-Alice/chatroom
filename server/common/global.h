@@ -34,6 +34,7 @@
 #include "config_manager.h"
 #include "my_utils.h"
 #include "common_result.h"
+#include "user.h"
 
 
 // 简化命名空间
@@ -83,5 +84,6 @@ enum REQUEST_ID
     GET_VERIFY_CODE = 1001, //获取验证码
     REGISTER_USER = 1002, //用户注册
     USER_LOGIN = 1003, // 用户登录
-    CHAT_LOGIN = 1004  //聊天服务器登录
+    CHAT_LOGIN = 1004,  //聊天服务器登录
+    SEARCH_CONTENT = 1005 // 搜索内容
 };

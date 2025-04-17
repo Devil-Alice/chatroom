@@ -55,14 +55,14 @@ void Package::parse_message()
 char *Package::build_buffer()
 {
     // 转换字节序
-    request_id_ = htons(request_id_);
-    message_length_ = htons(message_length_);
+    int16_t request_id = htons(request_id_);
+    int16_t message_length = htons(message_length_);
 
     // 将包头写入buffer
-    memcpy(buffer_, &request_id_, sizeof(request_id_));
-    memcpy(buffer_ + sizeof(request_id_), &message_length_, sizeof(message_length_));
+    memcpy(buffer_, &request_id, sizeof(request_id));
+    memcpy(buffer_ + sizeof(request_id), &message_length, sizeof(message_length));
     // 将消息体写入buffer
-    memcpy(buffer_ + sizeof(request_id_) + sizeof(message_length_), message_.data(), message_.length());
+    memcpy(buffer_ + sizeof(request_id) + sizeof(message_length), message_.data(), message_.length());
 
     return buffer_;
 }
@@ -255,6 +255,10 @@ void Session::send_package()
             std::cout << "send_package length not enough " << std::endl; 
             return;
         }
+
+        std::cout << "sent a message: " << std::endl <<
+        "reqest id: " << pkg->get_request_id() << std:: endl <<
+        "request message: " << pkg->get_message() << std::endl;
     });
 }
 

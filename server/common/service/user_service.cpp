@@ -90,6 +90,52 @@ CommonResult UserService::user_login(string phone, string password)
     json_result["port"] = rsp.port();
     json_result["token"] = rsp.token();
 
-
     return result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
+}
+
+CommonResult UserService::chat_login()
+{
+    return CommonResult();
+}
+
+CommonResult UserService::search_content(string content)
+{
+    CommonResult result;
+    try
+    {
+        std::vector<std::shared_ptr<User>> users;
+
+        bool is_digit = my_utils::is_all_digit(content);
+
+        // 如果全是数字，根手机号查询
+        if (is_digit)
+        {
+            auto user = user_dao_.get_user_by_phone(content);
+            if (user != nullptr)
+                users.push_back(user);
+        }
+
+        // 不管是不是数字，都要根据name查询
+        auto users_by_name = user_dao_.get_users_by_name(content);
+        users.insert(users.end(), users_by_name.begin(), users_by_name.end());
+
+        // 将user转换为JsonObject
+        std::vector<std::shared_ptr<JsonObject>> searched_users;
+        for (std::shared_ptr<User> item : users)
+        {
+            searched_users.emplace_back(new SearchedUserDto(*item));
+        }
+
+        // 将vector转为json
+        Json::Value json_data = JsonObject::to_json_array(searched_users);
+
+
+        return result.set(MY_STATUS_CODE::SUCCESS, "query success", json_data);
+    }
+    catch (std::runtime_error &ex)
+    {
+        return result.set(MY_STATUS_CODE::NETWORK_FAILED, ex.what());
+    }
+
+    return result;
 }

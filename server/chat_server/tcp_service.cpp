@@ -53,6 +53,25 @@ TcpService::TcpService()
 
         return result_pkg;
     });
+
+
+    register_service(REQUEST_ID::SEARCH_CONTENT, 
+    [](std::shared_ptr<Package> package){
+        std::shared_ptr<Package> result_pkg(new Package());
+        CommonResult result;
+        
+        // 根据package中的内容作处理
+
+        Json::Value json_request = JsonObject::parse_json_string(package->get_message());
+        string search_content = json_request["search_content"].asString();
+
+        result = UserService::instance().search_content(search_content);
+
+        result_pkg->set_request_id(package->get_request_id());
+        result_pkg->set_message(result.to_json_string());
+
+        return result_pkg;
+    });
 }
 
 TcpService::~TcpService()
@@ -65,6 +84,7 @@ void TcpService::register_service(REQUEST_ID request_id, TcpHandler handler)
     return;
 }
 
+// 该函数需要在外层添加异常处理
 std::shared_ptr<Package> TcpService::handle_request(std::shared_ptr<Package> package)
 {
     REQUEST_ID request_id = (REQUEST_ID)package->get_request_id();

@@ -1,6 +1,5 @@
 #include "user.h"
 
-
 User::User() {}
 
 User::User(string name, string phone, string password)
@@ -8,6 +7,15 @@ User::User(string name, string phone, string password)
     name_ = name;
     phone_ = phone;
     password_ = password;
+    avatar_ = "";
+}
+User::User(string uid, string name, string phone, string password, string avatar)
+{
+    uid_ = uid;
+    name_ = name;
+    phone_ = phone;
+    password_ = password;
+    avatar_ = avatar;
 }
 User::~User() {}
 int User::get_id() { return id_; }
@@ -22,6 +30,7 @@ void User::set_password(string password) { password_ = password; }
 
 SearchedUserDto::SearchedUserDto(User &user)
 {
+    this->uid_ = user.get_uid();
     this->name_ = user.get_name();
     this->avatar_ = "";
 }
@@ -29,6 +38,7 @@ SearchedUserDto::SearchedUserDto(User &user)
 Json::Value SearchedUserDto::to_json()
 {
     Json::Value root;
+    root["uid"] = uid_;
     root["name"] = name_;
     root["avatar"] = avatar_;
     return root;

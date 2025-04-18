@@ -126,7 +126,7 @@ void MysqlPool::check_heartbeat()
             std::unique_ptr<sql::Statement> stmt(conn->conn_->createStatement());
             stmt->executeQuery("select 1;");
             conn->last_execute_time_ = current_time;
-            std::cout << "mysql heartbeat sent" << std::endl;
+            // std::cout << "mysql heartbeat sent" << std::endl;
         }
         catch (std::exception &ex)
         {

@@ -109,10 +109,11 @@ std::vector<std::shared_ptr<User>> UserDao::get_users_by_name(string name)
 
     while (result->next())
     {
+        string uid = result->getString("uid");
         string name = result->getString("name");
         string phone = result->getString("phone");
         string password = result->getString("password");
-        users.emplace_back(new User(name, phone, password));
+        users.emplace_back(new User(uid, name, phone, password));
     }
 
     return users;

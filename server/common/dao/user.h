@@ -3,7 +3,7 @@
 #include <jsoncpp/json/json.h>
 #include "json_object.h"
 
-// todo: 添加头像 
+// todo: 添加头像
 
 class User
 {
@@ -15,10 +15,12 @@ private:
     string name_;
     string phone_;
     string password_;
+    string avatar_;
 
 public:
     User();
     User(string name, string phone, string password);
+    User(string uid, string name, string phone, string password, string avatar = "");
     ~User();
 
     int get_id();
@@ -35,11 +37,11 @@ public:
 class SearchedUserDto : public JsonObject
 {
 public:
+    std::string uid_;
     std::string name_;
     std::string avatar_;
 
     SearchedUserDto(User &user);
     Json::Value to_json() override;
     void from_json_string(std::string json_string) override;
-
 };

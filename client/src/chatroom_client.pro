@@ -25,6 +25,9 @@ SOURCES += \
     recent_message_list_form.cpp \
     recent_message_list_item_form.cpp \
     register_dialog.cpp \
+    scroll_list_form.cpp \
+    search_bar_form.cpp \
+    searched_item_form.cpp \
     sidebar_form.cpp \
     tcp_manager.cpp \
     user.cpp
@@ -43,6 +46,9 @@ HEADERS += \
     recent_message_list_form.h \
     recent_message_list_item_form.h \
     register_dialog.h \
+    scroll_list_form.h \
+    search_bar_form.h \
+    searched_item_form.h \
     sidebar_form.h \
     singleton.h \
     tcp_manager.h \
@@ -59,6 +65,9 @@ FORMS += \
     recent_message_list_form.ui \
     recent_message_list_item_form.ui \
     register_dialog.ui \
+    scroll_list_form.ui \
+    search_bar_form.ui \
+    searched_item_form.ui \
     sidebar_form.ui
 
 # Default rules for deployment.

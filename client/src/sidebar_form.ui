@@ -38,7 +38,7 @@
        </property>
        <property name="icon">
         <iconset resource="resource.qrc">
-         <normaloff>:/image/cat.jpg</normaloff>:/image/cat.jpg</iconset>
+         <normaloff>:/image/user.png</normaloff>:/image/user.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -96,7 +96,7 @@
        </property>
        <property name="icon">
         <iconset resource="resource.qrc">
-         <normaloff>:/image/friend.png</normaloff>:/image/friend.png</iconset>
+         <normaloff>:/image/contacts.png</normaloff>:/image/contacts.png</iconset>
        </property>
        <property name="iconSize">
         <size>

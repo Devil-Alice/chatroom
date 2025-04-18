@@ -53,12 +53,25 @@
             <x>0</x>
             <y>0</y>
             <width>396</width>
-            <height>135</height>
+            <height>68</height>
            </rect>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
+          <layout class="QGridLayout" name="gridLayout_2" rowminimumheight="0,1">
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="layout_chat_message"/>
+           </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>

@@ -7,14 +7,14 @@ ChatForm::ChatForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 隐藏垂直滚动条
+    ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 隐藏水平滚动条
+
     ui->splitter->setStretchFactor(0, 1);
     ui->splitter->setStretchFactor(1, 0);
 
     add_message(0);
-    add_message(0);
     add_message(1);
-    add_message(1);
-    add_message(0);
     
 
 }

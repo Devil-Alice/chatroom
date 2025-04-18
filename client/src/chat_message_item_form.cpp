@@ -62,11 +62,11 @@ void ChatMessageItemForm::set_width()
     }
 
     ui->text_message->getContentsMargins(&margins[0], &margins[1], &margins[2], &margins[3]);
-    qDebug() << "left" << margins[0];
-    qDebug() << "top" << margins[1];
-    qDebug() << "right" << margins[2];
-    qDebug() << "bottom" << margins[3];
-    qDebug() << "padding" << ui->text_message->document()->documentMargin();
+    // qDebug() << "left" << margins[0];
+    // qDebug() << "top" << margins[1];
+    // qDebug() << "right" << margins[2];
+    // qDebug() << "bottom" << margins[3];
+    // qDebug() << "padding" << ui->text_message->document()->documentMargin();
 
     int doc_margin = ui->text_message->document()->documentMargin() * 2 + margins[0] + margins[2];
     ui->text_message->setMaximumWidth(qMin(max_line_text_width, max_message_width_) + doc_margin + 2);

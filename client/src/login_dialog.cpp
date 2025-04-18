@@ -67,6 +67,9 @@ void LoginDialog::init_response_handler()
         uid_ = info.uid;
         token_ = info.token;
 
+        self_info->uid_ = uid_;
+        self_info->token_ = token_;
+
         emit signal_connect_to_server(info);
         return; });
 }
@@ -149,19 +152,18 @@ void LoginDialog::slot_handle_connection_status(bool success)
 void LoginDialog::slot_chat_login_finished(QJsonObject json_data)
 {
 
-    QString status = json_data["status"].toString();
+    int status = json_data["status"].toInt();
     QString message = json_data["message"].toString();
     if (status != MY_STATUS_CODE::SUCCESS)
     {
         QMessageBox::information(this, "info", message);
+        return;
     }
 
     QJsonObject data = json_data["data"].toObject();
 
-
     //跳转到主页
     emit signal_goto_main_interface();
-
 
     return;
 }

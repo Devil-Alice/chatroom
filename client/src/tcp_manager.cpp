@@ -158,16 +158,23 @@ void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
 
     // 将message转换为json对象
     QJsonDocument json_doc = QJsonDocument::fromJson(message.toUtf8());
-    if (json_doc.isNull() || !json_doc.isObject())
+     if (json_doc.isNull() || !json_doc.isObject())
     {
         QMessageBox::information(nullptr, "info", "json解析错误");
         return;
     }
 
+    QByteArray array = json_doc.toJson();
 
     if (request_id == REQUEST_ID::CHAT_LOGIN)
     {
         emit signal_chat_login_finished(json_doc.object());
+    }
+
+
+    if (request_id == REQUEST_ID::SEARCH_CONTENT)
+    {
+        emit signal_search_content_finished(json_doc.object());
     }
 }
 

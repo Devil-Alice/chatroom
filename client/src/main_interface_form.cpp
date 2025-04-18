@@ -17,22 +17,28 @@ MainInterfaceForm::MainInterfaceForm(QWidget *parent) :
 
     // 初始化成员变量
     sidebar_form_ = new SidebarForm(this);
+    search_bar_form_ = new SearchBarForm(this);
     recent_message_list_form_ = new RecentMessageListForm(this);
     friend_list_form_ = new FriendListForm(this);
-    chat_list_from_ = new ChatForm(this);
+    friend_list_form_->hide();
+    chat_form_ = new ChatForm(this);
+    scroll_list_form_ = new ScrollListForm(this);
+    scroll_list_form_->hide();
 
     ui->layout_sidebar->addWidget(sidebar_form_);
+    ui->layout_top->addWidget(search_bar_form_);
     ui->layout_left->addWidget(recent_message_list_form_);
-    // recent_message_list_form_->hide();
     ui->layout_left->addWidget(friend_list_form_);
-    friend_list_form_->hide();
-    ui->layout_right->addWidget(chat_list_from_);
+    ui->layout_right->addWidget(chat_form_);
+    ui->layout_right->addWidget(scroll_list_form_);
+
 
 
 
     // 窗口切换事件
-    connect(sidebar_form_, &SidebarForm::signal_goto_recent_message_list, this, &MainInterfaceForm::show_recent_message_list);
-    connect(sidebar_form_, &SidebarForm::signal_goto_friend_list, this, &MainInterfaceForm::show_friend_list);
+    connect(sidebar_form_, &SidebarForm::signal_goto_recent_message_list, this, &MainInterfaceForm::slot_goto_recent_message_list);
+    connect(sidebar_form_, &SidebarForm::signal_goto_friend_list, this, &MainInterfaceForm::slot_goto_friend_list);
+    connect(search_bar_form_, &SearchBarForm::signal_goto_search_result_list, this, &MainInterfaceForm::slot_goto_search_result_list);
 
 }
 
@@ -41,16 +47,20 @@ MainInterfaceForm::~MainInterfaceForm()
     delete ui;
 }
 
-void MainInterfaceForm::show_recent_message_list()
+void MainInterfaceForm::slot_goto_recent_message_list()
 {
     friend_list_form_->hide();
     recent_message_list_form_->show();
 }
 
-void MainInterfaceForm::show_friend_list()
+void MainInterfaceForm::slot_goto_friend_list()
 {
     recent_message_list_form_->hide();
     friend_list_form_->show();
 }
 
-
+void MainInterfaceForm::slot_goto_search_result_list()
+{
+    chat_form_->hide();
+    scroll_list_form_->show();
+}

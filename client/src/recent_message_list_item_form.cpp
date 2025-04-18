@@ -6,7 +6,7 @@ RecentMessageListItemForm::RecentMessageListItemForm(QWidget *parent) : QWidget(
 {
     ui->setupUi(this);
 
-    QPixmap avatar(":/image/cat.jpg");
+    QPixmap avatar(":/image/user.png");
     // avatar = avatar.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     ui->label_avatar->setFixedSize(40, 40);
     ui->label_avatar->setScaledContents(true);
@@ -20,3 +20,4 @@ RecentMessageListItemForm::~RecentMessageListItemForm()
 {
     delete ui;
 }
+

@@ -20,8 +20,10 @@
 #include <QListWidgetItem>
 #include <QPainter>
 #include <QTextBlock>
+#include <QJsonArray>
 #include "singleton.h"
 #include "config_manager.h"
+#include "user.h"
 
 extern QString gate_url_prefix;
 
@@ -44,8 +46,9 @@ enum REQUEST_ID
     GET_VERIFY_CODE = 1001, //获取验证码
     REGISTER_USER = 1002, //用户注册
     USER_LOGIN = 1003, // 用户登录
-    CHAT_LOGIN = 1004  //聊天服务器登录
-
+    CHAT_LOGIN = 1004,  //聊天服务器登录
+    SEARCH_CONTENT = 1005, //搜索内容
+    FRIEND_APPLY = 1006, //好友申请
 };
 
 enum MY_STATUS_CODE
@@ -61,6 +64,5 @@ enum MY_STATUS_CODE
     PASSWORD_ERROR = 1008,
     NETWORK_FAILED = 1009
 };
-
 
 #endif // GLOBAL_H

@@ -2,6 +2,8 @@
 #include "ui_main_window.h"
 #include "login_dialog.h"
 
+std::shared_ptr<SelfInfo> self_info = std::make_shared<SelfInfo>();
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {

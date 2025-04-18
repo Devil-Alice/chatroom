@@ -36,7 +36,8 @@ signals:
     void signal_send_message(REQUEST_ID request_id, QString message);
     void signal_message_received(REQUEST_ID request_id, QString message);
     void signal_chat_login_finished(QJsonObject json_data);
-    
+    void signal_search_content_finished(QJsonObject json_data);
+
 public slots:
     void slot_connect_to_server(ConnectoinInfo info);
     void slot_send_message(REQUEST_ID request_id, QString message);

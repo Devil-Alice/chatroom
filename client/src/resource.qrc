@@ -3,6 +3,7 @@
         <file>image/cat.jpg</file>
         <file>style/styles.css</file>
         <file>image/message.png</file>
-        <file>image/friend.png</file>
+        <file>image/user.png</file>
+        <file>image/contacts.png</file>
     </qresource>
 </RCC>

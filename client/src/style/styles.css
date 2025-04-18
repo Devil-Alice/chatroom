@@ -106,3 +106,31 @@ ChatMessageItemForm QTextEdit {
     padding: 5px 10px 5px 10px;
 }
 
+/* 垂直滚动条样式 */
+ScrollListForm QScrollBar:vertical {
+    border: none;
+    background: rgba(0, 0, 0, 10%);
+    width: 6px;
+    margin: 0px 0px 0px 0px;
+    border-radius: 3px;
+}
+
+ScrollListForm QScrollBar::handle:vertical {
+    background: rgba(0, 0, 0, 30%);
+    min-height: 30px;
+    border-radius: 3px;
+}
+
+ScrollListForm QScrollBar::handle:vertical:hover {
+    background: rgba(0, 0, 0, 60%);
+}
+
+ScrollListForm QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+    border: none;
+}
+
+
+UserItemForm {
+    background: #ccc;
+}

@@ -2,6 +2,7 @@
 #define USER_H
 #include <QString>
 #include <QDate>
+#include <memory>
 
 class User
 {
@@ -9,7 +10,7 @@ public:
     User();
 private:
 public:
-    QString uuid_;
+    QString uid_;
     QString name_;
     QString avatar_;
 
@@ -23,6 +24,8 @@ public:
     QString server_host_;
     int server_port_;
 };
+
+extern std::shared_ptr<SelfInfo> self_info;
 
 class Friend : public User
 {

@@ -1,24 +1,6 @@
 #include "user_dao.h"
 #include "mysql_pool.h"
 
-User::User() {}
-
-User::User(string name, string phone, string password)
-{
-    name_ = name;
-    phone_ = phone;
-    password_ = password;
-}
-User::~User() {}
-int User::get_id() { return id_; }
-std::string User::get_uid() { return uid_; }
-void User::set_uid(string uid) { uid_ = uid; }
-std::string User::get_name() { return name_; }
-void User::set_name(string name) { name_ = name; }
-std::string User::get_phone() { return phone_; }
-void User::set_phone(string phone) { phone_ = phone; }
-std::string User::get_password() { return password_; }
-void User::set_password(string password) { password_ = password; }
 
 UserDao::UserDao()
 {
@@ -88,9 +70,9 @@ std::shared_ptr<User> UserDao::get_user_by_phone(string phone)
 
     try
     {
-        std::unique_ptr<sql::PreparedStatement> stmt(conn->conn_->prepareStatement("select * from user where phone = ?;"));
-        stmt->setString(1, phone);
-        std::unique_ptr<sql::ResultSet> result(stmt->executeQuery());
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn->conn_->prepareStatement("select * from user where phone = ?;"));
+        pstmt->setString(1, phone);
+        std::unique_ptr<sql::ResultSet> result(pstmt->executeQuery());
 
         if (!result->next())
         {
@@ -111,4 +93,27 @@ std::shared_ptr<User> UserDao::get_user_by_phone(string phone)
     }
 
     return nullptr;
+}
+
+std::vector<std::shared_ptr<User>> UserDao::get_users_by_name(string name)
+{
+    auto conn = MysqlPool::instance().get_connection();
+    std::vector<std::shared_ptr<User>> users;
+
+    std::unique_ptr<sql::PreparedStatement> pstmt(conn->conn_->prepareStatement("select * from user where name like ?"));
+    pstmt->setString(1, "%" + name + "%");
+    std::unique_ptr<sql::ResultSet> result(pstmt->executeQuery());
+
+    if (result->rowsCount() <= 0)
+        return users;
+
+    while (result->next())
+    {
+        string name = result->getString("name");
+        string phone = result->getString("phone");
+        string password = result->getString("password");
+        users.emplace_back(new User(name, phone, password));
+    }
+
+    return users;
 }

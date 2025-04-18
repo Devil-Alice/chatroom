@@ -62,7 +62,11 @@ HttpService::HttpService()
             // 写入请求体
             http_conn->response_.set(http::field::content_type, "text/plain");
 
-            response_body_ostream << result.set(0, "ok").to_json_string();
+            // todo: 测试完毕删除回显验证码的功能
+            Json::Value json_result;
+            json_result["verify_code"] = verify_code;
+
+            response_body_ostream << result.set(0, "ok", json_result).to_json_string();
 
             return true;
         }

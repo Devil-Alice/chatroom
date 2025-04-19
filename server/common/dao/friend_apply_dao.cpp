@@ -69,7 +69,7 @@ std::vector<std::shared_ptr<FriendApply>> FriendApplyDao::get_friend_applys_by_u
     }
     catch (std::runtime_error &ex)
     {
-        std::cout << "FriendApplyDao::update_friend_apply error: " << ex.what() << std::endl;
+        std::cout << "FriendApplyDao::get_friend_applys_by_uid error: " << ex.what() << std::endl;
         return friend_applys;
     }
 

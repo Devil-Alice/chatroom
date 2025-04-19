@@ -3,7 +3,7 @@
 
 class FriendApplyDao : public Singleton<FriendApplyDao>
 {
-    friend Singleton<FriendApplyDao>;
+    friend class Singleton<FriendApplyDao>;
     using string = std::string;
 public:
     // 插入好友申请，如果存在，则更新

@@ -17,7 +17,7 @@ create table if not exists user (
     index (name)
 );
 
-create table if not exists friend (
+create table if not exists friend_relation (
     id int primary key auto_increment,
     uid varchar(40) not null,
     friend_uid varchar(40) not null,

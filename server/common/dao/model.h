@@ -46,11 +46,23 @@ public:
     void from_json_string(std::string json_string) override;
 };
 
+class FriendRelation
+{
+    using string = std::string;
+public:
+    int id_;
+    string uid_;
+    string friend_uid_;
+    string remark_name_;
+
+    FriendRelation(string uid, string friend_uid, string remark_name);
+};
+
 class FriendApply
 {
     using string = std::string;
 public:
-    string id_;
+    int id_;
     string from_uid_;
     string to_uid_;
     string remark_name_;

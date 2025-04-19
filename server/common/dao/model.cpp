@@ -56,3 +56,10 @@ FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, str
     apply_message_ = apply_message;
     status_ = status;
 }
+
+FriendRelation::FriendRelation(string uid, string friend_uid, string remark_name)
+{
+    uid_ = uid;
+    friend_uid_ = friend_uid;
+    remark_name_ = remark_name;
+}

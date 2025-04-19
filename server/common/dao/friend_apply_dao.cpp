@@ -50,7 +50,7 @@ std::vector<std::shared_ptr<FriendApply>> FriendApplyDao::get_friend_applys_by_u
         if (conn == nullptr)
             return friend_applys;
 
-        std::unique_ptr<sql::PreparedStatement> pstmt(conn->conn_->prepareStatement("select * from apply_friend where from_uid = ?;"));
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn->conn_->prepareStatement("select * from friend_apply where from_uid = ?;"));
         pstmt->setString(1, uid);
         std::unique_ptr<sql::ResultSet> result(pstmt->executeQuery());
 

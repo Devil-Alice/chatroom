@@ -26,8 +26,15 @@
    <property name="bottomMargin">
     <number>1</number>
    </property>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QListWidget" name="listWidget"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QPushButton" name="btn_friend_apply">
+     <property name="text">
+      <string>新朋友</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

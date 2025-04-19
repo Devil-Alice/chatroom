@@ -17,9 +17,12 @@ public:
     explicit FriendListForm(QWidget *parent = nullptr);
     ~FriendListForm();
 
+signals:
+    void slot_goto_friend_apply_list();
+
 public slots:
     void slot_item_clicked(QListWidgetItem *item);
-
+    void slot_btn_friend_apply_clicked();
 
 private:
     Ui::FriendListForm *ui;

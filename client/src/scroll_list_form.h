@@ -24,6 +24,7 @@ signals:
 
 public slots:
     void slot_search_content_finished(QJsonObject json_data);
+    void slot_query_friend_apply_finished(QJsonObject json_data);
 
 private:
     Ui::ScrollListForm *ui;

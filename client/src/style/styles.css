@@ -131,6 +131,28 @@ ScrollListForm QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 }
 
 
+/* todo:此处暂未生效，后续需要处理 */
 UserItemForm {
     background: #ccc;
+}
+
+
+/* 设置 QTextEdit 样式，与 QLineEdit 类似 */
+QPlainTextEdit {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    background-color: white;  /* 设置背景为白色 */
+    font-size: 12pt;          /* 设置字体大小 */
+}
+
+/* QTextEdit 聚焦时高亮 */
+QPlainTextEdit:focus {
+    border: 2px solid #34c759;
+}
+
+/* 修改 QTextEdit 内容时的光标颜色（可选） */
+QPlainTextEdit:focus {
+    border: 2px solid #34c759;
+    color: #333;
 }

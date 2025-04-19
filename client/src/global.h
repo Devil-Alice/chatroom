@@ -48,7 +48,9 @@ enum REQUEST_ID
     USER_LOGIN = 1003, // 用户登录
     CHAT_LOGIN = 1004,  //聊天服务器登录
     SEARCH_CONTENT = 1005, //搜索内容
-    FRIEND_APPLY = 1006, //好友申请
+    SNED_FRIEND_APPLY = 1006, // 发送好友申请
+    QUERY_FRIEND_APPLY = 1007, // 查询好友申请
+    HANDLE_FRIEND_APPLY = 1008, // 处理好友申请
 };
 
 enum MY_STATUS_CODE

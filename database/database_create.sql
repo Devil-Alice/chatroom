@@ -17,6 +17,8 @@ create table if not exists user (
     index (name)
 );
 
+INSERT INTO `user` VALUES (1,'bf8a63cd-b750-46fc-9d9b-bbd757d187c8','alice','18912345678','202cb962ac59075b964b07152d234b70','',0),(2,'3bde5a18-1339-4d32-8eeb-442f623748fb','barbara','18987654321','202cb962ac59075b964b07152d234b70','',0),(3,'a5c26eb5-598d-46c4-b1ad-e34bce4e490f','ciri','18987654322','202cb962ac59075b964b07152d234b70','',0),(4,'7943e367-2fb9-45fb-ba4e-83939f4519a9','diana','18987654323','202cb962ac59075b964b07152d234b70','',0);
+
 create table if not exists friend_relation (
     id int primary key auto_increment,
     uid varchar(40) not null,
@@ -41,5 +43,7 @@ create table if not exists friend_apply (
     unique (from_uid, to_uid)
     -- index (from_uid asc, to_uid asc) using btree -- unique约束会自动创建索引
 );
+
+INSERT INTO `friend_apply` VALUES (1,'bf8a63cd-b750-46fc-9d9b-bbd757d187c8','3bde5a18-1339-4d32-8eeb-442f623748fb','bba','hi~',0,0),(2,'a5c26eb5-598d-46c4-b1ad-e34bce4e490f','bf8a63cd-b750-46fc-9d9b-bbd757d187c8','a','hello alice, i am ciri',0,0),(3,'7943e367-2fb9-45fb-ba4e-83939f4519a9','bf8a63cd-b750-46fc-9d9b-bbd757d187c8','al','hello alice, i am diana',0,0);
 
 

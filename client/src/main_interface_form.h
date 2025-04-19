@@ -10,7 +10,6 @@
 #include "chat_form.h"
 #include "scroll_list_form.h"
 
-
 namespace Ui
 {
     class MainInterfaceForm;
@@ -24,10 +23,14 @@ public:
     explicit MainInterfaceForm(QWidget *parent = nullptr);
     ~MainInterfaceForm();
 
+private:
+    // 隐藏layout中所有的窗体
+    void hide_all_widgets_in_layout(QLayout *layout);
+
 private slots:
     void slot_goto_recent_message_list();
     void slot_goto_friend_list();
-    void slot_goto_search_result_list();
+    void slot_goto_scroll_list();
 
 private:
     Ui::MainInterfaceForm *ui;
@@ -36,6 +39,7 @@ private:
     RecentMessageListForm *recent_message_list_form_;
     FriendListForm *friend_list_form_;
     ChatForm *chat_form_;
+    // scroll_list_form_是一个通用的滚动列表，可以承载好友查询结果、好友申请信息等
     ScrollListForm *scroll_list_form_;
 };
 

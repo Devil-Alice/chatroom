@@ -43,11 +43,11 @@ RegisterDialog::RegisterDialog(QWidget *parent) : QDialog(parent),
     ui->text_confirm_password->setEchoMode(QLineEdit::Password);
 
     // 注册用户输入检查事件
-    connect(ui->text_name, &QLineEdit::editingFinished, this,               &slot_check_name);
-    connect(ui->text_phone, &QLineEdit::editingFinished, this,              &slot_check_phone);
-    connect(ui->text_verify_code, &QLineEdit::editingFinished, this,        &slot_check_verify_code);
-    connect(ui->text_password, &QLineEdit::editingFinished, this,           &slot_check_password);
-    connect(ui->text_confirm_password, &QLineEdit::editingFinished, this,   &slot_check_confirm_password);
+    connect(ui->text_name, &QLineEdit::editingFinished, this,               &RegisterDialog::slot_check_name);
+    connect(ui->text_phone, &QLineEdit::editingFinished, this,              &RegisterDialog::slot_check_phone);
+    connect(ui->text_verify_code, &QLineEdit::editingFinished, this,        &RegisterDialog::slot_check_verify_code);
+    connect(ui->text_password, &QLineEdit::editingFinished, this,           &RegisterDialog::slot_check_password);
+    connect(ui->text_confirm_password, &QLineEdit::editingFinished, this,   &RegisterDialog::slot_check_confirm_password);
 
     // 注册界面收到网络响应后的事件
     connect(HttpManager::instance().get(), &HttpManager::signal_resigter_request_finished, this, &RegisterDialog::slot_register_request_finished);
@@ -194,6 +194,16 @@ void RegisterDialog::init_response_handler()
         timer_->start();
 
         show_register_msg(json_obj["message"].toString(), "success");
+
+
+        
+        // todo: 测试完毕后，删除验证码回显
+        QString verify_code = json_obj["data"].toObject()["verify_code"].toString();
+        if (!verify_code.isEmpty())
+        {
+            show_register_msg("验证码：" + verify_code, "success");
+        }
+
         return;
     };
 

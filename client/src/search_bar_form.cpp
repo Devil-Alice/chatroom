@@ -26,10 +26,7 @@ void SearchBarForm::slot_btn_search_clicked()
     }
 
     // 构造请求数据
-    QJsonObject json_obj;
-
-    json_obj["uid"] = self_info->uid_;
-    json_obj["token"] = self_info->token_;
+    QJsonObject json_obj = self_info->get_basic_info_json();
     json_obj["search_content"] = search_text;
 
     QJsonDocument json_doc(json_obj);

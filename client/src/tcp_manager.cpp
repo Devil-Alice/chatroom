@@ -176,6 +176,17 @@ void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
     {
         emit signal_search_content_finished(json_doc.object());
     }
+
+    if (request_id == REQUEST_ID::SNED_FRIEND_APPLY)
+    {
+        // todo: 完成发送好友申请的接收逻辑
+    }
+
+
+    if (request_id == REQUEST_ID::QUERY_FRIEND_APPLY)
+    {
+        emit signal_query_friend_apply_finished(json_doc.object());
+    }
 }
 
 TcpManager::~TcpManager()

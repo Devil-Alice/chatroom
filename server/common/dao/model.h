@@ -3,7 +3,8 @@
 #include <jsoncpp/json/json.h>
 #include "json_object.h"
 
-// todo: 添加头像
+// todo: 添加头像的存储逻辑
+// todo: 实现dto的反序列化，让客户端和服务器传输统一使用序列化的对象，提高复用性
 
 class User
 {
@@ -34,14 +35,16 @@ public:
     void set_password(string password);
 };
 
-class SearchedUserDto : public JsonObject
+class UserDto : public JsonObject
 {
 public:
     std::string uid_;
     std::string name_;
     std::string avatar_;
 
-    SearchedUserDto(User &user);
+    UserDto();
+    UserDto(std::string uid, std::string name, std::string avatar);
+    UserDto(User &user);
     Json::Value to_json() override;
     void from_json_string(std::string json_string) override;
 };
@@ -49,6 +52,7 @@ public:
 class FriendRelation
 {
     using string = std::string;
+
 public:
     int id_;
     string uid_;
@@ -61,14 +65,31 @@ public:
 class FriendApply
 {
     using string = std::string;
+
 public:
     int id_;
     string from_uid_;
     string to_uid_;
     string remark_name_;
     string apply_message_;
-    //状态字段，0表示未处理， 1表示同意， 2表示拒绝
+    // 状态字段，0表示未处理， 1表示同意， 2表示拒绝
     int status_;
 
     FriendApply(string from_uid, string to_uid, string remark_name, string apply_message, int status = 0);
+};
+
+class FriendApplyDto : public JsonObject
+{
+    using string = std::string;
+
+public:
+    UserDto from_user_;
+    UserDto to_user_;
+    string apply_message_;
+    // 状态字段，0表示未处理， 1表示同意， 2表示拒绝
+    int status_;
+
+    FriendApplyDto(UserDto from_user, UserDto to_user, string apply_message, int status = 0);
+    Json::Value to_json() override;
+    void from_json_string(std::string json_string) override;
 };

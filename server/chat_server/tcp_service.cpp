@@ -10,10 +10,12 @@ TcpService::TcpService()
     register_service(REQUEST_ID::UNKNOWN,
         [](std::shared_ptr<Package> package)
         {
-            std::shared_ptr<Package> result_pkg;
+            std::shared_ptr<Package> result_pkg(new Package());
             CommonResult result;
     
     
+            result_pkg->set_request_id(package->get_request_id());
+            result_pkg->set_message(result.to_json_string());
             return result_pkg;
         });
 
@@ -109,6 +111,23 @@ TcpService::TcpService()
         result_pkg->set_message(result.to_json_string());
         return result_pkg;
     });
+
+
+    register_service(REQUEST_ID::QUERY_FRIEND_APPLY,
+        [](std::shared_ptr<Package> package)
+        {
+            std::shared_ptr<Package> result_pkg(new Package());
+            CommonResult result;
+
+            Json::Value json_request = JsonObject::parse_json_string(package->get_message());
+            string uid = json_request["uid"].asString();
+
+            result = UserService::instance().get_friend_applys_by_uid(uid);
+
+            result_pkg->set_request_id(package->get_request_id());
+            result_pkg->set_message(result.to_json_string());
+            return result_pkg;
+        });
 
 }
 

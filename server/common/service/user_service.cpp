@@ -123,7 +123,7 @@ CommonResult UserService::search_content(string content)
         std::vector<std::shared_ptr<JsonObject>> searched_users;
         for (std::shared_ptr<User> item : users)
         {
-            searched_users.emplace_back(new SearchedUserDto(*item));
+            searched_users.emplace_back(new UserDto(*item));
         }
 
         // 将vector转为json
@@ -150,4 +150,19 @@ CommonResult UserService::update_friend_apply(string from_uid, string to_uid, st
         return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
 
     return result.set(MY_STATUS_CODE::SUCCESS, "ok");
+}
+
+CommonResult UserService::get_friend_applys_by_uid(string uid)
+{
+    CommonResult result(MY_STATUS_CODE::ERROR, "");
+
+    std::vector<std::shared_ptr<FriendApplyDto>> applys = friend_apply_dao_.get_friend_applys_dto_by_uid(uid);
+
+    std::vector<std::shared_ptr<JsonObject>> json_array;
+    for (auto item : applys)
+    {
+        json_array.push_back(item);
+    }  
+    
+    return result.set(MY_STATUS_CODE::SUCCESS, "query success", JsonObject::to_json_array(json_array));
 }

@@ -28,14 +28,25 @@ void User::set_phone(string phone) { phone_ = phone; }
 std::string User::get_password() { return password_; }
 void User::set_password(string password) { password_ = password; }
 
-SearchedUserDto::SearchedUserDto(User &user)
+UserDto::UserDto()
+{
+}
+
+UserDto::UserDto(std::string uid, std::string name, std::string avatar)
+{
+    uid_ = uid;
+    name_ = name;
+    avatar_ = avatar;
+}
+
+UserDto::UserDto(User &user)
 {
     this->uid_ = user.get_uid();
     this->name_ = user.get_name();
     this->avatar_ = "";
 }
 
-Json::Value SearchedUserDto::to_json()
+Json::Value UserDto::to_json()
 {
     Json::Value root;
     root["uid"] = uid_;
@@ -44,8 +55,15 @@ Json::Value SearchedUserDto::to_json()
     return root;
 }
 
-void SearchedUserDto::from_json_string(std::string json_string)
+void UserDto::from_json_string(std::string json_string)
 {
+}
+
+FriendRelation::FriendRelation(string uid, string friend_uid, string remark_name)
+{
+    uid_ = uid;
+    friend_uid_ = friend_uid;
+    remark_name_ = remark_name;
 }
 
 FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, string apply_message, int status)
@@ -57,9 +75,26 @@ FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, str
     status_ = status;
 }
 
-FriendRelation::FriendRelation(string uid, string friend_uid, string remark_name)
+FriendApplyDto::FriendApplyDto(UserDto from_user, UserDto to_user, string apply_message, int status)
 {
-    uid_ = uid;
-    friend_uid_ = friend_uid;
-    remark_name_ = remark_name;
+    from_user_ = from_user;
+    to_user_ = to_user;
+    apply_message_ = apply_message;
+    status_ = status;
 }
+
+Json::Value FriendApplyDto::to_json()
+{
+    Json::Value root;
+    root["from_user"] = from_user_.to_json();
+    root["to_user"] = to_user_.to_json();
+    root["apply_message"] = apply_message_;
+    root["status"] = status_;
+    return root;
+}
+
+void FriendApplyDto::from_json_string(std::string json_string)
+{
+}
+
+

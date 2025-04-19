@@ -25,5 +25,6 @@ public:
     CommonResult chat_login();
     CommonResult search_content(string content);
     CommonResult update_friend_apply(string from_uid, string to_uid, string remark_name, string apply_message, int status = 0);
+    CommonResult get_friend_applys_by_uid(string uid);
 
 };

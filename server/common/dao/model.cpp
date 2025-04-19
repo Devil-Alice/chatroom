@@ -47,3 +47,12 @@ Json::Value SearchedUserDto::to_json()
 void SearchedUserDto::from_json_string(std::string json_string)
 {
 }
+
+FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, string apply_message, int status)
+{
+    from_uid_ = from_uid;
+    to_uid_ = to_uid;
+    remark_name_ = remark_name;
+    apply_message_ = apply_message;
+    status_ = status;
+}

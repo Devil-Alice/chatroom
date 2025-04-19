@@ -4,6 +4,19 @@
 
 TcpService::TcpService()
 {
+
+
+    // 注册模版，作为其他注册动作的示例
+    register_service(REQUEST_ID::UNKNOWN,
+        [](std::shared_ptr<Package> package)
+        {
+            std::shared_ptr<Package> result_pkg;
+            CommonResult result;
+    
+    
+            return result_pkg;
+        });
+
     register_service(REQUEST_ID::CHAT_LOGIN, [](std::shared_ptr<Package> package){
         //构建结果package的message
         CommonResult result;
@@ -72,6 +85,31 @@ TcpService::TcpService()
 
         return result_pkg;
     });
+
+
+
+    register_service(REQUEST_ID::SNED_FRIEND_APPLY,
+    [](std::shared_ptr<Package> package)
+    {
+        std::shared_ptr<Package> result_pkg(new Package());
+        CommonResult result;
+
+        auto json_request = JsonObject::parse_json_string(package->get_message());
+        
+        string from_uid = json_request["from_uid"].asString();
+        string uid = from_uid;
+        string token = json_request["token"].asString();
+        string to_uid = json_request["to_uid"].asString();
+        string remark_name = json_request["remark_name"].asString();
+        string apply_message = json_request["apply_message"].asString();
+
+        result = UserService::instance().update_friend_apply(from_uid, to_uid, remark_name, apply_message);
+
+        result_pkg->set_request_id(package->get_request_id());
+        result_pkg->set_message(result.to_json_string());
+        return result_pkg;
+    });
+
 }
 
 TcpService::~TcpService()

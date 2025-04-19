@@ -2,7 +2,7 @@
 #include "grpc_verify_client.h"
 #include "grpc_status_client.h"
 
-UserService::UserService() : user_dao_(UserDao::instance()), redis_(RedisManager::instance())
+UserService::UserService() : user_dao_(UserDao::instance()), friend_apply_dao_(FriendApplyDao::instance()), redis_(RedisManager::instance())
 {
 }
 
@@ -129,13 +129,25 @@ CommonResult UserService::search_content(string content)
         // 将vector转为json
         Json::Value json_data = JsonObject::to_json_array(searched_users);
 
-
         return result.set(MY_STATUS_CODE::SUCCESS, "query success", json_data);
     }
     catch (std::runtime_error &ex)
     {
-        return result.set(MY_STATUS_CODE::NETWORK_FAILED, ex.what());
+        return result.set(MY_STATUS_CODE::ERROR, ex.what());
     }
 
     return result;
+}
+
+CommonResult UserService::update_friend_apply(string from_uid, string to_uid, string remark_name, string apply_message, int status)
+{
+    CommonResult result(MY_STATUS_CODE::ERROR, "");
+
+    FriendApply apply(from_uid, to_uid, remark_name, apply_message, status);
+    bool success = friend_apply_dao_.update_friend_apply(apply);
+
+    if (!success)
+        return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
+
+    return result.set(MY_STATUS_CODE::SUCCESS, "ok");
 }

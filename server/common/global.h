@@ -65,6 +65,7 @@ const std::string verify_code_prefix = "verify_code_";
 enum MY_STATUS_CODE
 {
     SUCCESS = 0,
+    ERROR = 1,
     JSON_ERROR = 1001,
     RPC_FAILED = 1002,
     TIMEOUT = 1003,
@@ -75,7 +76,8 @@ enum MY_STATUS_CODE
     PASSWORD_ERROR = 1008,
     NETWORK_FAILED = 1009,
     TOKEN_INVALID = 1010,
-    USER_NOT_FOUND = 1011
+    USER_NOT_FOUND = 1011,
+    DATABASE_FAILED = 1012,
 };
 
 enum REQUEST_ID
@@ -85,5 +87,8 @@ enum REQUEST_ID
     REGISTER_USER = 1002, //用户注册
     USER_LOGIN = 1003, // 用户登录
     CHAT_LOGIN = 1004,  //聊天服务器登录
-    SEARCH_CONTENT = 1005 // 搜索内容
+    SEARCH_CONTENT = 1005, // 搜索内容
+    SNED_FRIEND_APPLY = 1006, // 发送好友申请
+    QUERY_FRIEND_APPLY = 1007, // 查询好友申请
+    HANDLE_FRIEND_APPLY = 1008, // 处理好友申请
 };

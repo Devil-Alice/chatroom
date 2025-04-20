@@ -182,16 +182,20 @@ CommonResult UserService::handle_friend_apply(string from_uid, string to_uid, in
         return result.set(MY_STATUS_CODE::SUCCESS, "ok");
 
     // 好友申请通过后，还需要创建好友关系
-    return add_friend_relation(to_uid, from_uid, remark_name);
+    return add_friend_relation(from_uid, to_uid, remark_name);
 }
 
-CommonResult UserService::add_friend_relation(string uid, string friend_uid, string remark_name)
+CommonResult UserService::add_friend_relation(string from_uid, string to_uid, string remark_name)
 {
     CommonResult result(MY_STATUS_CODE::ERROR, "");
 
-    FriendRelation relation(uid, friend_uid, remark_name);
-    bool success = friend_relation_dao_.add_friend(relation);
-    if (!success)
+    FriendRelation relation1(from_uid, to_uid, remark_name);
+    bool success1 = friend_relation_dao_.add_friend(relation1);
+
+    FriendRelation relation2(to_uid, from_uid, "");
+    bool success2 = friend_relation_dao_.add_friend(relation2);
+    
+    if (!success1 && success2)
         return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
 
     return result.set(MY_STATUS_CODE::SUCCESS, "ok");

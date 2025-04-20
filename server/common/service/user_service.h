@@ -33,5 +33,5 @@ public:
     CommonResult get_friend_applys_by_uid(string uid);
     // 处理好友申请，接收或拒绝
     CommonResult handle_friend_apply(string from_uid, string to_uid, int status, string remark_name = "");
-    CommonResult add_friend_relation(string uid, string friend_uid, string remark_name);
+    CommonResult add_friend_relation(string from_uid, string to_uid, string remark_name);
 };

@@ -147,9 +147,10 @@ TcpService::TcpService()
 
                 string from_uid = json_request["from_uid"].asString();
                 string to_uid = json_request["to_uid"].asString();
+                string remark_name = json_request["remark_name"].asString();
                 int status = json_request["status"].asInt();
 
-                result = UserService::instance().handle_friend_apply(from_uid, to_uid, status);
+                result = UserService::instance().handle_friend_apply(from_uid, to_uid, status, remark_name);
         
                 result_pkg->set_request_id(package->get_request_id());
                 result_pkg->set_message(result.to_json_string());

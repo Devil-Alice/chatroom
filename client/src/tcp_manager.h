@@ -37,7 +37,9 @@ signals:
     void signal_message_received(REQUEST_ID request_id, QString message);
     void signal_chat_login_finished(QJsonObject json_data);
     void signal_search_content_finished(QJsonObject json_data);
+    void signal_send_friend_apply_finished(QJsonObject json_data);
     void signal_query_friend_apply_finished(QJsonObject json_data);
+    void signal_handle_friend_apply_finished(QJsonObject json_data);
 
 public slots:
     void slot_connect_to_server(ConnectoinInfo info);

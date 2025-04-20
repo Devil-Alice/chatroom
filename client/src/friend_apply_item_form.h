@@ -19,6 +19,11 @@ public:
     explicit FriendApplyItemForm(FriendApply friend_apply, QWidget *parent = nullptr);
     ~FriendApplyItemForm();
 
+public slots:
+    void slot_btn_accpet_clicked();
+    void slot_btn_reject_clicked();
+
+
 private:
     Ui::FriendApplyItemForm *ui;
 };

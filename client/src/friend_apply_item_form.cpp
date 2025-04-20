@@ -1,5 +1,6 @@
 #include "friend_apply_item_form.h"
 #include "ui_friend_apply_item_form.h"
+#include "tcp_manager.h"
 
 FriendApplyItemForm::FriendApplyItemForm(FriendApply friend_apply, QWidget *parent) : QWidget(parent),
                                                                                       ui(new Ui::FriendApplyItemForm)
@@ -41,7 +42,9 @@ FriendApplyItemForm::FriendApplyItemForm(FriendApply friend_apply, QWidget *pare
         else
         {
             ui->btn_accept->hide();
+            ui->btn_accept->setEnabled(false);
             ui->btn_reject->hide();
+            ui->btn_reject->setEnabled(false);
         }
     }
     else if (from_user.uid_ == self_info->uid_)
@@ -54,14 +57,49 @@ FriendApplyItemForm::FriendApplyItemForm(FriendApply friend_apply, QWidget *pare
         ui->label_name->setText(to_user.name_ + " 的好友申请已发送");
 
         ui->btn_accept->hide();
+        ui->btn_accept->setEnabled(false);
         ui->btn_reject->hide();
+        ui->btn_reject->setEnabled(false);
     }
 
 
     ui->label_apply_message->setText(friend_apply.apply_message_);
+
+
+
+
+    // 处理好友申请的动作
+    connect(ui->btn_accept, &QPushButton::clicked, this, &FriendApplyItemForm::slot_btn_accpet_clicked);
+    connect(ui->btn_reject, &QPushButton::clicked, this, &FriendApplyItemForm::slot_btn_reject_clicked);
 }
 
 FriendApplyItemForm::~FriendApplyItemForm()
 {
     delete ui;
+}
+
+void FriendApplyItemForm::slot_btn_accpet_clicked()
+{
+    QJsonObject json_obj = self_info->get_basic_info_json();
+    json_obj["from_uid"] = friend_apply_.from_user_.uid_;
+    json_obj["to_uid"] = friend_apply_.to_user_.uid_;
+    json_obj["remark_name"] = friend_apply_.remark_name_;
+    json_obj["status"] = 1;
+
+    QJsonDocument json_doc(json_obj);
+    emit TcpManager::instance()->signal_send_message(REQUEST_ID::HANDLE_FRIEND_APPLY, json_doc.toJson());
+}
+
+
+void FriendApplyItemForm::slot_btn_reject_clicked()
+{
+
+    QJsonObject json_obj = self_info->get_basic_info_json();
+    json_obj["from_uid"] = friend_apply_.from_user_.uid_;
+    json_obj["to_uid"] = friend_apply_.to_user_.uid_;
+    json_obj["remark_name"] = friend_apply_.remark_name_;
+    json_obj["status"] = 2;
+
+    QJsonDocument json_doc(json_obj);
+    emit TcpManager::instance()->signal_send_message(REQUEST_ID::HANDLE_FRIEND_APPLY, json_doc.toJson());
 }

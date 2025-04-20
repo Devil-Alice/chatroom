@@ -23,6 +23,8 @@ signals:
 public slots:
     void slot_item_clicked(QListWidgetItem *item);
     void slot_btn_friend_apply_clicked();
+    void slot_handle_friend_apply_finished(QJsonObject json_data);
+    
 
 private:
     Ui::FriendListForm *ui;

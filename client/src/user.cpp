@@ -22,10 +22,11 @@ User::User(QString uid, QString name, QString avatar)
     avatar_ = avatar;
 }
 
-FriendApply::FriendApply(User from_user, User to_user, QString apply_message, int status)
+FriendApply::FriendApply(User from_user, User to_user, QString remark_name, QString apply_message, int status)
 {
     from_user_ = from_user;
     to_user_ = to_user;
+    remark_name_ = remark_name;
     apply_message_ = apply_message;
     status_ = status;
 }

@@ -11,6 +11,7 @@ ScrollListForm::ScrollListForm(QWidget *parent) : QWidget(parent),
     connect(this, &ScrollListForm::signal_build_list, this, &ScrollListForm::set_widgets);
 
     connect(TcpManager::instance().get(), &TcpManager::signal_search_content_finished, this, &ScrollListForm::slot_search_content_finished);
+    connect(TcpManager::instance().get(), &TcpManager::signal_send_friend_apply_finished, this, &ScrollListForm::slot_send_friend_apply_finished);
     connect(TcpManager::instance().get(), &TcpManager::signal_query_friend_apply_finished, this, &ScrollListForm::slot_query_friend_apply_finished);
 }
 
@@ -83,13 +84,17 @@ void ScrollListForm::slot_search_content_finished(QJsonObject json_data)
     return;
 }
 
+void ScrollListForm::slot_send_friend_apply_finished(QJsonObject json_data)
+{
+}
+
 void ScrollListForm::slot_query_friend_apply_finished(QJsonObject json_data)
 {
     // 解析json
-    int status = json_data["status"].toInt();
+    int reply_status = json_data["status"].toInt();
     QString msg = json_data["message"].toString();
 
-    if (status != MY_STATUS_CODE::SUCCESS)
+    if (reply_status != MY_STATUS_CODE::SUCCESS)
     {
         QMessageBox::information(this, "info", msg);
         return;
@@ -112,16 +117,15 @@ void ScrollListForm::slot_query_friend_apply_finished(QJsonObject json_data)
         QString from_avatar = from_user_json["avatar"].toString();
         User from_user(from_uid, from_name, from_avatar);
 
-
         QString to_uid = to_user_json["uid"].toString();
         QString to_name = to_user_json["name"].toString();
         QString to_avatar = to_user_json["avatar"].toString();
         User to_user(to_uid, to_name, to_avatar);
 
-
-//        QString remark_name = item["remark_name"].toString();
+        QString remark_name = item["remark_name"].toString();
         QString apply_message = item["apply_message"].toString();
-        FriendApply friend_apply(from_user, to_user, apply_message, status);
+        int status = item["status"].toInt();
+        FriendApply friend_apply(from_user, to_user, remark_name, apply_message, status);
 
         auto widget = std::make_shared<FriendApplyItemForm>(friend_apply);
         widgets.push_back(widget);
@@ -130,3 +134,5 @@ void ScrollListForm::slot_query_friend_apply_finished(QJsonObject json_data)
     emit signal_build_list(widgets);
     return;
 }
+
+

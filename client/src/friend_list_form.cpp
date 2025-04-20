@@ -24,7 +24,8 @@ FriendListForm::FriendListForm(QWidget *parent) : QWidget(parent),
     ui->listWidget->setItemWidget(item2, friend_item2);
 
     connect(ui->listWidget, &QListWidget::itemClicked, this,  &FriendListForm::slot_item_clicked);
-    connect(ui->btn_friend_apply, &QPushButton::clicked, this, slot_btn_friend_apply_clicked);
+    connect(ui->btn_friend_apply, &QPushButton::clicked, this, &FriendListForm::slot_btn_friend_apply_clicked);
+    connect(TcpManager::instance().get(), &TcpManager::signal_handle_friend_apply_finished, this, &FriendListForm::slot_handle_friend_apply_finished);
 
 }
 
@@ -48,4 +49,21 @@ void FriendListForm::slot_item_clicked(QListWidgetItem *item)
 {
     FriendListItemForm *friend_list_item = qobject_cast<FriendListItemForm*>(ui->listWidget->itemWidget(item));
         
+}
+
+void FriendListForm::slot_handle_friend_apply_finished(QJsonObject json_data)
+{
+    // 解析json
+    int reply_status = json_data["status"].toInt();
+    QString msg = json_data["message"].toString();
+
+    if (reply_status != MY_STATUS_CODE::SUCCESS)
+    {
+        QMessageBox::information(this, "info", msg);
+        return;
+    }
+
+    // 重新查询一次
+    slot_btn_friend_apply_clicked();
+    return;
 }

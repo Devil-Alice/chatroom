@@ -36,12 +36,13 @@ class FriendApply
 public:
     User from_user_;
     User to_user_;
+    QString remark_name_;
     QString apply_message_;
     int status_;
 
     FriendApply() {};
 
-    FriendApply(User from_user, User to_user, QString apply_message, int status);
+    FriendApply(User from_user, User to_user, QString remark_name, QString apply_message, int status);
 };
 
 class Friend : public User

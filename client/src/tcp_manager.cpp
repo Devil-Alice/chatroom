@@ -13,15 +13,14 @@ TcpManager::TcpManager()
     head_length_ = sizeof(request_id_) + sizeof(message_length_);
 
     connect(&socket_, &QTcpSocket::connected, this, [this]()
-        { 
+            { 
         qDebug() << "connected to the server successfully";
-        emit signal_connection_status(true);
-        });
+        emit signal_connection_status(true); });
 
-    connect(&socket_, &QTcpSocket::disconnected, this, [this](){
+    connect(&socket_, &QTcpSocket::disconnected, this, [this]()
+            {
         qDebug() << "server disconnected "; 
-        emit signal_connection_status(false);
-    });
+        emit signal_connection_status(false); });
 
     connect(&socket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error), this, [this](QAbstractSocket::SocketError socket_error)
             {
@@ -62,7 +61,6 @@ TcpManager::TcpManager()
                 break;
             } });
 
-
     // 读取就绪时，读数据
     connect(&socket_, &QTcpSocket::readyRead, this, &TcpManager::receive_message);
     // 当发送信号来临时，发送数据
@@ -82,15 +80,15 @@ void TcpManager::connect_to_server(ConnectoinInfo info)
 
 void TcpManager::receive_message()
 {
-        
+
     buffer_.append(socket_.readAll());
     QDataStream stream(&buffer_, QIODevice::ReadOnly);
-    
+
     // 接收头部信息
     if (!flag_head_complete_)
     {
         // 头部信息如果不够，则返回继续接收
-        if(buffer_.length() < head_length_)
+        if (buffer_.length() < head_length_)
             return;
 
         stream >> request_id_ >> message_length_;
@@ -116,18 +114,16 @@ void TcpManager::receive_message()
 
     emit signal_message_received((REQUEST_ID)request_id_, message);
     return;
-
 }
 
 void TcpManager::send_message(REQUEST_ID request_id, QString message)
 {
 
-    //构造stream，方便写入数据
+    // 构造stream，方便写入数据
     QByteArray data;
     QDataStream data_stream(&data, QIODevice::WriteOnly);
     // 为流设置大端（网络字节序一般为大端）
     data_stream.setByteOrder(QDataStream::ByteOrder::BigEndian);
-
 
     quint16 req_id = (quint16)request_id;
     quint16 msg_len = (quint16)(message.toUtf8().length());
@@ -158,7 +154,7 @@ void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
 
     // 将message转换为json对象
     QJsonDocument json_doc = QJsonDocument::fromJson(message.toUtf8());
-     if (json_doc.isNull() || !json_doc.isObject())
+    if (json_doc.isNull() || !json_doc.isObject())
     {
         QMessageBox::information(nullptr, "info", "json解析错误");
         return;
@@ -170,22 +166,21 @@ void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
     {
         emit signal_chat_login_finished(json_doc.object());
     }
-
-
-    if (request_id == REQUEST_ID::SEARCH_CONTENT)
+    else if (request_id == REQUEST_ID::SEARCH_CONTENT)
     {
         emit signal_search_content_finished(json_doc.object());
     }
-
-    if (request_id == REQUEST_ID::SNED_FRIEND_APPLY)
+    else if (request_id == REQUEST_ID::SNED_FRIEND_APPLY)
     {
-        // todo: 完成发送好友申请的接收逻辑
+        emit signal_send_friend_apply_finished(json_doc.object());
     }
-
-
-    if (request_id == REQUEST_ID::QUERY_FRIEND_APPLY)
+    else if (request_id == REQUEST_ID::QUERY_FRIEND_APPLY)
     {
         emit signal_query_friend_apply_finished(json_doc.object());
+    }
+    else if (request_id == REQUEST_ID::HANDLE_FRIEND_APPLY)
+    {
+        emit signal_handle_friend_apply_finished(json_doc.object());
     }
 }
 

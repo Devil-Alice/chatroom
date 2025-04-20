@@ -59,13 +59,6 @@ void UserDto::from_json_string(std::string json_string)
 {
 }
 
-FriendRelation::FriendRelation(string uid, string friend_uid, string remark_name)
-{
-    uid_ = uid;
-    friend_uid_ = friend_uid;
-    remark_name_ = remark_name;
-}
-
 FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, string apply_message, int status)
 {
     from_uid_ = from_uid;
@@ -75,10 +68,11 @@ FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, str
     status_ = status;
 }
 
-FriendApplyDto::FriendApplyDto(UserDto from_user, UserDto to_user, string apply_message, int status)
+FriendApplyDto::FriendApplyDto(UserDto from_user, UserDto to_user, string remark_name, string apply_message, int status)
 {
     from_user_ = from_user;
     to_user_ = to_user;
+    remark_name_ = remark_name;
     apply_message_ = apply_message;
     status_ = status;
 }
@@ -88,6 +82,7 @@ Json::Value FriendApplyDto::to_json()
     Json::Value root;
     root["from_user"] = from_user_.to_json();
     root["to_user"] = to_user_.to_json();
+    root["remark_name"] = remark_name_;
     root["apply_message"] = apply_message_;
     root["status"] = status_;
     return root;
@@ -97,4 +92,9 @@ void FriendApplyDto::from_json_string(std::string json_string)
 {
 }
 
-
+FriendRelation::FriendRelation(string uid, string friend_uid, string remark_name)
+{
+    uid_ = uid;
+    friend_uid_ = friend_uid;
+    remark_name_ = remark_name;
+}

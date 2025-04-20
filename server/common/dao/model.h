@@ -49,19 +49,6 @@ public:
     void from_json_string(std::string json_string) override;
 };
 
-class FriendRelation
-{
-    using string = std::string;
-
-public:
-    int id_;
-    string uid_;
-    string friend_uid_;
-    string remark_name_;
-
-    FriendRelation(string uid, string friend_uid, string remark_name);
-};
-
 class FriendApply
 {
     using string = std::string;
@@ -85,11 +72,25 @@ class FriendApplyDto : public JsonObject
 public:
     UserDto from_user_;
     UserDto to_user_;
+    string remark_name_;
     string apply_message_;
     // 状态字段，0表示未处理， 1表示同意， 2表示拒绝
     int status_;
 
-    FriendApplyDto(UserDto from_user, UserDto to_user, string apply_message, int status = 0);
+    FriendApplyDto(UserDto from_user, UserDto to_user, string remark_name, string apply_message, int status = 0);
     Json::Value to_json() override;
     void from_json_string(std::string json_string) override;
+};
+
+class FriendRelation
+{
+    using string = std::string;
+
+public:
+    int id_;
+    string uid_;
+    string friend_uid_;
+    string remark_name_;
+
+    FriendRelation(string uid, string friend_uid, string remark_name);
 };

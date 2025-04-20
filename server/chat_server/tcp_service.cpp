@@ -12,6 +12,11 @@ TcpService::TcpService()
         {
             std::shared_ptr<Package> result_pkg(new Package());
             CommonResult result;
+
+            auto json_request = JsonObject::parse_json_string(package->get_message());
+            // 每条请求都会附加验证的uid和token
+            string uid = json_request["uid"].asString();
+            string token = json_request["token"].asString();
     
     
             result_pkg->set_request_id(package->get_request_id());
@@ -128,6 +133,28 @@ TcpService::TcpService()
             result_pkg->set_message(result.to_json_string());
             return result_pkg;
         });
+
+
+        register_service(REQUEST_ID::HANDLE_FRIEND_APPLY,
+            [](std::shared_ptr<Package> package)
+            {
+                std::shared_ptr<Package> result_pkg(new Package());
+                CommonResult result;
+        
+                auto json_request = JsonObject::parse_json_string(package->get_message());
+                string uid = json_request["uid"].asString();
+                string token = json_request["token"].asString();
+
+                string from_uid = json_request["from_uid"].asString();
+                string to_uid = json_request["to_uid"].asString();
+                int status = json_request["status"].asInt();
+
+                result = UserService::instance().handle_friend_apply(from_uid, to_uid, status);
+        
+                result_pkg->set_request_id(package->get_request_id());
+                result_pkg->set_message(result.to_json_string());
+                return result_pkg;
+            });
 
 }
 

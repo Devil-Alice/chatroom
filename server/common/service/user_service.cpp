@@ -2,7 +2,7 @@
 #include "grpc_verify_client.h"
 #include "grpc_status_client.h"
 
-UserService::UserService() : user_dao_(UserDao::instance()), friend_apply_dao_(FriendApplyDao::instance()), redis_(RedisManager::instance())
+UserService::UserService() : user_dao_(UserDao::instance()), friend_apply_dao_(FriendApplyDao::instance()), friend_relation_dao_(FriendRelationDao::instance()), redis_(RedisManager::instance())
 {
 }
 
@@ -162,7 +162,37 @@ CommonResult UserService::get_friend_applys_by_uid(string uid)
     for (auto item : applys)
     {
         json_array.push_back(item);
-    }  
-    
+    }
+
     return result.set(MY_STATUS_CODE::SUCCESS, "query success", JsonObject::to_json_array(json_array));
+}
+
+CommonResult UserService::handle_friend_apply(string from_uid, string to_uid, int status, string remark_name)
+{
+    // todo 使用事物保证安全
+    CommonResult result(MY_STATUS_CODE::ERROR, "");
+
+    bool success = friend_apply_dao_.update_friend_apply_status(from_uid, to_uid, status);
+
+    if (!success)
+        return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
+
+    // 拒绝申请，直接返回
+    if (status == 2)
+        return result.set(MY_STATUS_CODE::SUCCESS, "ok");
+
+    // 好友申请通过后，还需要创建好友关系
+    return add_friend_relation(to_uid, from_uid, remark_name);
+}
+
+CommonResult UserService::add_friend_relation(string uid, string friend_uid, string remark_name)
+{
+    CommonResult result(MY_STATUS_CODE::ERROR, "");
+
+    FriendRelation relation(uid, friend_uid, remark_name);
+    bool success = friend_relation_dao_.add_friend(relation);
+    if (!success)
+        return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
+
+    return result.set(MY_STATUS_CODE::SUCCESS, "ok");
 }

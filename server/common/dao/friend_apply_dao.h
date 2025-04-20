@@ -11,4 +11,5 @@ public:
     std::vector<std::shared_ptr<FriendApply>> get_friend_applys_by_uid(string uid);
     // todo: 完成dto需要联查user取出用户姓名
     std::vector<std::shared_ptr<FriendApplyDto>> get_friend_applys_dto_by_uid(string uid);
+    bool update_friend_apply_status(string from_uid, string to_uid, int status);
 };

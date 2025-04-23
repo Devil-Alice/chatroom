@@ -1,4 +1,5 @@
 #include "grpc_status_server.h"
+#include "redis_manager.h"
 
 GrpcStatusServer::GrpcStatusServer()
 {
@@ -15,12 +16,13 @@ GrpcStatusServer::GrpcStatusServer()
     for (auto it = root.begin(); it != root.end(); it++)
     {
         ChatServerInfo info;
+        info.name = it->get("name", "").asString();
         info.host = it->get("host", "").asString();
         info.port = it->get("port", 0).asInt();
+        info.grpc_chat_server_port = it->get("grpc_chat_server_port", 0).asInt();
         std::cout << info.host << " " << info.port << std::endl;
         chat_servers_infos_.push_back(info);
     }
-
 }
 
 GrpcStatusServer::~GrpcStatusServer()
@@ -29,23 +31,42 @@ GrpcStatusServer::~GrpcStatusServer()
 
 grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, const GetChatServerRequest *request, GetChatServerResponse *response)
 {
-    // chat_servers_infos_是公共资源，而grpc处理多个任务是多线程，所以需要加锁
+    // chat_servers_infos_是公共资源，而grpc处理多个任务是多线程，如果这个grpc服务器多个任务到来，可能会导致资源竞争，所以需要加锁
     std::lock_guard<std::mutex> locker(mutex_);
-    ChatServerInfo server = chat_servers_infos_[poll_idx_];
-    // 轮询获取，更新下标
-    poll_idx_ = (poll_idx_ + 1) % chat_servers_infos_.size();
+
+    // 通过查询redis获取人数最少的服务器信息
+    ChatServerInfo server = chat_servers_infos_[0];
+    
+    string server_name_min = "";
+    int server_user_count_min = -1;
+    for (int i = 0; i < chat_servers_infos_.size(); i++)
+    {
+        string server_name = chat_servers_infos_[i].name;
+        string count_str = RedisManager::instance().hget(chat_server_user_count_hset_key, server_name);
+        int count = std::atoi(count_str.data());
+
+        // 如果是为初始化，或者是找到了新的最小值，记录下来
+        if (server_user_count_min == -1 || count < server_user_count_min)
+        {
+            server_name_min = server_name;
+            server_user_count_min = count;
+            server = chat_servers_infos_[i];
+        }
+
+    }
 
     // 用户请求聊天服务器的时候，给他生成一个token，传回
     string token = my_utils::generate_uuid();
     std::cout << "get_chat_server uid: " << request->uid() << ", gen token: " << token << std::endl;
 
+    // 将token存入redis
+    RedisManager::instance().hset(user_token_hset_key, request->uid(), token);
+
+    // 返回数据
     response->set_error(0);
     response->set_host(server.host);
     response->set_port(server.port);
     response->set_token(token);
-
-    // 将token插入tokens
-    tokens_[request->uid()] = token;
 
     std::cout << "get_chat_server finished" << std::endl;
     return grpc::Status::OK;
@@ -60,7 +81,8 @@ grpc::Status GrpcStatusServer::user_login(grpc::ServerContext *context, const Us
     std::string token = request->token();
 
     // 从tokens中查询uid对应的token是否存在
-    if (tokens_.find(uid) == tokens_.end())
+    string token_find = RedisManager::instance().hget(user_token_hset_key, uid);
+    if (token_find != token)
     {
         response->set_error(MY_STATUS_CODE::TOKEN_INVALID);
     }

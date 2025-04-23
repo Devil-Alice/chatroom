@@ -3,7 +3,6 @@
 #include <my_grpc.grpc.pb.h>
 #include <vector>
 #include "global.h"
-#include "chat_server_info.h"
 
 using my_grpc::GetChatServerRequest;
 using my_grpc::GetChatServerResponse;
@@ -19,8 +18,8 @@ private:
     std::mutex mutex_;
     std::vector<ChatServerInfo> chat_servers_infos_;
     int poll_idx_;
-    // key是uid，value时token
-    std::map<string, string> tokens_;
+    // key是uid，value时token，优化后，将tokens存入redis
+    // std::map<string, string> tokens_;
 public:
     GrpcStatusServer();
     ~GrpcStatusServer();

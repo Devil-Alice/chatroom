@@ -60,7 +60,15 @@ using my_grpc::GetChatServerResponse;
 using my_grpc::UserLoginRequest;
 using my_grpc::UserLoginResponse;
 
+using my_grpc::NotifySendFriendApplyRequest;
+using my_grpc::NotifySendFriendApplyResponse;
+
+using my_grpc::NotifyHandleFriendApplyRequest;
+using my_grpc::NotifyHandleFriendApplyResponse;
+
 const std::string verify_code_prefix = "verify_code_";
+const std::string user_token_hset_key = "user_token";
+const std::string chat_server_user_count_hset_key = "chat_server_user_count";
 
 enum MY_STATUS_CODE
 {
@@ -91,4 +99,19 @@ enum REQUEST_ID
     SNED_FRIEND_APPLY = 1006, // 发送好友申请
     QUERY_FRIEND_APPLY = 1007, // 查询好友申请
     HANDLE_FRIEND_APPLY = 1008, // 处理好友申请
+};
+
+struct ChatServerInfo
+{
+    // 注意此处的host和port都是相对于客户端的地址和端口
+
+    using string = std::string;
+    // 服务器名称
+    string name ;
+    // 聊天服务器地址
+    string host;
+    // 聊天服务器端口
+    int port;
+    // 聊天服务器的grpc服务器端口
+    int grpc_chat_server_port;
 };

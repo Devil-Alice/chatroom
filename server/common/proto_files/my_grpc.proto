@@ -66,3 +66,41 @@ service Status
     rpc get_chat_server(GetChatServerRequest) returns (GetChatServerResponse) {}
     rpc user_login(UserLoginRequest) returns (UserLoginResponse) {}
 }
+
+
+// 聊天的服务以及对象的proto代码 ------------------------------------------------
+message NotifySendFriendApplyRequest
+{
+    string from_uid = 1;
+    string to_uid = 2;
+    string remark_name = 3;
+    string apply_message = 4;
+    int32 status = 5;
+}
+
+message NotifySendFriendApplyResponse
+{
+    int32 error = 1;
+    string from_uid = 2;
+    string to_uid = 3;
+}
+
+message NotifyHandleFriendApplyRequest
+{
+    string from_uid = 1;
+    string to_uid = 2;
+    int32 status = 3;
+}
+
+message NotifyHandleFriendApplyResponse
+{
+    int32 error = 1;
+    string from_uid = 2;
+    string to_uid = 3;
+}
+
+service Chat
+{
+    rpc notify_send_friend_apply(NotifySendFriendApplyRequest) returns (NotifySendFriendApplyResponse) {}
+    rpc notify_handle_friend_apply(NotifyHandleFriendApplyRequest) returns (NotifyHandleFriendApplyResponse) {};
+}

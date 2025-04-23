@@ -3,35 +3,44 @@
         "port": 8080
     },
     "verify_server": {
-        "host": "127.0.0.1",
+        "host": "my_grpc_servers",
         "port": 50051,
         "bind_ip": "0.0.0.0"
     },
     "status_server": {
-        "host": "127.0.0.1",
+        "host": "my_grpc_servers",
         "port": 50052,
         "bind_ip": "0.0.0.0"
     },
     "redis_server": {
-        "host": "127.0.0.1",
+        "host": "my_redis",
         "port": 6379,
         "password": ""
     },
     "mysql_server": {
-        "host": "127.0.0.1",
+        "host": "my_mysql",
         "port": 3306,
-        "user": "",
-        "password": "",
+        "user": "root",
+        "password": "alice",
         "schema": "chatroom"
     },
     "chat_servers": [
         {
+            "name":"chat_server1",
             "host": "127.0.0.1",
-            "port": 55555
+            "port": 45555,
+            "grpc_chat_server_port": 50051
         },
         {
+            "name":"chat_server2",
             "host": "127.0.0.1",
-            "port": 55556
+            "port": 45556,
+            "grpc_chat_server_port": 50052
         }
-    ]
+    ],
+    "chat_server_serlf": {
+        "name": "chat_server1",
+        "port": 55555,
+        "grpc_chat_server_port": 50051
+    }
 }

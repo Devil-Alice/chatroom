@@ -2,6 +2,8 @@
 #include <grpcpp/grpcpp.h>
 #include "global.h"
 
+// todo: 吧typename GrpcStub优化掉，用GrpcService::stub替代、此外将port_改为int类型
+
 template <typename GrpcService, typename GrpcStub>
 class GrpcStubPool
 {

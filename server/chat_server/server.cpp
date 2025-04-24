@@ -31,8 +31,9 @@ void Server::accept_client()
         self->sessions_.insert(std::make_pair(session->get_id(), session));
         
         // 让session启动
-        session->receive_package();
+        session->start();
 
+        // 继续接受链接
         self->accept_client();
     });
 

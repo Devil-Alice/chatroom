@@ -17,7 +17,7 @@ private:
     asio::io_context &ioc_;
     tcp::acceptor acceptor_;
 
-    // 保存的session, key是token
+    // 保存的session, key是session的id
     std::map<string, std::shared_ptr<Session>> sessions_;
     
 public:

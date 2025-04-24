@@ -1,5 +1,6 @@
 #include "session.h"
 #include "tcp_service.h"
+#include "user_manager.h"
 
 Package::Package()
 {
@@ -74,20 +75,18 @@ size_t Package::get_total_length()
 
 void Session::init_thread_send_response()
 {
+    // 这里使用this是安全的，因为析构函数会join等待，确保释放前，该线程会执行完毕
     thread_send_response_ = std::thread([this]()
-    {
+                                        {
         // 持续发送数据包
         while (!flag_stop_)
         {
-            // todo :使用条件变量优化获取请求的函数，在没有请求时阻塞，避免占用资源过多
-
             // 先处理数据包
             handle_request();
     
             // 异步发送response
             send_package();
-        } 
-    });
+        } });
 }
 
 Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server)
@@ -98,12 +97,13 @@ Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server)
     head_length_ = sizeof(uint16_t) * 2;
     request_ = std::make_shared<Package>();
     flag_stop_ = false;
-    init_thread_send_response();
 }
 
 Session::~Session()
 {
+    shutdown();
     flag_stop_ = true;
+    // 结束线程
     cond_handle_request_.notify_all();
     cond_send_response_.notify_all();
     thread_send_response_.join();
@@ -139,6 +139,12 @@ std::string Session::get_user_uid()
     return user_uid_;
 }
 
+void Session::start()
+{
+    init_thread_send_response();
+    receive_package();
+}
+
 void Session::add_request(std::shared_ptr<Package> package)
 {
     std::lock_guard<std::mutex> locker(mutex_request_);
@@ -152,19 +158,19 @@ std::shared_ptr<Package> Session::get_request()
 {
     std::unique_lock<std::mutex> locker(mutex_request_);
     cond_handle_request_.wait(locker,
-    [this]() -> bool
-    {
-        if (flag_stop_)
-        {
-            return true;
-        }
-        else if (packages_request_.size() <= 0)
-        {
-            return false;
-        }
+                              [this]() -> bool
+                              {
+                                  if (flag_stop_)
+                                  {
+                                      return true;
+                                  }
+                                  else if (packages_request_.size() <= 0)
+                                  {
+                                      return false;
+                                  }
 
-        return true;
-    });
+                                  return true;
+                              });
 
     if (flag_stop_)
         return nullptr;
@@ -198,28 +204,28 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
     // async_read_some接收char*类型的缓冲区时，需要手动指定写的位置，否则会覆盖原有数据
     // 此处应该写入的位置为 起始地址 + 已经读取的长度，能写入的大小为，期望读取的长度 - 已经读取的长度
     socket_.async_read_some(asio::buffer(buf + length_read, length - length_read),
-    [self, handler, length, length_read](boost::system::error_code err_code, size_t size)
-    {
-        // 出现错误，关闭socket
-        if (err_code)
-        {
-            self->shutdown(err_code);
-            return;
-        }
+                            [self, handler, length, length_read](boost::system::error_code err_code, size_t size)
+                            {
+                                // 出现错误，关闭socket
+                                if (err_code)
+                                {
+                                    self->shutdown(err_code);
+                                    return;
+                                }
 
-        // 计算当前长度 = 本次读取的长度size + 之前累积读取的长度length_read
-        size_t cur_len = size + length_read;
-        // 长度达到，调用回调
-        if (cur_len >= length)
-        {
-            handler(err_code, cur_len);
-            return;
-        }
+                                // 计算当前长度 = 本次读取的长度size + 之前累积读取的长度length_read
+                                size_t cur_len = size + length_read;
+                                // 长度达到，调用回调
+                                if (cur_len >= length)
+                                {
+                                    handler(err_code, cur_len);
+                                    return;
+                                }
 
-        // 没有达到预期长度，继续接收
-        self->async_read_fixed_length(length - cur_len, handler, cur_len);
-        return;
-    });
+                                // 没有达到预期长度，继续接收
+                                self->async_read_fixed_length(length - cur_len, handler, cur_len);
+                                return;
+                            });
 }
 
 void Session::receive_package()
@@ -242,6 +248,8 @@ void Session::handle_request()
     {
         Json::Value root = JsonObject::parse_json_string(response->get_message());
         user_uid_ = root["data"]["uid"].asString();
+        // 将uid与session对应关系存储到usermanager
+        UserManager::instance().set_uid_session(user_uid_, shared_from_this());
     }
 
     add_response(response);
@@ -255,25 +263,25 @@ void Session::send_package()
         return;
     pkg->build_buffer();
     socket_.async_send(asio::buffer(pkg->buffer_, pkg->get_total_length()),
-    [pkg](boost::system::error_code err_code, size_t size)
-    {
-        if (err_code)
-        {
-            std::cout << "send_package error: " << err_code.message() << std::endl;
-            return;
-        }
-        // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
-        // 如果需要重发，将数据包重新放回
-        if (size < pkg->get_total_length())
-        {
-            std::cout << "send_package length not enough " << std::endl;
-            return;
-        }
+                       [pkg](boost::system::error_code err_code, size_t size)
+                       {
+                           if (err_code)
+                           {
+                               std::cout << "send_package error: " << err_code.message() << std::endl;
+                               return;
+                           }
+                           // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
+                           // 如果需要重发，将数据包重新放回
+                           if (size < pkg->get_total_length())
+                           {
+                               std::cout << "send_package length not enough " << std::endl;
+                               return;
+                           }
 
-        std::cout << "send a message: " << std::endl
-                    << "reqest id: " << pkg->get_request_id() << std::endl
-                    << "message: " << pkg->get_message() << std::endl;
-    });
+                           std::cout << "send a message: " << std::endl
+                                     << "reqest id: " << pkg->get_request_id() << std::endl
+                                     << "message: " << pkg->get_message() << std::endl;
+                       });
 }
 
 void Session::read_head()
@@ -337,4 +345,7 @@ void Session::shutdown(boost::system::error_code err_code)
 
     // 从server的map中移除此session
     server_->remove_session(id_);
+    // 从UserManager中删除session
+    UserManager::instance().remove_uid_session(user_uid_);
+    // 执行完上面两行，这个session应该叫可以自动释放了
 }

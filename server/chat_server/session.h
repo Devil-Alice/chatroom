@@ -85,6 +85,7 @@ public:
     tcp::socket &get_socket();
     string get_id();
     string get_user_uid();
+    void start();
     // 添加请求，将请求放入packages_request_中
     void add_request(std::shared_ptr<Package> package);
     // 获取请求，从packages_request_中移除
@@ -109,5 +110,5 @@ public:
     // 异步读取消息的函数
     void read_message();
     // 关闭函数
-    void shutdown(boost::system::error_code err_code);
+    void shutdown(boost::system::error_code err_code = boost::system::error_code());
 };

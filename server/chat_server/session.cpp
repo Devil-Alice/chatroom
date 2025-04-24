@@ -256,9 +256,9 @@ void Session::send_package()
             return;
         }
 
-        std::cout << "sent a message: " << std::endl <<
+        std::cout << "send a message: " << std::endl <<
         "reqest id: " << pkg->get_request_id() << std:: endl <<
-        "request message: " << pkg->get_message() << std::endl;
+        "message: " << pkg->get_message() << std::endl;
     });
 }
 
@@ -300,9 +300,9 @@ void Session::read_message()
         self->add_request(self->request_);
 
         // 调试信息
-        std::cout << "read_message received a message: " << std::endl <<
+        std::cout << "received a message: " << std::endl <<
         "reqest id: " << self->request_->get_request_id() << std:: endl <<
-        "request message: " << self->request_->get_message() << std::endl;
+        "message: " << self->request_->get_message() << std::endl;
 
         // 继续接收数据包
         self->receive_package();

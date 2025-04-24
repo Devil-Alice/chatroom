@@ -61,6 +61,7 @@ TcpService::TcpService()
                 Json::Value json_result;
                 json_result["uid"] = user->get_uid();
                 json_result["token"] = token;
+                json_result["name"] = user->get_name();
 
                 result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
             }

@@ -21,7 +21,7 @@ GrpcStatusServer::GrpcStatusServer()
         info.port = it->get("port", 0).asInt();
         info.grpc_chat_server_port = it->get("grpc_chat_server_port", 0).asInt();
         std::cout << info.host << " " << info.port << std::endl;
-        chat_servers_infos_.push_back(info);
+        chat_server_infos_.push_back(info);
     }
 }
 
@@ -35,13 +35,13 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
     std::lock_guard<std::mutex> locker(mutex_);
 
     // 通过查询redis获取人数最少的服务器信息
-    ChatServerInfo server = chat_servers_infos_[0];
+    ChatServerInfo server = chat_server_infos_[0];
     
     string server_name_min = "";
     int server_user_count_min = -1;
-    for (int i = 0; i < chat_servers_infos_.size(); i++)
+    for (int i = 0; i < chat_server_infos_.size(); i++)
     {
-        string server_name = chat_servers_infos_[i].name;
+        string server_name = chat_server_infos_[i].name;
         string count_str = RedisManager::instance().hget(chat_server_user_count_hset_key, server_name);
         int count = std::atoi(count_str.data());
 
@@ -50,7 +50,7 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
         {
             server_name_min = server_name;
             server_user_count_min = count;
-            server = chat_servers_infos_[i];
+            server = chat_server_infos_[i];
         }
 
     }

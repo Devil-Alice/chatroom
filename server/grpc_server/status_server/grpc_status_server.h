@@ -16,7 +16,7 @@ class GrpcStatusServer final : public my_grpc::Status::Service
     using string = std::string;
 private:
     std::mutex mutex_;
-    std::vector<ChatServerInfo> chat_servers_infos_;
+    std::vector<ChatServerInfo> chat_server_infos_;
     int poll_idx_;
     // key是uid，value时token，优化后，将tokens存入redis
     // std::map<string, string> tokens_;

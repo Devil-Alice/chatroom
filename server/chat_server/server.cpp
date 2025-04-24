@@ -28,7 +28,7 @@ void Server::accept_client()
         }
 
         // 成功接收到一个客户端连接
-        self->sessions_.insert(std::make_pair(session->get_uuid(), session));
+        self->sessions_.insert(std::make_pair(session->get_id(), session));
         
         // 让session启动
         session->receive_package();

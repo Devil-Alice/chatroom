@@ -74,7 +74,8 @@ size_t Package::get_total_length()
 
 void Session::init_thread_send_response()
 {
-    thread_send_response_ = std::thread([this](){
+    thread_send_response_ = std::thread([this]()
+    {
         // 持续发送数据包
         while (!flag_stop_)
         {
@@ -85,14 +86,15 @@ void Session::init_thread_send_response()
     
             // 异步发送response
             send_package();
-        }
+        } 
     });
 }
 
-Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server) 
-: ioc_(ioc), socket_(ioc), server_(server)
+Session::Session(asio::io_context &ioc, std::shared_ptr<Server> server)
+    : ioc_(ioc), socket_(ioc), server_(server)
 {
-    uuid_ = my_utils::generate_uuid();
+    id_ = my_utils::generate_uuid();
+    user_uid_ = "";
     head_length_ = sizeof(uint16_t) * 2;
     request_ = std::make_shared<Package>();
     flag_stop_ = false;
@@ -119,7 +121,7 @@ Session::~Session()
         packages_response_.pop();
     }
     mutex_response_.unlock();
-    std::cout << "session[" << uuid_ << "] destruct" << std::endl;
+    std::cout << "session[" << id_ << "] destruct" << std::endl;
 }
 
 tcp::socket &Session::get_socket()
@@ -127,9 +129,14 @@ tcp::socket &Session::get_socket()
     return socket_;
 }
 
-std::string Session::get_uuid()
+std::string Session::get_id()
 {
-    return uuid_;
+    return id_;
+}
+
+std::string Session::get_user_uid()
+{
+    return user_uid_;
 }
 
 void Session::add_request(std::shared_ptr<Package> package)
@@ -144,7 +151,7 @@ void Session::add_request(std::shared_ptr<Package> package)
 std::shared_ptr<Package> Session::get_request()
 {
     std::unique_lock<std::mutex> locker(mutex_request_);
-    cond_handle_request_.wait(locker, 
+    cond_handle_request_.wait(locker,
     [this]() -> bool
     {
         if (flag_stop_)
@@ -161,7 +168,7 @@ std::shared_ptr<Package> Session::get_request()
 
     if (flag_stop_)
         return nullptr;
-    
+
     auto pkg = packages_request_.front();
     packages_request_.pop();
     return pkg;
@@ -190,7 +197,7 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
     char *buf = request_->buffer_;
     // async_read_some接收char*类型的缓冲区时，需要手动指定写的位置，否则会覆盖原有数据
     // 此处应该写入的位置为 起始地址 + 已经读取的长度，能写入的大小为，期望读取的长度 - 已经读取的长度
-    socket_.async_read_some(asio::buffer(buf + length_read, length - length_read), 
+    socket_.async_read_some(asio::buffer(buf + length_read, length - length_read),
     [self, handler, length, length_read](boost::system::error_code err_code, size_t size)
     {
         // 出现错误，关闭socket
@@ -206,12 +213,12 @@ void Session::async_read_fixed_length(size_t length, read_handler handler, size_
         if (cur_len >= length)
         {
             handler(err_code, cur_len);
-            return;  
+            return;
         }
 
         // 没有达到预期长度，继续接收
         self->async_read_fixed_length(length - cur_len, handler, cur_len);
-        return; 
+        return;
     });
 }
 
@@ -229,7 +236,14 @@ void Session::handle_request()
 
     // handle_request一般不返回null，如果出错会以package返回一个错误包
     auto response = TcpService::instance().handle_request(pkg);
-    
+
+    // 如果是登陆的回包，则获取用户id
+    if (response->get_request_id() == REQUEST_ID::CHAT_LOGIN)
+    {
+        Json::Value root = JsonObject::parse_json_string(response->get_message());
+        user_uid_ = root["data"]["uid"].asString();
+    }
+
     add_response(response);
     return;
 }
@@ -237,28 +251,28 @@ void Session::handle_request()
 void Session::send_package()
 {
     auto pkg = get_response();
-    if(pkg == nullptr)
+    if (pkg == nullptr)
         return;
     pkg->build_buffer();
-    socket_.async_send(asio::buffer(pkg->buffer_, pkg->get_total_length()), 
+    socket_.async_send(asio::buffer(pkg->buffer_, pkg->get_total_length()),
     [pkg](boost::system::error_code err_code, size_t size)
     {
         if (err_code)
         {
-            std::cout << "send_package error: " << err_code.message() << std::endl; 
+            std::cout << "send_package error: " << err_code.message() << std::endl;
             return;
         }
         // 如果出错，可能是网络错误、客户端掉线，看情况决定是否需要重发
         // 如果需要重发，将数据包重新放回
         if (size < pkg->get_total_length())
         {
-            std::cout << "send_package length not enough " << std::endl; 
+            std::cout << "send_package length not enough " << std::endl;
             return;
         }
 
-        std::cout << "send a message: " << std::endl <<
-        "reqest id: " << pkg->get_request_id() << std:: endl <<
-        "message: " << pkg->get_message() << std::endl;
+        std::cout << "send a message: " << std::endl
+                    << "reqest id: " << pkg->get_request_id() << std::endl
+                    << "message: " << pkg->get_message() << std::endl;
     });
 }
 
@@ -312,15 +326,15 @@ void Session::read_message()
 
 void Session::shutdown(boost::system::error_code err_code)
 {
-    std::cout << "session socket[" << uuid_ << "] shutdown: " << err_code.what() << std::endl;
+    std::cout << "session socket[" << id_ << "] shutdown: " << err_code.what() << std::endl;
     flag_stop_ = true;
     socket_.shutdown(asio::socket_base::shutdown_both, err_code);
-    
+
     // 唤醒正在阻塞的地方
     cond_handle_request_.notify_all();
     cond_send_response_.notify_all();
     // socket_.close();
 
     // 从server的map中移除此session
-    server_->remove_session(uuid_);
+    server_->remove_session(id_);
 }

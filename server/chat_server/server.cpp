@@ -1,13 +1,18 @@
 #include "server.h"
 
-Server::Server(int port, asio::io_context &ioc)
-    : port_(port), ioc_(ioc), acceptor_(ioc_, tcp::endpoint(tcp::v4(), port_))
+Server::Server(string name, int port, asio::io_context &ioc)
+    : name_(name), port_(port), ioc_(ioc), acceptor_(ioc_, tcp::endpoint(tcp::v4(), port_))
 {
 }
 
 Server::~Server()
 {
     ioc_.stop();
+}
+
+std::string Server::get_name()
+{
+    return name_;
 }
 
 void Server::accept_client()

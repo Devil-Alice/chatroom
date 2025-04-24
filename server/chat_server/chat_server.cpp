@@ -23,9 +23,11 @@ int main()
         });
 
         // 解析配置文件
-        int port = 55555;
+        std::string port_str = app_config["chat_server_serlf"]["port"];
+        std::string name = app_config["chat_server_serlf"]["name"];
+        int port = std::atoi(port_str.data());
 
-        std::shared_ptr<Server> server = std::make_shared<Server>(port, ioc);
+        std::shared_ptr<Server> server = std::make_shared<Server>(name, port, ioc);
         server->accept_client();
         std::cout << "chat server running..." << std::endl;
         ioc.run();

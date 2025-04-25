@@ -36,10 +36,10 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
 
     // 通过查询redis获取人数最少的服务器信息
     ChatServerInfo server = chat_server_infos_[0];
-    
+
     string server_name_min = "";
     int server_user_count_min = -1;
-    for (int i = 0; i < chat_server_infos_.size(); i++)
+    for (size_t i = 0; i < chat_server_infos_.size(); i++)
     {
         string server_name = chat_server_infos_[i].name;
         string count_str = RedisManager::instance().hget(chat_server_user_count_hset_key, server_name);
@@ -52,7 +52,6 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
             server_user_count_min = count;
             server = chat_server_infos_[i];
         }
-
     }
 
     // 用户请求聊天服务器的时候，给他生成一个token，传回
@@ -72,19 +71,30 @@ grpc::Status GrpcStatusServer::get_chat_server(grpc::ServerContext *context, con
     return grpc::Status::OK;
 }
 
-grpc::Status GrpcStatusServer::user_login(grpc::ServerContext *context, const UserLoginRequest *request, UserLoginResponse *response)
+grpc::Status GrpcStatusServer::chat_login(grpc::ServerContext *context, const UserLoginRequest *request, UserLoginResponse *response)
 {
     std::lock_guard<std::mutex> locker(mutex_);
     response->set_error(MY_STATUS_CODE::SUCCESS);
 
-    std::string uid = request->uid();
-    std::string token = request->token();
+    string uid = request->uid();
+    string token = request->token();
+    string server_name = request->server_name();
 
     // 从tokens中查询uid对应的token是否存在
     string token_find = RedisManager::instance().hget(user_token_hset_key, uid);
     if (token_find != token)
     {
         response->set_error(MY_STATUS_CODE::TOKEN_INVALID);
+    }
+    else
+    {
+        // token 匹配成功
+        // 将servername的登陆数量+1
+        string login_count_str = RedisManager::instance().hget(chat_server_user_count_hset_key, server_name);
+        int login_count = 0;
+        if (!login_count_str.empty())
+            login_count = atoi(login_count_str.data());
+        RedisManager::instance().hset(chat_server_user_count_hset_key, server_name, std::to_string(login_count + 1));
     }
 
     response->set_uid(uid);

@@ -80,7 +80,7 @@ CommonResult UserService::user_login(string phone, string password)
     // 分配、获取聊天服务器的信息
     GetChatServerResponse rsp = GrpcStatusClient::instance().get_chat_server(user->get_uid());
     if (rsp.error() != MY_STATUS_CODE::SUCCESS)
-        return result.set(MY_STATUS_CODE::RPC_FAILED, "rpc fauled");
+        return result.set(MY_STATUS_CODE::RPC_FAILED, "rpc failed");
 
     Json::Value json_result;
     json_result["uid"] = user->get_uid();
@@ -93,9 +93,24 @@ CommonResult UserService::user_login(string phone, string password)
     return result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
 }
 
-CommonResult UserService::chat_login()
+CommonResult UserService::chat_login(string uid, string token, string server_name)
 {
-    return CommonResult();
+    // chat_login 执行前提是，user_login正确执行并返回，此时客户端会附带uid以及验证的token
+    CommonResult result(MY_STATUS_CODE::ERROR, "");
+    auto response = GrpcStatusClient::instance().chat_login(uid, token, server_name);
+
+    // 不成功，返回
+    if (response.error() != MY_STATUS_CODE::SUCCESS)
+    {
+        return result.set(MY_STATUS_CODE::RPC_FAILED, "rpc failed");
+    }
+
+    // 成功，设置信息，返回
+    Json::Value json_result;
+    json_result["uid"] = response.uid();
+    json_result["token"] = response.token();
+
+    return result.set(MY_STATUS_CODE::SUCCESS, "login success", json_result);
 }
 
 CommonResult UserService::search_content(string content)
@@ -194,7 +209,7 @@ CommonResult UserService::add_friend_relation(string from_uid, string to_uid, st
 
     FriendRelation relation2(to_uid, from_uid, "");
     bool success2 = friend_relation_dao_.add_friend(relation2);
-    
+
     if (!success1 && success2)
         return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
 

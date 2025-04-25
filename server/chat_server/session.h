@@ -82,9 +82,11 @@ public:
     using read_handler = std::function<void(boost::system::error_code, size_t)>;
     Session(asio::io_context &ioc, std::shared_ptr<Server> server);
     ~Session();
+    string get_server_name();
     tcp::socket &get_socket();
     string get_id();
     string get_user_uid();
+    void set_user_uid(string user_uid);
     void start();
     // 添加请求，将请求放入packages_request_中
     void add_request(std::shared_ptr<Package> package);

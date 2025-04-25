@@ -23,6 +23,6 @@ private:
 public:
     GrpcStatusServer();
     ~GrpcStatusServer();
-    grpc::Status get_chat_server(grpc::ServerContext *context, const GetChatServerRequest *request, GetChatServerResponse *response);
-    grpc::Status user_login(grpc::ServerContext *context, const UserLoginRequest *request, UserLoginResponse *response);
+    grpc::Status get_chat_server(grpc::ServerContext *context, const GetChatServerRequest *request, GetChatServerResponse *response) override;
+    grpc::Status chat_login(grpc::ServerContext *context, const UserLoginRequest *request, UserLoginResponse *response) override;
 };

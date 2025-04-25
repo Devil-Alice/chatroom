@@ -12,5 +12,5 @@ public:
     GrpcStatusClient();
     ~GrpcStatusClient();
     GetChatServerResponse get_chat_server(string uid);
-    UserLoginResponse user_login(string uid, string token);
+    UserLoginResponse chat_login(string uid, string token, string server_name);
 };

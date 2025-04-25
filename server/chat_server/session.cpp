@@ -124,6 +124,11 @@ Session::~Session()
     std::cout << "session[" << id_ << "] destruct" << std::endl;
 }
 
+std::string Session::get_server_name()
+{
+    return server_->get_name();
+}
+
 tcp::socket &Session::get_socket()
 {
     return socket_;
@@ -137,6 +142,11 @@ std::string Session::get_id()
 std::string Session::get_user_uid()
 {
     return user_uid_;
+}
+
+void Session::set_user_uid(string user_uid)
+{
+    user_uid_ = user_uid;
 }
 
 void Session::start()
@@ -241,16 +251,7 @@ void Session::handle_request()
         return;
 
     // handle_request一般不返回null，如果出错会以package返回一个错误包
-    auto response = TcpService::instance().handle_request(pkg);
-
-    // 如果是登陆的回包，则获取用户id
-    if (response->get_request_id() == REQUEST_ID::CHAT_LOGIN)
-    {
-        Json::Value root = JsonObject::parse_json_string(response->get_message());
-        user_uid_ = root["data"]["uid"].asString();
-        // 将uid与session对应关系存储到usermanager
-        UserManager::instance().set_uid_session(user_uid_, shared_from_this());
-    }
+    auto response = TcpService::instance().handle_request(shared_from_this(), pkg);
 
     add_response(response);
     return;
@@ -348,4 +349,6 @@ void Session::shutdown(boost::system::error_code err_code)
     // 从UserManager中删除session
     UserManager::instance().remove_uid_session(user_uid_);
     // 执行完上面两行，这个session应该叫可以自动释放了
+
+    // todo: 用户登出，需要向grpc发送请求，修改相关信息，例如，将redis中的token、用户登陆数量修改
 }

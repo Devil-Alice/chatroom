@@ -34,7 +34,7 @@ GetChatServerResponse GrpcStatusClient::get_chat_server(string uid)
     return response;
 }
 
-UserLoginResponse GrpcStatusClient::user_login(string uid, string token)
+UserLoginResponse GrpcStatusClient::chat_login(string uid, string token, string server_name)
 {
     ClientContext context;
     UserLoginRequest request;
@@ -42,9 +42,10 @@ UserLoginResponse GrpcStatusClient::user_login(string uid, string token)
 
     request.set_uid(uid);
     request.set_token(token);
+    request.set_server_name(server_name);
 
     auto stub = grpc_stub_pool_->get_grpc_stub();
-    grpc::Status status = stub->user_login(&context, request, &response);
+    grpc::Status status = stub->chat_login(&context, request, &response);
 
     if (!status.ok())
     {

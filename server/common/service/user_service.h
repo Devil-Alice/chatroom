@@ -26,7 +26,7 @@ public:
     // 用户登陆，验证用户的手机号、密码
     CommonResult user_login(string phone, string password);
     // todo:chat_login待完成
-    CommonResult chat_login();
+    CommonResult chat_login(string uid, string token, string server_name);
     CommonResult search_content(string content);
     // 插入好友申请，如果存在，则更新
     CommonResult update_friend_apply(string from_uid, string to_uid, string remark_name, string apply_message, int status = 0);

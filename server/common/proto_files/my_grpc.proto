@@ -52,6 +52,7 @@ message UserLoginRequest
 {
     string uid = 1;
     string token = 2;
+    string server_name = 3;
 }
 
 message UserLoginResponse
@@ -64,7 +65,7 @@ message UserLoginResponse
 service Status
 {
     rpc get_chat_server(GetChatServerRequest) returns (GetChatServerResponse) {}
-    rpc user_login(UserLoginRequest) returns (UserLoginResponse) {}
+    rpc chat_login(UserLoginRequest) returns (UserLoginResponse) {}
 }
 
 

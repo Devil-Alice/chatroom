@@ -471,6 +471,7 @@ class UserLoginRequest final
   enum : int {
     kUidFieldNumber = 1,
     kTokenFieldNumber = 2,
+    kServerNameFieldNumber = 3,
   };
   // string uid = 1;
   void clear_uid() ;
@@ -504,13 +505,29 @@ class UserLoginRequest final
   std::string* _internal_mutable_token();
 
   public:
+  // string server_name = 3;
+  void clear_server_name() ;
+  const std::string& server_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_server_name(Arg_&& arg, Args_... args);
+  std::string* mutable_server_name();
+  PROTOBUF_NODISCARD std::string* release_server_name();
+  void set_allocated_server_name(std::string* value);
+
+  private:
+  const std::string& _internal_server_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_server_name(
+      const std::string& value);
+  std::string* _internal_mutable_server_name();
+
+  public:
   // @@protoc_insertion_point(class_scope:my_grpc.UserLoginRequest)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      1, 2, 0,
-      41, 2>
+      2, 3, 0,
+      52, 2>
       _table_;
 
   friend class ::google::protobuf::MessageLite;
@@ -529,6 +546,7 @@ class UserLoginRequest final
                           const UserLoginRequest& from_msg);
     ::google::protobuf::internal::ArenaStringPtr uid_;
     ::google::protobuf::internal::ArenaStringPtr token_;
+    ::google::protobuf::internal::ArenaStringPtr server_name_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -2820,6 +2838,54 @@ inline void UserLoginRequest::set_allocated_token(std::string* value) {
     _impl_.token_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:my_grpc.UserLoginRequest.token)
+}
+
+// string server_name = 3;
+inline void UserLoginRequest::clear_server_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.server_name_.ClearToEmpty();
+}
+inline const std::string& UserLoginRequest::server_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:my_grpc.UserLoginRequest.server_name)
+  return _internal_server_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void UserLoginRequest::set_server_name(Arg_&& arg,
+                                                     Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.server_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:my_grpc.UserLoginRequest.server_name)
+}
+inline std::string* UserLoginRequest::mutable_server_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_server_name();
+  // @@protoc_insertion_point(field_mutable:my_grpc.UserLoginRequest.server_name)
+  return _s;
+}
+inline const std::string& UserLoginRequest::_internal_server_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.server_name_.Get();
+}
+inline void UserLoginRequest::_internal_set_server_name(const std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.server_name_.Set(value, GetArena());
+}
+inline std::string* UserLoginRequest::_internal_mutable_server_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.server_name_.Mutable( GetArena());
+}
+inline std::string* UserLoginRequest::release_server_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:my_grpc.UserLoginRequest.server_name)
+  return _impl_.server_name_.Release();
+}
+inline void UserLoginRequest::set_allocated_server_name(std::string* value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.server_name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.server_name_.IsDefault()) {
+    _impl_.server_name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:my_grpc.UserLoginRequest.server_name)
 }
 
 // -------------------------------------------------------------------

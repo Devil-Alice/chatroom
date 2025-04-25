@@ -84,7 +84,7 @@ Verify::Service::~Service() {
 
 static const char* Status_method_names[] = {
   "/my_grpc.Status/get_chat_server",
-  "/my_grpc.Status/user_login",
+  "/my_grpc.Status/chat_login",
 };
 
 std::unique_ptr< Status::Stub> Status::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -95,7 +95,7 @@ std::unique_ptr< Status::Stub> Status::NewStub(const std::shared_ptr< ::grpc::Ch
 
 Status::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_get_chat_server_(Status_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_user_login_(Status_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_chat_login_(Status_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status Status::Stub::get_chat_server(::grpc::ClientContext* context, const ::my_grpc::GetChatServerRequest& request, ::my_grpc::GetChatServerResponse* response) {
@@ -121,25 +121,25 @@ void Status::Stub::async::get_chat_server(::grpc::ClientContext* context, const 
   return result;
 }
 
-::grpc::Status Status::Stub::user_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::my_grpc::UserLoginResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::my_grpc::UserLoginRequest, ::my_grpc::UserLoginResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_user_login_, context, request, response);
+::grpc::Status Status::Stub::chat_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::my_grpc::UserLoginResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::my_grpc::UserLoginRequest, ::my_grpc::UserLoginResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_chat_login_, context, request, response);
 }
 
-void Status::Stub::async::user_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::my_grpc::UserLoginRequest, ::my_grpc::UserLoginResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_user_login_, context, request, response, std::move(f));
+void Status::Stub::async::chat_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::my_grpc::UserLoginRequest, ::my_grpc::UserLoginResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_chat_login_, context, request, response, std::move(f));
 }
 
-void Status::Stub::async::user_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_user_login_, context, request, response, reactor);
+void Status::Stub::async::chat_login(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_chat_login_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::my_grpc::UserLoginResponse>* Status::Stub::PrepareAsyncuser_loginRaw(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::my_grpc::UserLoginResponse, ::my_grpc::UserLoginRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_user_login_, context, request);
+::grpc::ClientAsyncResponseReader< ::my_grpc::UserLoginResponse>* Status::Stub::PrepareAsyncchat_loginRaw(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::my_grpc::UserLoginResponse, ::my_grpc::UserLoginRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_chat_login_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::my_grpc::UserLoginResponse>* Status::Stub::Asyncuser_loginRaw(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::my_grpc::UserLoginResponse>* Status::Stub::Asyncchat_loginRaw(::grpc::ClientContext* context, const ::my_grpc::UserLoginRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
-    this->PrepareAsyncuser_loginRaw(context, request, cq);
+    this->PrepareAsyncchat_loginRaw(context, request, cq);
   result->StartCall();
   return result;
 }
@@ -163,7 +163,7 @@ Status::Service::Service() {
              ::grpc::ServerContext* ctx,
              const ::my_grpc::UserLoginRequest* req,
              ::my_grpc::UserLoginResponse* resp) {
-               return service->user_login(ctx, req, resp);
+               return service->chat_login(ctx, req, resp);
              }, this)));
 }
 
@@ -177,7 +177,7 @@ Status::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status Status::Service::user_login(::grpc::ServerContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response) {
+::grpc::Status Status::Service::chat_login(::grpc::ServerContext* context, const ::my_grpc::UserLoginRequest* request, ::my_grpc::UserLoginResponse* response) {
   (void) context;
   (void) request;
   (void) response;

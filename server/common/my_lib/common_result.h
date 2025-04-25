@@ -17,6 +17,12 @@ private:
     Json::Value data_;
 
 public:
+    CommonResult() {};
+    CommonResult(int status, string message, Json::Value data = Json::Value())
+    {
+        set(status, message, data);
+    }
+    ~CommonResult() {};
     // 方便链式调用
     CommonResult &set(int status, string message, Json::Value data = Json::Value())
     {
@@ -26,12 +32,15 @@ public:
         return *this;
     }
 
-    CommonResult() {};
-    CommonResult(int status, string message, Json::Value data = Json::Value())
+    int get_status()
     {
-        set(status, message, data);
+        return status_;
     }
-    ~CommonResult() {};
+
+    Json::Value get_data()
+    {
+        return data_;
+    }
 
     string to_json_string()
     {

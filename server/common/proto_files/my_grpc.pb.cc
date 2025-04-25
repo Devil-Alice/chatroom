@@ -65,6 +65,9 @@ inline constexpr UserLoginRequest::Impl_::Impl_(
         token_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()),
+        server_name_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
         _cached_size_{0} {}
 
 template <typename>
@@ -392,6 +395,7 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginRequest, _impl_.uid_),
         PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginRequest, _impl_.token_),
+        PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginRequest, _impl_.server_name_),
         ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::my_grpc::UserLoginResponse, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -458,11 +462,11 @@ static const ::_pbi::MigrationSchema
         {20, -1, -1, sizeof(::my_grpc::GetChatServerRequest)},
         {29, -1, -1, sizeof(::my_grpc::GetChatServerResponse)},
         {41, -1, -1, sizeof(::my_grpc::UserLoginRequest)},
-        {51, -1, -1, sizeof(::my_grpc::UserLoginResponse)},
-        {62, -1, -1, sizeof(::my_grpc::NotifySendFriendApplyRequest)},
-        {75, -1, -1, sizeof(::my_grpc::NotifySendFriendApplyResponse)},
-        {86, -1, -1, sizeof(::my_grpc::NotifyHandleFriendApplyRequest)},
-        {97, -1, -1, sizeof(::my_grpc::NotifyHandleFriendApplyResponse)},
+        {52, -1, -1, sizeof(::my_grpc::UserLoginResponse)},
+        {63, -1, -1, sizeof(::my_grpc::NotifySendFriendApplyRequest)},
+        {76, -1, -1, sizeof(::my_grpc::NotifySendFriendApplyResponse)},
+        {87, -1, -1, sizeof(::my_grpc::NotifyHandleFriendApplyRequest)},
+        {98, -1, -1, sizeof(::my_grpc::NotifyHandleFriendApplyResponse)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::my_grpc::_GetVerifyRequest_default_instance_._instance,
@@ -484,37 +488,38 @@ const char descriptor_table_protodef_my_5fgrpc_2eproto[] ABSL_ATTRIBUTE_SECTION_
     " \001(\t\"#\n\024GetChatServerRequest\022\013\n\003uid\030\001 \001("
     "\t\"Q\n\025GetChatServerResponse\022\r\n\005error\030\001 \001("
     "\005\022\014\n\004host\030\002 \001(\t\022\014\n\004port\030\003 \001(\005\022\r\n\005token\030\004"
-    " \001(\t\".\n\020UserLoginRequest\022\013\n\003uid\030\001 \001(\t\022\r\n"
-    "\005token\030\002 \001(\t\">\n\021UserLoginResponse\022\r\n\005err"
-    "or\030\001 \001(\005\022\013\n\003uid\030\002 \001(\t\022\r\n\005token\030\003 \001(\t\"|\n\034"
-    "NotifySendFriendApplyRequest\022\020\n\010from_uid"
-    "\030\001 \001(\t\022\016\n\006to_uid\030\002 \001(\t\022\023\n\013remark_name\030\003 "
-    "\001(\t\022\025\n\rapply_message\030\004 \001(\t\022\016\n\006status\030\005 \001"
-    "(\005\"P\n\035NotifySendFriendApplyResponse\022\r\n\005e"
-    "rror\030\001 \001(\005\022\020\n\010from_uid\030\002 \001(\t\022\016\n\006to_uid\030\003"
-    " \001(\t\"R\n\036NotifyHandleFriendApplyRequest\022\020"
-    "\n\010from_uid\030\001 \001(\t\022\016\n\006to_uid\030\002 \001(\t\022\016\n\006stat"
-    "us\030\003 \001(\005\"R\n\037NotifyHandleFriendApplyRespo"
-    "nse\022\r\n\005error\030\001 \001(\005\022\020\n\010from_uid\030\002 \001(\t\022\016\n\006"
-    "to_uid\030\003 \001(\t2T\n\006Verify\022J\n\017get_verify_cod"
-    "e\022\031.my_grpc.GetVerifyRequest\032\032.my_grpc.G"
-    "etVerifyResponse\"\0002\243\001\n\006Status\022R\n\017get_cha"
-    "t_server\022\035.my_grpc.GetChatServerRequest\032"
-    "\036.my_grpc.GetChatServerResponse\"\000\022E\n\nuse"
-    "r_login\022\031.my_grpc.UserLoginRequest\032\032.my_"
-    "grpc.UserLoginResponse\"\0002\346\001\n\004Chat\022k\n\030not"
-    "ify_send_friend_apply\022%.my_grpc.NotifySe"
-    "ndFriendApplyRequest\032&.my_grpc.NotifySen"
-    "dFriendApplyResponse\"\000\022q\n\032notify_handle_"
-    "friend_apply\022\'.my_grpc.NotifyHandleFrien"
-    "dApplyRequest\032(.my_grpc.NotifyHandleFrie"
-    "ndApplyResponse\"\000b\006proto3"
+    " \001(\t\"C\n\020UserLoginRequest\022\013\n\003uid\030\001 \001(\t\022\r\n"
+    "\005token\030\002 \001(\t\022\023\n\013server_name\030\003 \001(\t\">\n\021Use"
+    "rLoginResponse\022\r\n\005error\030\001 \001(\005\022\013\n\003uid\030\002 \001"
+    "(\t\022\r\n\005token\030\003 \001(\t\"|\n\034NotifySendFriendApp"
+    "lyRequest\022\020\n\010from_uid\030\001 \001(\t\022\016\n\006to_uid\030\002 "
+    "\001(\t\022\023\n\013remark_name\030\003 \001(\t\022\025\n\rapply_messag"
+    "e\030\004 \001(\t\022\016\n\006status\030\005 \001(\005\"P\n\035NotifySendFri"
+    "endApplyResponse\022\r\n\005error\030\001 \001(\005\022\020\n\010from_"
+    "uid\030\002 \001(\t\022\016\n\006to_uid\030\003 \001(\t\"R\n\036NotifyHandl"
+    "eFriendApplyRequest\022\020\n\010from_uid\030\001 \001(\t\022\016\n"
+    "\006to_uid\030\002 \001(\t\022\016\n\006status\030\003 \001(\005\"R\n\037NotifyH"
+    "andleFriendApplyResponse\022\r\n\005error\030\001 \001(\005\022"
+    "\020\n\010from_uid\030\002 \001(\t\022\016\n\006to_uid\030\003 \001(\t2T\n\006Ver"
+    "ify\022J\n\017get_verify_code\022\031.my_grpc.GetVeri"
+    "fyRequest\032\032.my_grpc.GetVerifyResponse\"\0002"
+    "\243\001\n\006Status\022R\n\017get_chat_server\022\035.my_grpc."
+    "GetChatServerRequest\032\036.my_grpc.GetChatSe"
+    "rverResponse\"\000\022E\n\nchat_login\022\031.my_grpc.U"
+    "serLoginRequest\032\032.my_grpc.UserLoginRespo"
+    "nse\"\0002\346\001\n\004Chat\022k\n\030notify_send_friend_app"
+    "ly\022%.my_grpc.NotifySendFriendApplyReques"
+    "t\032&.my_grpc.NotifySendFriendApplyRespons"
+    "e\"\000\022q\n\032notify_handle_friend_apply\022\'.my_g"
+    "rpc.NotifyHandleFriendApplyRequest\032(.my_"
+    "grpc.NotifyHandleFriendApplyResponse\"\000b\006"
+    "proto3"
 };
 static ::absl::once_flag descriptor_table_my_5fgrpc_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_my_5fgrpc_2eproto = {
     false,
     false,
-    1225,
+    1246,
     descriptor_table_protodef_my_5fgrpc_2eproto,
     "my_grpc.proto",
     &descriptor_table_my_5fgrpc_2eproto_once,
@@ -1620,6 +1625,7 @@ inline PROTOBUF_NDEBUG_INLINE UserLoginRequest::Impl_::Impl_(
     const Impl_& from, const ::my_grpc::UserLoginRequest& from_msg)
       : uid_(arena, from.uid_),
         token_(arena, from.token_),
+        server_name_(arena, from.server_name_),
         _cached_size_{0} {}
 
 UserLoginRequest::UserLoginRequest(
@@ -1643,6 +1649,7 @@ inline PROTOBUF_NDEBUG_INLINE UserLoginRequest::Impl_::Impl_(
     ::google::protobuf::Arena* arena)
       : uid_(arena),
         token_(arena),
+        server_name_(arena),
         _cached_size_{0} {}
 
 inline void UserLoginRequest::SharedCtor(::_pb::Arena* arena) {
@@ -1658,6 +1665,7 @@ inline void UserLoginRequest::SharedDtor(MessageLite& self) {
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.uid_.Destroy();
   this_._impl_.token_.Destroy();
+  this_._impl_.server_name_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -1697,15 +1705,15 @@ const ::google::protobuf::internal::ClassData* UserLoginRequest::GetClassData() 
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 41, 2> UserLoginRequest::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 0, 52, 2> UserLoginRequest::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -1715,12 +1723,16 @@ const ::_pbi::TcParseTable<1, 2, 0, 41, 2> UserLoginRequest::_table_ = {
     ::_pbi::TcParser::GetTable<::my_grpc::UserLoginRequest>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string token = 2;
-    {::_pbi::TcParser::FastUS1,
-     {18, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.token_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // string uid = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.uid_)}},
+    // string token = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.token_)}},
+    // string server_name = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.server_name_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -1730,13 +1742,17 @@ const ::_pbi::TcParseTable<1, 2, 0, 41, 2> UserLoginRequest::_table_ = {
     // string token = 2;
     {PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.token_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string server_name = 3;
+    {PROTOBUF_FIELD_OFFSET(UserLoginRequest, _impl_.server_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }},
   // no aux_entries
   {{
-    "\30\3\5\0\0\0\0\0"
+    "\30\3\5\13\0\0\0\0"
     "my_grpc.UserLoginRequest"
     "uid"
     "token"
+    "server_name"
   }},
 };
 
@@ -1749,6 +1765,7 @@ PROTOBUF_NOINLINE void UserLoginRequest::Clear() {
 
   _impl_.uid_.ClearToEmpty();
   _impl_.token_.ClearToEmpty();
+  _impl_.server_name_.ClearToEmpty();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -1781,6 +1798,14 @@ PROTOBUF_NOINLINE void UserLoginRequest::Clear() {
             ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
                 _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "my_grpc.UserLoginRequest.token");
             target = stream->WriteStringMaybeAliased(2, _s, target);
+          }
+
+          // string server_name = 3;
+          if (!this_._internal_server_name().empty()) {
+            const std::string& _s = this_._internal_server_name();
+            ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+                _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "my_grpc.UserLoginRequest.server_name");
+            target = stream->WriteStringMaybeAliased(3, _s, target);
           }
 
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1818,6 +1843,11 @@ PROTOBUF_NOINLINE void UserLoginRequest::Clear() {
               total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                               this_._internal_token());
             }
+            // string server_name = 3;
+            if (!this_._internal_server_name().empty()) {
+              total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                              this_._internal_server_name());
+            }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
@@ -1837,6 +1867,9 @@ void UserLoginRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, const 
   if (!from._internal_token().empty()) {
     _this->_internal_set_token(from._internal_token());
   }
+  if (!from._internal_server_name().empty()) {
+    _this->_internal_set_server_name(from._internal_server_name());
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1855,6 +1888,7 @@ void UserLoginRequest::InternalSwap(UserLoginRequest* PROTOBUF_RESTRICT other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.uid_, &other->_impl_.uid_, arena);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.token_, &other->_impl_.token_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.server_name_, &other->_impl_.server_name_, arena);
 }
 
 ::google::protobuf::Metadata UserLoginRequest::GetMetadata() const {

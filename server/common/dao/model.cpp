@@ -27,6 +27,8 @@ std::string User::get_phone() { return phone_; }
 void User::set_phone(string phone) { phone_ = phone; }
 std::string User::get_password() { return password_; }
 void User::set_password(string password) { password_ = password; }
+std::string User::get_avatar() { return avatar_; }
+void User::set_avatar(string avatar) { avatar_ = avatar; }
 
 UserDto::UserDto()
 {

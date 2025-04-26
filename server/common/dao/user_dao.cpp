@@ -62,6 +62,40 @@ bool UserDao::update_user(User &user)
     return false;
 }
 
+std::shared_ptr<User> UserDao::get_user_by_uid(string uid)
+{
+    auto conn = MysqlPool::instance().get_connection();
+    if (conn == nullptr)
+        throw std::runtime_error("get mysql connection failed");
+
+    try
+    {
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn->conn_->prepareStatement("select * from user where uid = ?;"));
+        pstmt->setString(1, uid);
+        std::unique_ptr<sql::ResultSet> result(pstmt->executeQuery());
+
+        if (!result->next())
+        {
+            return nullptr;
+        }
+
+        std::shared_ptr<User> user_ptr = std::make_shared<User>();
+        user_ptr->set_uid(result->getString("uid"));
+        user_ptr->set_name(result->getString("name"));
+        user_ptr->set_phone(result->getString("phone"));
+        user_ptr->set_password(result->getString("password"));
+        user_ptr->set_avatar(result->getString("avatar"));
+
+        return user_ptr;
+    }
+    catch (std::exception &ex)
+    {
+        std::cout << "add_user failed:" << ex.what() << std::endl;
+    }
+
+    return nullptr;
+}
+
 std::shared_ptr<User> UserDao::get_user_by_phone(string phone)
 {
     auto conn = MysqlPool::instance().get_connection();
@@ -84,6 +118,7 @@ std::shared_ptr<User> UserDao::get_user_by_phone(string phone)
         user_ptr->set_name(result->getString("name"));
         user_ptr->set_phone(result->getString("phone"));
         user_ptr->set_password(result->getString("password"));
+        user_ptr->set_avatar(result->getString("avatar"));
 
         return user_ptr;
     }
@@ -113,7 +148,8 @@ std::vector<std::shared_ptr<User>> UserDao::get_users_by_name(string name)
         string name = result->getString("name");
         string phone = result->getString("phone");
         string password = result->getString("password");
-        users.emplace_back(new User(uid, name, phone, password));
+        string avatar = result->getString("avatar");
+        users.emplace_back(new User(uid, name, phone, password, avatar));
     }
 
     return users;

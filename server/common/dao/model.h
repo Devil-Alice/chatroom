@@ -33,6 +33,8 @@ public:
     void set_phone(string phone);
     string get_password();
     void set_password(string password);
+    string get_avatar();
+    void set_avatar(string avatar);
 };
 
 class UserDto : public JsonObject

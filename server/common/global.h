@@ -69,6 +69,7 @@ using my_grpc::NotifyHandleFriendApplyResponse;
 const std::string verify_code_prefix = "verify_code_";
 const std::string user_token_hset_key = "user_token";
 const std::string chat_server_user_count_hset_key = "chat_server_user_count";
+const std::string user_login_server_hset_key = "user_login_server";
 
 enum MY_STATUS_CODE
 {

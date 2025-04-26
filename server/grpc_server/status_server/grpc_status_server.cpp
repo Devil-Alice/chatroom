@@ -95,6 +95,9 @@ grpc::Status GrpcStatusServer::chat_login(grpc::ServerContext *context, const Us
         if (!login_count_str.empty())
             login_count = atoi(login_count_str.data());
         RedisManager::instance().hset(chat_server_user_count_hset_key, server_name, std::to_string(login_count + 1));
+
+        // 将用户登陆的服务器信息记录在redis中
+        RedisManager::instance().hset(user_login_server_hset_key, uid, server_name);
     }
 
     response->set_uid(uid);

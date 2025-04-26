@@ -41,6 +41,7 @@
     "chat_server_serlf": {
         "name": "chat_server1",
         "port": 55555,
+        "bind_ip":"0.0.0.0",
         "grpc_chat_server_port": 50051
     }
 }

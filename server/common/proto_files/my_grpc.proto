@@ -70,6 +70,23 @@ service Status
 
 
 // 聊天的服务以及对象的proto代码 ------------------------------------------------
+message NotifyRequest
+{
+    string from_uid = 1;
+    string token = 2;
+    string to_uid = 3;
+    int32 request_id = 4;
+    // 这里的message指的是数据包的消息
+    string message = 5;
+}
+
+message NotifyResponse
+{
+    int32 error = 1;
+    string uid = 2;
+    string token = 3;
+}
+
 message NotifySendFriendApplyRequest
 {
     string from_uid = 1;
@@ -102,6 +119,7 @@ message NotifyHandleFriendApplyResponse
 
 service Chat
 {
+    rpc notify(NotifyRequest) returns (NotifyResponse) {}
     rpc notify_send_friend_apply(NotifySendFriendApplyRequest) returns (NotifySendFriendApplyResponse) {}
-    rpc notify_handle_friend_apply(NotifyHandleFriendApplyRequest) returns (NotifyHandleFriendApplyResponse) {};
+    rpc notify_handle_friend_apply(NotifyHandleFriendApplyRequest) returns (NotifyHandleFriendApplyResponse) {}
 }

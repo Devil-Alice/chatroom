@@ -119,7 +119,7 @@ std::shared_ptr<Package> TcpService::handle_request(std::shared_ptr<Session> ses
 
     // 设置默认返回数据
     CommonResult result(MY_STATUS_CODE::ERROR, "request not found");
-    std::shared_ptr<Package> response_package;
+    std::shared_ptr<Package> response_package(new Package());
     response_package->set_request_id(request_id);
     response_package->set_message(result.to_json_string());
 

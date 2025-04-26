@@ -106,7 +106,12 @@ Session::~Session()
     // 结束线程
     cond_handle_request_.notify_all();
     cond_send_response_.notify_all();
-    thread_send_response_.join();
+
+    // 这里由于服务器会先创建session，但是需要接收到链接才会启动session的线程
+    // 所以此线程有可能还未启动，就join了，导致core dumped错误
+    // 需要加joinable判断
+    if (thread_send_response_.joinable())
+        thread_send_response_.join();
 
     mutex_request_.lock();
     while (!packages_request_.empty())
@@ -337,7 +342,10 @@ void Session::shutdown(boost::system::error_code err_code)
 {
     std::cout << "session socket[" << id_ << "] shutdown: " << err_code.what() << std::endl;
     flag_stop_ = true;
-    socket_.shutdown(asio::socket_base::shutdown_both, err_code);
+    if (socket_.is_open())
+    {
+        socket_.shutdown(asio::socket_base::shutdown_both, err_code);
+    }
 
     // 唤醒正在阻塞的地方
     cond_handle_request_.notify_all();

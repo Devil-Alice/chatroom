@@ -40,6 +40,7 @@ signals:
     void signal_send_friend_apply_finished(QJsonObject json_data);
     void signal_query_friend_apply_finished(QJsonObject json_data);
     void signal_handle_friend_apply_finished(QJsonObject json_data);
+    void signal_notify_receive_friend_apply(QJsonObject json_data);
 
 public slots:
     void slot_connect_to_server(ConnectoinInfo info);

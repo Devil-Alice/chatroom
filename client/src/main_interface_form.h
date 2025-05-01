@@ -8,7 +8,9 @@
 #include "recent_message_list_form.h"
 #include "friend_list_form.h"
 #include "chat_form.h"
-#include "scroll_list_form.h"
+#include "searched_list_form.h"
+#include "friend_apply_list_form.h"
+
 
 namespace Ui
 {
@@ -30,7 +32,9 @@ private:
 private slots:
     void slot_goto_recent_message_list();
     void slot_goto_friend_list();
-    void slot_goto_scroll_list();
+    void slot_goto_friend_apply_list();
+    void slot_goto_search_result_list();
+    void slot_notify_receive_friend_apply(QJsonObject json_data);
 
 private:
     Ui::MainInterfaceForm *ui;
@@ -40,7 +44,8 @@ private:
     FriendListForm *friend_list_form_;
     ChatForm *chat_form_;
     // scroll_list_form_是一个通用的滚动列表，可以承载好友查询结果、好友申请信息等
-    ScrollListForm *scroll_list_form_;
+    FriendApplyListForm *friend_apply_list_form_;
+    SearchedListForm *searched_list_form_;
 };
 
 #endif // MAIN_INTERFACE_FORM_H

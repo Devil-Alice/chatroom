@@ -16,18 +16,17 @@ class ScrollListForm : public QWidget
 public:
     explicit ScrollListForm(QWidget *parent = nullptr);
     ~ScrollListForm();
-    void set_widgets(QVector<std::shared_ptr<QWidget>> widgets);
+    void show_widgets(QVector<std::shared_ptr<QWidget>> widgets);
     void clear_widgets();
 
 signals:
     void signal_build_list( QVector<std::shared_ptr<QWidget>> widgets_);
 
 public slots:
-    void slot_search_content_finished(QJsonObject json_data);
-    void slot_send_friend_apply_finished(QJsonObject json_data);
-    void slot_query_friend_apply_finished(QJsonObject json_data); 
 
-private:
+
+
+protected:
     Ui::ScrollListForm *ui;
     QVector<std::shared_ptr<QWidget>> widgets_;
 };

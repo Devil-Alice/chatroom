@@ -18,6 +18,8 @@ class FriendApplyItemForm : public QWidget
 public:
     explicit FriendApplyItemForm(FriendApply friend_apply, QWidget *parent = nullptr);
     ~FriendApplyItemForm();
+    static std::shared_ptr<FriendApplyItemForm> parse_from_json(QJsonObject json_obj);
+    FriendApply get_friend_apply();
 
 public slots:
     void slot_btn_accpet_clicked();

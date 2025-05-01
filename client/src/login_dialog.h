@@ -20,8 +20,6 @@ public:
 
 private:
     Ui::LoginDialog *ui;
-    QString uid_;
-    QString token_;
     
     QMap<REQUEST_ID, std::function<void(QJsonObject&)>> http_response_handler_;
     void init_response_handler();

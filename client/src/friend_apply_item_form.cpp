@@ -78,6 +78,35 @@ FriendApplyItemForm::~FriendApplyItemForm()
     delete ui;
 }
 
+std::shared_ptr<FriendApplyItemForm> FriendApplyItemForm::parse_from_json(QJsonObject json_obj)
+{
+    QJsonObject from_user_json = json_obj["from_user"].toObject();
+    QJsonObject to_user_json = json_obj["to_user"].toObject();
+
+    QString from_uid = from_user_json["uid"].toString();
+    QString from_name = from_user_json["name"].toString();
+    QString from_avatar = from_user_json["avatar"].toString();
+    User from_user(from_uid, from_name, from_avatar);
+
+    QString to_uid = to_user_json["uid"].toString();
+    QString to_name = to_user_json["name"].toString();
+    QString to_avatar = to_user_json["avatar"].toString();
+    User to_user(to_uid, to_name, to_avatar);
+
+    QString remark_name = json_obj["remark_name"].toString();
+    QString apply_message = json_obj["apply_message"].toString();
+    int status = json_obj["status"].toInt();
+    FriendApply friend_apply(from_user, to_user, remark_name, apply_message, status);
+
+    auto widget = std::make_shared<FriendApplyItemForm>(friend_apply);
+    return widget;
+}
+
+FriendApply FriendApplyItemForm::get_friend_apply()
+{
+    return friend_apply_;
+}
+
 void FriendApplyItemForm::slot_btn_accpet_clicked()
 {
     QJsonObject json_obj = self_info->get_basic_info_json();

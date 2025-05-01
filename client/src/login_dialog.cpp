@@ -64,11 +64,9 @@ void LoginDialog::init_response_handler()
         info.token= json_obj_data["token"].toString();
 
         // 记录token和uid
-        uid_ = info.uid;
-        token_ = info.token;
-
-        self_info->uid_ = uid_;
-        self_info->token_ = token_;
+        self_info->uid_ = info.uid;
+        self_info->token_ = info.token;
+        self_info->name_ = json_obj_data["name"].toString();
 
         emit signal_connect_to_server(info);
         return; });
@@ -138,8 +136,8 @@ void LoginDialog::slot_handle_connection_status(bool success)
 
     QJsonObject json_obj;
     json_obj["phone"] = ui->text_phone->text();
-    json_obj["uid"] = uid_;
-    json_obj["token"] = token_;
+    json_obj["uid"] = self_info->uid_;
+    json_obj["token"] = self_info->token_;
 
     QJsonDocument json_doc(json_obj);
     QByteArray data = json_doc.toJson();

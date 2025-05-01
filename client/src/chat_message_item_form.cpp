@@ -58,7 +58,6 @@ void ChatMessageItemForm::set_width()
     {
         int line_text_width = fm.width(it.text());
         max_line_text_width = qMax(max_line_text_width, line_text_width);
-        qDebug() << "line_text_width: " << line_text_width;
     }
 
     ui->text_message->getContentsMargins(&margins[0], &margins[1], &margins[2], &margins[3]);
@@ -78,7 +77,6 @@ void ChatMessageItemForm::paintEvent(QPaintEvent *evnet)
     {
         set_width();
         flag_width_set_ = true;
-        qDebug() << "test" << endl;
     }
 
     // 这里似乎需要加上2才是真正的高度，否则会出现滚动条，原因未知

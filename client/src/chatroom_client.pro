@@ -16,6 +16,7 @@ SOURCES += \
     config_manager.cpp \
     friend_apply_form.cpp \
     friend_apply_item_form.cpp \
+    friend_apply_list_form.cpp \
     friend_list_form.cpp \
     friend_list_item_form.cpp \
     global.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
     scroll_list_form.cpp \
     search_bar_form.cpp \
     searched_item_form.cpp \
+    searched_list_form.cpp \
     sidebar_form.cpp \
     tcp_manager.cpp \
     user.cpp
@@ -40,6 +42,7 @@ HEADERS += \
     config_manager.h \
     friend_apply_form.h \
     friend_apply_item_form.h \
+    friend_apply_list_form.h \
     friend_list_form.h \
     friend_list_item_form.h \
     global.h \
@@ -53,6 +56,7 @@ HEADERS += \
     scroll_list_form.h \
     search_bar_form.h \
     searched_item_form.h \
+    searched_list_form.h \
     sidebar_form.h \
     singleton.h \
     tcp_manager.h \

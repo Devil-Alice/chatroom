@@ -47,10 +47,12 @@ enum REQUEST_ID
     REGISTER_USER = 1002, //用户注册
     USER_LOGIN = 1003, // 用户登录
     CHAT_LOGIN = 1004,  //聊天服务器登录
-    SEARCH_CONTENT = 1005, //搜索内容
+    SEARCH_CONTENT = 1005, // 搜索内容
     SNED_FRIEND_APPLY = 1006, // 发送好友申请
     QUERY_FRIEND_APPLY = 1007, // 查询好友申请
     HANDLE_FRIEND_APPLY = 1008, // 处理好友申请
+    NOTIFY_SEND_FRIEND_APPLY = 1009, // 提醒发送好友申请
+    NOTIFY_HALDLE_FRIEND_APPLY = 1010, // 提醒好友申请处理完毕
 };
 
 enum MY_STATUS_CODE

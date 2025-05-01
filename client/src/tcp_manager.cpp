@@ -95,11 +95,9 @@ void TcpManager::receive_message()
         buffer_.remove(0, head_length_);
         flag_head_complete_ = true;
 
-        qDebug() << "request id: " << request_id_ << endl
-                 << "message length: " << message_length_ << endl;
     }
 
-    qDebug() << "current message length: " << buffer_.length() << endl;
+    // qDebug() << "current message length: " << buffer_.length() << endl;
     // 消息长度不够，继续接收
     if (buffer_.length() < message_length_)
         return;
@@ -110,8 +108,10 @@ void TcpManager::receive_message()
     // 重置状态接收头部
     flag_head_complete_ = false;
 
+    
+    qDebug() << "request id: " << request_id_ << endl
+            << "message length: " << message_length_ << endl;
     qDebug() << "message: " << message << endl;
-
     emit signal_message_received((REQUEST_ID)request_id_, message);
     return;
 }
@@ -182,6 +182,13 @@ void TcpManager::slot_message_received(REQUEST_ID request_id, QString message)
     {
         emit signal_handle_friend_apply_finished(json_doc.object());
     }
+    else if (request_id == REQUEST_ID::NOTIFY_SEND_FRIEND_APPLY)
+    {
+        emit signal_notify_receive_friend_apply(json_doc.object());
+    }
+
+
+    
 }
 
 TcpManager::~TcpManager()

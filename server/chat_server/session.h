@@ -75,7 +75,9 @@ private:
     std::atomic<bool> flag_stop_;
     std::condition_variable cond_handle_request_;
     std::condition_variable cond_send_response_;
+    std::thread thread_handle_request_;
     std::thread thread_send_response_;
+    void init_thread_handle_request();
     void init_thread_send_response();
 
 public:

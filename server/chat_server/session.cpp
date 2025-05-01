@@ -73,6 +73,21 @@ size_t Package::get_total_length()
     return 2 + 2 + message_.length();
 }
 
+void Session::init_thread_handle_request()
+{
+    // 这里使用this是安全的，因为析构函数会join等待，确保释放前，该线程会执行完毕
+    thread_handle_request_ = std::thread([this]()
+    {
+        // 持续发送数据包
+        while (!flag_stop_)
+        {
+            // 线程中单独先处理数据包，影响send_package发送突发的通知
+            handle_request();
+        
+        } 
+    });
+}
+
 void Session::init_thread_send_response()
 {
     // 这里使用this是安全的，因为析构函数会join等待，确保释放前，该线程会执行完毕
@@ -81,8 +96,6 @@ void Session::init_thread_send_response()
         // 持续发送数据包
         while (!flag_stop_)
         {
-            // 先处理数据包
-            handle_request();
     
             // 异步发送response
             send_package();
@@ -110,6 +123,9 @@ Session::~Session()
     // 这里由于服务器会先创建session，但是需要接收到链接才会启动session的线程
     // 所以此线程有可能还未启动，就join了，导致core dumped错误
     // 需要加joinable判断
+    if (thread_handle_request_.joinable())
+        thread_handle_request_.join();
+
     if (thread_send_response_.joinable())
         thread_send_response_.join();
 
@@ -156,6 +172,7 @@ void Session::set_user_uid(string user_uid)
 
 void Session::start()
 {
+    init_thread_handle_request();
     init_thread_send_response();
     receive_package();
 }

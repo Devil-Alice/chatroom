@@ -79,6 +79,7 @@ public:
     // 状态字段，0表示未处理， 1表示同意， 2表示拒绝
     int status_;
 
+    FriendApplyDto();
     FriendApplyDto(UserDto from_user, UserDto to_user, string remark_name, string apply_message, int status = 0);
     Json::Value to_json() override;
     void from_json_string(std::string json_string) override;

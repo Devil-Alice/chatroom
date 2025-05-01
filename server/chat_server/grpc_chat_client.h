@@ -14,6 +14,8 @@ private:
 
 public:
     GrpcChatClient();
-    NotifySendFriendApplyResponse notify_send_friend_apply(string server_host, const NotifySendFriendApplyRequest &request);
-    NotifyHandleFriendApplyResponse notify_handle_friend_apply(string server_host, const NotifyHandleFriendApplyRequest &request);
+    // 通用的提醒方法，用于提醒处于不同服务器的其他用户，直接将要向其发送的数据包写入request即可
+    NotifyResponse notify(string server_name, const NotifyRequest &request);
+    NotifySendFriendApplyResponse notify_send_friend_apply(string server_name, const NotifySendFriendApplyRequest &request);
+    NotifyHandleFriendApplyResponse notify_handle_friend_apply(string server_name, const NotifyHandleFriendApplyRequest &request);
 };

@@ -70,6 +70,16 @@ FriendApply::FriendApply(string from_uid, string to_uid, string remark_name, str
     status_ = status;
 }
 
+FriendApplyDto::FriendApplyDto()
+{
+    from_user_ = UserDto();
+    to_user_ = UserDto();
+    remark_name_ = "";
+    apply_message_ = "";
+    // 状态字段，0表示未处理， 1表示同意， 2表示拒绝
+    status_ = 0;
+}
+
 FriendApplyDto::FriendApplyDto(UserDto from_user, UserDto to_user, string remark_name, string apply_message, int status)
 {
     from_user_ = from_user;

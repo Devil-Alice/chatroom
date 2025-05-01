@@ -22,14 +22,43 @@ GrpcChatClient::GrpcChatClient()
     }
 }
 
-NotifySendFriendApplyResponse GrpcChatClient::notify_send_friend_apply(string server_host, const NotifySendFriendApplyRequest &request)
+NotifyResponse GrpcChatClient::notify(string server_name, const NotifyRequest &request)
+{
+    NotifyResponse response;
+    response.set_error(MY_STATUS_CODE::RPC_FAILED);
+
+    if (grpc_stub_pools_.find(server_name) == grpc_stub_pools_.end())
+    {
+        return response;
+    }
+
+    auto pool = grpc_stub_pools_[server_name];
+    auto conn = pool->get_grpc_stub();
+
+    // 向grpc服务器发送提醒的请求
+    grpc::ClientContext context;
+    auto status = conn->notify(&context, request, &response);
+
+    if (!status.ok())
+    {
+        std::cout << "GrpcChatClient::notify error details: " << status.error_details() << std::endl
+                    << "GrpcChatClient::notify error message: " << status.error_message() << std::endl;
+        response.set_error(MY_STATUS_CODE::RPC_FAILED);
+        return response;
+    }
+
+    pool->return_grpc_stub(std::move(conn));
+    return response;
+}
+
+NotifySendFriendApplyResponse GrpcChatClient::notify_send_friend_apply(string server_name, const NotifySendFriendApplyRequest &request)
 {
     NotifySendFriendApplyResponse response;
 
     return response;
 }
 
-NotifyHandleFriendApplyResponse GrpcChatClient::notify_handle_friend_apply(string server_host, const NotifyHandleFriendApplyRequest &request)
+NotifyHandleFriendApplyResponse GrpcChatClient::notify_handle_friend_apply(string server_name, const NotifyHandleFriendApplyRequest &request)
 {
     NotifyHandleFriendApplyResponse response;
 

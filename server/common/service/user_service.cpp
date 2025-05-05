@@ -194,7 +194,14 @@ CommonResult UserService::handle_friend_apply(string from_uid, string to_uid, in
 
     // 拒绝申请，直接返回
     if (status == 2)
-        return result.set(MY_STATUS_CODE::SUCCESS, "ok");
+    {
+        // 构造返回的json
+        Json::Value root;
+        root["from_uid"] = from_uid;
+        root["to_uid"] = to_uid;
+        root["status"] = status;
+        return result.set(MY_STATUS_CODE::SUCCESS, "ok", root);
+    }
 
     // 好友申请通过后，还需要创建好友关系
     return add_friend_relation(from_uid, to_uid, remark_name);
@@ -213,5 +220,9 @@ CommonResult UserService::add_friend_relation(string from_uid, string to_uid, st
     if (!success1 && success2)
         return result.set(MY_STATUS_CODE::DATABASE_FAILED, "failed");
 
-    return result.set(MY_STATUS_CODE::SUCCESS, "ok");
+    Json::Value root;
+    root["from_uid"] = from_uid;
+    root["to_uid"] = to_uid;
+    root["status"] = 1;
+    return result.set(MY_STATUS_CODE::SUCCESS, "ok", root);
 }

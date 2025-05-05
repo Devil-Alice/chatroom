@@ -94,9 +94,11 @@ TcpService::TcpService()
 
         // 获取对方的session
         std::shared_ptr<Session> to_session = UserManager::instance().get_uid_session(to_uid);
+        std::cout << "send notify..." << std::endl;
         
         if (to_session)
         {
+            std::cout << "user is in this server" << std::endl;
             // 构造提醒数据包
             std::shared_ptr<Package> notify_package(new Package());
             notify_package->set_request_id(REQUEST_ID::NOTIFY_SEND_FRIEND_APPLY);
@@ -111,6 +113,8 @@ TcpService::TcpService()
 
             if (server_name.empty())
                 return result;
+
+            std::cout << "user is in another server: " << server_name << std::endl;
             
             NotifyRequest req;
             req.set_from_uid(from_uid);

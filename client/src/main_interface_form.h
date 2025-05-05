@@ -34,7 +34,7 @@ private slots:
     void slot_goto_friend_list();
     void slot_goto_friend_apply_list();
     void slot_goto_search_result_list();
-    void slot_notify_receive_friend_apply(QJsonObject json_data);
+    void slot_set_unhandled_apply_num(int num);
 
 private:
     Ui::MainInterfaceForm *ui;

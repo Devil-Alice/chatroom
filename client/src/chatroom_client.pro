@@ -50,6 +50,7 @@ HEADERS += \
     login_dialog.h \
     main_interface_form.h \
     main_window.h \
+    raii.h \
     recent_message_list_form.h \
     recent_message_list_item_form.h \
     register_dialog.h \

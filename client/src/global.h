@@ -21,8 +21,10 @@
 #include <QPainter>
 #include <QTextBlock>
 #include <QJsonArray>
+#include <QLabel>
 #include "singleton.h"
 #include "config_manager.h"
+#include "raii.h"
 #include "user.h"
 
 extern QString gate_url_prefix;

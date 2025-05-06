@@ -6,8 +6,6 @@
 
 TcpService::TcpService()
 {
-
-
     // 注册模版，作为其他注册动作的示例
     register_service(REQUEST_ID::UNKNOWN,
         [](std::shared_ptr<Session> session, std::shared_ptr<Package> request_package)
@@ -42,7 +40,7 @@ TcpService::TcpService()
             return result;
 
         // 如果登陆成功，则设置session的user uid，以及向status服务发送请求
-        session->set_user_uid((result.get_data())["uid"].asString());
+        session->set_user_uid(uid);
 
         // 登陆成功后，还需要向usermanager中注册映射
         UserManager::instance().set_uid_session(uid, session);

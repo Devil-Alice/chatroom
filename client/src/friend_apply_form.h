@@ -18,6 +18,7 @@ public:
 
 private:
     void send_apply();
+    void close_window();
 
 private:
     Ui::FriendApplyForm *ui;

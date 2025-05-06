@@ -14,6 +14,7 @@ FriendApplyForm::FriendApplyForm(QString to_uid, QString name, QWidget *parent) 
     ui->label_name->setText(name_);
 
     connect(ui->btn_send, &QPushButton::clicked, this, &FriendApplyForm::send_apply);
+    connect(ui->btn_cancel, &QPushButton::clicked, this, &FriendApplyForm::close_window);
 }
 
 FriendApplyForm::~FriendApplyForm()
@@ -37,4 +38,10 @@ void FriendApplyForm::send_apply()
     QJsonDocument json_doc(json_obj);
 
     emit TcpManager::instance()->signal_send_message(REQUEST_ID::SNED_FRIEND_APPLY, json_doc.toJson());
+    close_window();
+}
+
+void FriendApplyForm::close_window()
+{
+    this->close();
 }

@@ -21,7 +21,7 @@ public:
     void set_unhandled_friend_apply_num(int num);
 
 signals:
-    void slot_goto_friend_apply_list();
+    void signal_goto_friend_apply_list();
 
 public slots:
     void slot_item_clicked(QListWidgetItem *item);
@@ -30,6 +30,8 @@ public slots:
 private:
     Ui::FriendListForm *ui;
     QLabel *label_unhandled_num;
+    void resizeEvent(QResizeEvent *event) override;
+
 };
 
 #endif // FRIEND_LIST_FORM_H

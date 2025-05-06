@@ -49,8 +49,6 @@ void FriendListForm::query_friend_applys()
     QJsonDocument json_doc(json_obj);
 
     emit TcpManager::instance() -> signal_send_message(REQUEST_ID::QUERY_FRIEND_APPLY, json_doc.toJson());
-
-    emit slot_goto_friend_apply_list();
 }
 
 void FriendListForm::set_unhandled_friend_apply_num(int num)
@@ -80,6 +78,19 @@ void FriendListForm::set_unhandled_friend_apply_num(int num)
 void FriendListForm::slot_btn_friend_apply_clicked()
 {
     query_friend_applys();
+    emit signal_goto_friend_apply_list();
+}
+
+void FriendListForm::resizeEvent(QResizeEvent *event)
+{
+    // 计算label的位置，实现右对其的效果
+    auto label_size = label_unhandled_num->size();
+    auto btn_size = ui->btn_friend_apply->size();
+
+    int x = btn_size.width() - label_size.width() - 5;
+    int y = btn_size.height() / 2 - label_size.height() / 2;
+
+    label_unhandled_num->move(x, y);
 }
 
 void FriendListForm::slot_item_clicked(QListWidgetItem *item)

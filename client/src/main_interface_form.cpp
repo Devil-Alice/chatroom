@@ -38,7 +38,7 @@ MainInterfaceForm::MainInterfaceForm(QWidget *parent) : QWidget(parent),
     connect(sidebar_form_, &SidebarForm::signal_goto_recent_message_list, this, &MainInterfaceForm::slot_goto_recent_message_list);
     connect(sidebar_form_, &SidebarForm::signal_goto_friend_list, this, &MainInterfaceForm::slot_goto_friend_list);
     connect(search_bar_form_, &SearchBarForm::signal_goto_search_result_list, this, &MainInterfaceForm::slot_goto_search_result_list);
-    connect(friend_list_form_, &FriendListForm::slot_goto_friend_apply_list, this, &MainInterfaceForm::slot_goto_friend_apply_list);
+    connect(friend_list_form_, &FriendListForm::signal_goto_friend_apply_list, this, &MainInterfaceForm::slot_goto_friend_apply_list);
 
     // 查询好友申请后，设置未读数字
     connect(friend_apply_list_form_, &FriendApplyListForm::signal_set_unhandled_apply_nums, this, &MainInterfaceForm::slot_set_unhandled_apply_num);
